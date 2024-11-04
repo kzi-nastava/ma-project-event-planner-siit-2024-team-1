@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Zadatak2</string>
+    <string name="login">Login</string>
+    <string name="home">Home</string>
+    <string name="register">Register</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+</resources>
