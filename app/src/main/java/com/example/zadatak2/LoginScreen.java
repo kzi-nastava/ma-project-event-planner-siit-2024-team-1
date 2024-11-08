@@ -29,7 +29,7 @@ public class LoginScreen extends AppCompatActivity {
             startActivity(intent);
         });
         registerButton.setOnClickListener(v -> {
-            Intent intent=new Intent(LoginScreen.this,RegisterScreen.class);
+            Intent intent=new Intent(LoginScreen.this, RegisterPupScreen.class);
             startActivity(intent);
         });
     }

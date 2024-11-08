@@ -59,7 +59,7 @@ public class SplashScreen extends AppCompatActivity {
                 ProgressBar progressBar=(ProgressBar) findViewById(R.id.progressBar);
                 progressBar.setVisibility(View.GONE);
             }
-        }, 5000);
+        }, 1);
     }
 
     @Override
