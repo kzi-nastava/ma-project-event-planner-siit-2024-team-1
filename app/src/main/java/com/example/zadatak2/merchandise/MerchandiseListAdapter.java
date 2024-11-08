@@ -52,11 +52,11 @@ public class MerchandiseListAdapter extends ArrayAdapter<Merchandise> {
         TextView merchandiseDescription = convertView.findViewById(R.id.merchandise_description);
         TextView merchandisePrice = convertView.findViewById(R.id.merchandise_price);
         TextView merchandiseLocation = convertView.findViewById(R.id.merchandise_location);
-        TextView merchandiseDuration = convertView.findViewById(R.id.merchandise_duration);
+        //TextView merchandiseDuration = convertView.findViewById(R.id.merchandise_duration);
         RatingBar merchandiseRating = convertView.findViewById(R.id.merchandise_rating);
-        TextView merchandiseReviewCount = convertView.findViewById(R.id.merchandise_review_count);
-        TextView merchandiseDiscount = convertView.findViewById(R.id.merchandise_discount);
-        TextView merchandiseStatus = convertView.findViewById(R.id.merchandise_status);
+//        TextView merchandiseReviewCount = convertView.findViewById(R.id.merchandise_review_count);
+//        TextView merchandiseDiscount = convertView.findViewById(R.id.merchandise_discount);
+//        TextView merchandiseStatus = convertView.findViewById(R.id.merchandise_status);
 
         if (merchandise != null) {
             // Set main image if available
@@ -74,43 +74,43 @@ public class MerchandiseListAdapter extends ArrayAdapter<Merchandise> {
             double finalPrice = merchandise.getPrice() * (1 - merchandise.getDiscount());
             merchandisePrice.setText(String.format("$%.2f", finalPrice));
 
-            if (merchandise.getDiscount() > 0) {
-                merchandiseDiscount.setVisibility(View.VISIBLE);
-                merchandiseDiscount.setText(String.format("-%d%%", (int)(merchandise.getDiscount() * 100)));
-            } else {
-                merchandiseDiscount.setVisibility(View.GONE);
-            }
+//            if (merchandise.getDiscount() > 0) {
+//                merchandiseDiscount.setVisibility(View.VISIBLE);
+//                merchandiseDiscount.setText(String.format("-%d%%", (int)(merchandise.getDiscount() * 100)));
+//            } else {
+//                merchandiseDiscount.setVisibility(View.GONE);
+        }
 
-            // Set location
-            merchandiseLocation.setText(String.format("%s, %s",
-                    merchandise.getAddress().getCity(),
-                    merchandise.getAddress().getStreet()));
+        // Set location
+        merchandiseLocation.setText(String.format("%s, %s",
+                merchandise.getAddress().getCity(),
+                merchandise.getAddress().getStreet()));
 
-            // Set duration range
-            merchandiseDuration.setText(String.format("%d-%d days",
-                    merchandise.getMinDuration(),
-                    merchandise.getMaxDuration()));
+        // Set duration range
+//            merchandiseDuration.setText(String.format("%d-%d days",
+//                    merchandise.getMinDuration(),
+//                    merchandise.getMaxDuration()));
 
-            // Calculate average rating
-           merchandiseRating.setRating(merchandise.getRating().floatValue());
+        // Calculate average rating
+        merchandiseRating.setRating(merchandise.getRating().floatValue());
 
-            // Set status
-            if (!merchandise.isAvailable()) {
-                merchandiseStatus.setText("Not Available");
-                merchandiseStatus.setTextColor(getContext().getColor(android.R.color.holo_red_dark));
-            } else if (!merchandise.isVisible()) {
-                merchandiseStatus.setText("Hidden");
-                merchandiseStatus.setTextColor(getContext().getColor(android.R.color.darker_gray));
-            } else {
-                merchandiseStatus.setText("Available");
-                merchandiseStatus.setTextColor(getContext().getColor(android.R.color.holo_green_dark));
-            }
+        // Set status
+//            if (!merchandise.isAvailable()) {
+//                merchandiseStatus.setText("Not Available");
+//                merchandiseStatus.setTextColor(getContext().getColor(android.R.color.holo_red_dark));
+//            } else if (!merchandise.isVisible()) {
+//                merchandiseStatus.setText("Hidden");
+//                merchandiseStatus.setTextColor(getContext().getColor(android.R.color.darker_gray));
+//            } else {
+//                merchandiseStatus.setText("Available");
+//                merchandiseStatus.setTextColor(getContext().getColor(android.R.color.holo_green_dark));
+//            }
 
-            // Set click listener
+                // Set click listener
             merchandiseCard.setOnClickListener(v -> {
                 Toast.makeText(getContext(), merchandise.getTitle(), Toast.LENGTH_SHORT).show();
             });
-        }
+
 
         return convertView;
     }

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/merchandise_card_item"
@@ -7,41 +6,24 @@
     android:orientation="vertical"
     android:padding="8dp">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
-    android:layout_marginVertical="4dp"
-    android:elevation="4dp"
-    app:cardCornerRadius="8dp"
-        app:cardBackgroundColor="@color/black">
+        android:elevation="4dp"
+        app:cardCornerRadius="12dp"
+        style="?attr/materialCardViewFilledStyle">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <FrameLayout
+            <ImageView
+                android:id="@+id/merchandise_image"
                 android:layout_width="match_parent"
-                android:layout_height="200dp">
-
-                <ImageView
-                    android:id="@+id/merchandise_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"/>
-
-                <TextView
-                    android:id="@+id/merchandise_discount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top|end"
-                    android:background="@android:color/holo_red_light"
-                    android:padding="4dp"
-                    android:textColor="@android:color/white"
-                    android:textStyle="bold"
-                    android:visibility="gone"/>
-            </FrameLayout>
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                 />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -53,91 +35,84 @@
                     android:id="@+id/merchandise_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:text="Signature Portrait Session"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/merchandise_description"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:maxLines="2"
-                    android:ellipsize="end"/>
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@android:drawable/ic_menu_mylocation"
+                         />
+
+                    <TextView
+                        android:id="@+id/merchandise_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Bulevar Oslobodenja 76, Novi Sad"
+                        android:textAppearance="?attr/textAppearanceBodySmall" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <RatingBar
+                        android:id="@+id/merchandise_rating"
+                        style="@style/RatingBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:numStars="5"
+                        android:rating="4.5"
+                        android:stepSize="0.5" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="4.5"
+                        android:textAppearance="?attr/textAppearanceBodySmall" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/merchandise_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/holo_blue_dark"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:orientation="horizontal">
-
-                    <RatingBar
-                        android:id="@+id/merchandise_rating"
-                        style="?android:attr/ratingBarStyleSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:numStars="5"
-                        android:stepSize="0.1"/>
-
-                    <TextView
-                        android:id="@+id/merchandise_review_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:src="@android:drawable/ic_menu_mylocation"/>
-
-                    <TextView
-                        android:id="@+id/merchandise_location"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:src="@android:drawable/ic_menu_recent_history"/>
-
-                    <TextView
-                        android:id="@+id/merchandise_duration"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"/>
-                </LinearLayout>
+                    android:text="299.99"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/merchandise_status"
+                    android:id="@+id/merchandise_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Professional Photography Session that captures your unique personality and style"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/see_details_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:textStyle="bold"/>
-
+                    android:text="See details"
+                    android:textAllCaps="false"
+                    style="@style/Secondary.Button.Primary.Text" />
             </LinearLayout>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

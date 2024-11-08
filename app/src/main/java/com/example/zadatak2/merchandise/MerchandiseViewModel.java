@@ -7,6 +7,6 @@ import java.util.ArrayList;
 public class MerchandiseViewModel extends ViewModel {
     public ArrayList<Merchandise> merchandises;
     public MerchandiseViewModel(){
-        merchandises=new ArrayList<>(DummyMerchandiseGenerator.createDummyMerchandise(5));
+        merchandises=new ArrayList<>(DummyMerchandiseGenerator.CreateDummyMerchandise(5));
     }
 }

@@ -2,6 +2,20 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Zadatak2" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorOnPrimary">@color/primary_text_color</item>
+        <item name="colorSecondary">@color/accent_color</item>
+        <item name="materialCardViewFilledStyle">@style/Card.Night</item>
     </style>
+    <style name="Secondary.Button.Primary.Text" parent="Widget.Material3.Button">
+        <item name="backgroundTint">?attr/colorSecondary</item>
+    </style>
+    <style name="Card.Night" parent="Widget.Material3.CardView.Filled">
+        <item name="cardBackgroundColor">@color/surface_card</item>
+    </style>
+    <style name="RatingBar" parent="Widget.AppCompat.RatingBar.Small">
+        <item name="android:progressTint">@color/primary_color</item>
+        <item name="android:progressBackgroundTint">@color/primary_color</item>
+    </style>
+
 </resources>
