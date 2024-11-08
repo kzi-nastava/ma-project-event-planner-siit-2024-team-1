@@ -1,10 +1,18 @@
 <resources>
     <string name="app_name">Zadatak2</string>
-    <string name="login">Login</string>
+    <string name="signin">SIGN IN</string>
     <string name="home">Home</string>
-    <string name="register">Register</string>
-    <string name="username">Username</string>
+    <string name="register">CREATE ACCOUNT</string>
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="photo">CHOOSE PROFILE PHOTO</string>
+    <string name="add_photos">ADD PHOTOS (OPTIONAL)</string>
+    <string name="email">Email</string>
     <string name="password">Password</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="confirmPassword">Confirm Password</string>
+    <string name="company">Company</string>
+    <string name="description">Description</string>
+    <string name="phone">Phone</string>
+    <string name="address">Address</string>
 </resources>

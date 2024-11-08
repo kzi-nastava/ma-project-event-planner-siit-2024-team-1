@@ -1,8 +1,6 @@
 package com.example.zadatak2;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,27 +8,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class LoginScreen extends AppCompatActivity {
+public class RegisterPupScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_login_screen);
+        setContentView(R.layout.activity_register_screen);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
-        });
-        Button loginButton=(Button) findViewById(R.id.loginButton);
-        Button registerButton=(Button) findViewById(R.id.registerButton);
-        loginButton.setOnClickListener(v -> {
-            Intent intent=new Intent(LoginScreen.this,HomeScreen.class);
-            startActivity(intent);
-        });
-        registerButton.setOnClickListener(v -> {
-            Intent intent=new Intent(LoginScreen.this, RegisterPupScreen.class);
-            startActivity(intent);
         });
     }
     @Override
