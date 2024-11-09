@@ -1,6 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/merchandise_card_item"
+    android:id="@+id/event_card_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -18,28 +18,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="200dp">
-
-                <ImageView
-                    android:id="@+id/merchandise_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"/>
-
-                <TextView
-                    android:id="@+id/merchandise_discount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top|end"
-                    android:background="@android:color/holo_red_light"
-                    android:padding="4dp"
-                    android:textColor="@android:color/white"
-                    android:textStyle="bold"
-                    android:visibility="gone"/>
-            </FrameLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -48,14 +26,14 @@
 
 
                 <TextView
-                    android:id="@+id/merchandise_title"
+                    android:id="@+id/event_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Signature Portrait Session"
                     android:textAppearance="?attr/textAppearanceTitleMedium"
                     android:textStyle="bold" />
                 <TextView
-                    android:id="@+id/merchandise_category"
+                    android:id="@+id/event_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="category/type"
@@ -73,15 +51,17 @@
                     <ImageView
                         android:layout_width="16dp"
                         android:layout_height="16dp"
-                        android:src="@android:drawable/ic_menu_mylocation"
-                         />
+                        android:src="@android:drawable/ic_menu_my_calendar"
+                        android:contentDescription="" />
+
                     <TextView
-                        android:id="@+id/merchandise_location"
+                        android:id="@+id/event_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:text="Bulevar Oslobodenja 76, Novi Sad"
+                        android:text="September 15, 2024 at 14:30"
                         android:textAppearance="?attr/textAppearanceBodySmall" />
+
 
                 </LinearLayout>
 
@@ -92,35 +72,34 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <RatingBar
-                        android:id="@+id/merchandise_rating"
-                        style="@style/RatingBar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:numStars="5"
-                        android:rating="4.5"
-                        android:stepSize="0.5" />
-
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@android:drawable/ic_menu_mylocation"
+                        />
                     <TextView
-                        android:id="@+id/merchandise_rating_text"
+                        android:id="@+id/event_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:text="4.5"
+                        android:text="Bulevar Oslobodenja 76, Novi Sad"
                         android:textAppearance="?attr/textAppearanceBodySmall" />
+
+
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/merchandise_price"
-                    android:layout_width="wrap_content"
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="299.99"
-                    android:textAppearance="?attr/textAppearanceTitleMedium"
-                    android:textStyle="bold" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                </LinearLayout>
+
 
                 <TextView
-                    android:id="@+id/merchandise_description"
+                    android:id="@+id/event_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
