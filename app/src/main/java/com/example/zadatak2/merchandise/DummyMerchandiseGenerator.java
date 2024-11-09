@@ -164,7 +164,7 @@ public class DummyMerchandiseGenerator {
         return servicesList;
     }
 
-    public static List<Merchandise> CreateDummyMerchandise(int count){
+    public static List<Merchandise> createDummyMerchandise(int count){
         List<Merchandise> merchandiseList=new ArrayList<>();
         merchandiseList.addAll(createDummyProduct(5));
         merchandiseList.addAll(createDummyService(5));

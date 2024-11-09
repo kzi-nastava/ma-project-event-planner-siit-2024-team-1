@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -15,7 +16,10 @@ import androidx.annotation.Nullable;
 
 import com.example.zadatak2.R;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class MerchandiseListAdapter extends ArrayAdapter<Merchandise> {
     private ArrayList<Merchandise> aMerchandises;
@@ -47,70 +51,45 @@ public class MerchandiseListAdapter extends ArrayAdapter<Merchandise> {
         }
 
         LinearLayout merchandiseCard = convertView.findViewById(R.id.merchandise_card_item);
-        //ImageView merchandiseImage = convertView.findViewById(R.id.merchandise_image);
+        ImageView merchandiseImage = convertView.findViewById(R.id.merchandise_image);
         TextView merchandiseTitle = convertView.findViewById(R.id.merchandise_title);
         TextView merchandiseDescription = convertView.findViewById(R.id.merchandise_description);
         TextView merchandisePrice = convertView.findViewById(R.id.merchandise_price);
         TextView merchandiseLocation = convertView.findViewById(R.id.merchandise_location);
-        //TextView merchandiseDuration = convertView.findViewById(R.id.merchandise_duration);
         RatingBar merchandiseRating = convertView.findViewById(R.id.merchandise_rating);
-//        TextView merchandiseReviewCount = convertView.findViewById(R.id.merchandise_review_count);
-//        TextView merchandiseDiscount = convertView.findViewById(R.id.merchandise_discount);
-//        TextView merchandiseStatus = convertView.findViewById(R.id.merchandise_status);
+        TextView merchandiseDiscount = convertView.findViewById(R.id.merchandise_discount);
+        TextView merchandiseRatingText=convertView.findViewById(R.id.merchandise_rating_text);
+        TextView merchandiseCategory=convertView.findViewById(R.id.merchandise_category);
 
         if (merchandise != null) {
-            // Set main image if available
             if (merchandise.getPhotos() != null && !merchandise.getPhotos().isEmpty()) {
-                // You'll need to implement proper image loading here
-                // For example using Picasso or Glide
-                // Picasso.get().load(merchandise.getPhotos().get(0)).into(merchandiseImage);
+                merchandiseImage.setImageResource(R.drawable.dinja);
             }
 
-            // Set basic information
             merchandiseTitle.setText(merchandise.getTitle());
             merchandiseDescription.setText(merchandise.getDescription());
 
-            // Format price with discount if applicable
             double finalPrice = merchandise.getPrice() * (1 - merchandise.getDiscount());
             merchandisePrice.setText(String.format("$%.2f", finalPrice));
 
-//            if (merchandise.getDiscount() > 0) {
-//                merchandiseDiscount.setVisibility(View.VISIBLE);
-//                merchandiseDiscount.setText(String.format("-%d%%", (int)(merchandise.getDiscount() * 100)));
-//            } else {
-//                merchandiseDiscount.setVisibility(View.GONE);
-        }
+            if (merchandise.getDiscount() > 0) {
+                merchandiseDiscount.setVisibility(View.VISIBLE);
+                merchandiseDiscount.setText(String.format("-%d%%", (int) (merchandise.getDiscount() * 100)));
+            } else {
+                merchandiseDiscount.setVisibility(View.GONE);
+            }
 
-        // Set location
-        merchandiseLocation.setText(String.format("%s, %s",
-                merchandise.getAddress().getCity(),
-                merchandise.getAddress().getStreet()));
+            merchandiseLocation.setText(String.format("%s, %s",
+                    merchandise.getAddress().getCity(),
+                    merchandise.getAddress().getStreet()));
 
-        // Set duration range
-//            merchandiseDuration.setText(String.format("%d-%d days",
-//                    merchandise.getMinDuration(),
-//                    merchandise.getMaxDuration()));
-
-        // Calculate average rating
-        merchandiseRating.setRating(merchandise.getRating().floatValue());
-
-        // Set status
-//            if (!merchandise.isAvailable()) {
-//                merchandiseStatus.setText("Not Available");
-//                merchandiseStatus.setTextColor(getContext().getColor(android.R.color.holo_red_dark));
-//            } else if (!merchandise.isVisible()) {
-//                merchandiseStatus.setText("Hidden");
-//                merchandiseStatus.setTextColor(getContext().getColor(android.R.color.darker_gray));
-//            } else {
-//                merchandiseStatus.setText("Available");
-//                merchandiseStatus.setTextColor(getContext().getColor(android.R.color.holo_green_dark));
-//            }
-
-                // Set click listener
+            merchandiseRating.setRating(merchandise.getRating().floatValue());
+            merchandiseRatingText.setText(String.format(Locale.getDefault(), "%.1f", merchandise.getRating()));
             merchandiseCard.setOnClickListener(v -> {
                 Toast.makeText(getContext(), merchandise.getTitle(), Toast.LENGTH_SHORT).show();
             });
-
+            merchandiseCategory.setText(String.format(Locale.getDefault(), "%s/%s",merchandise.getCategory().getTitle(),merchandise.getClass().getSimpleName()));
+        }
 
         return convertView;
     }
