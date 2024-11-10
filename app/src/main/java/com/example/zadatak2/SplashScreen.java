@@ -9,10 +9,18 @@ import android.os.Looper;
 import android.widget.ProgressBar;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
+
+import androidx.appcompat.widget.Toolbar;
+import com.google.android.material.appbar.MaterialToolbar;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -35,6 +43,38 @@ public class SplashScreen extends AppCompatActivity {
             startActivity(intent);
         });
         handler = new Handler(Looper.getMainLooper());
+
+        MaterialToolbar toolbar = findViewById(R.id.topAppBar);
+        setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+
+        if (itemId == R.id.edit_profile) {
+            // Handle Notifications click
+            Toast.makeText(this, "Notifications clicked", Toast.LENGTH_SHORT).show();
+            return true;
+
+        } else if (itemId == R.id.settings) {
+            // Handle Option 1 click
+            Toast.makeText(this, "Option 1 clicked", Toast.LENGTH_SHORT).show();
+            return true;
+
+        } else if (itemId == R.id.logout) {
+            // Handle Option 2 click
+            Toast.makeText(this, "Option 2 clicked", Toast.LENGTH_SHORT).show();
+            return true;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

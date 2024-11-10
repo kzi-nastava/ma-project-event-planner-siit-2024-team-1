@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/notifications"
+        android:icon="@drawable/ring_icon"
+        android:title=""
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/more"
+        android:icon="@drawable/more_vert"
+        android:title=""
+        app:showAsAction="ifRoom">
+
+        <menu android:id="@+id/submenu">
+            <item
+                android:id="@+id/edit_profile"
+                android:title="Profile"
+                android:icon="@drawable/account_icon"
+                />
+            <item
+                android:id="@+id/settings"
+                android:title="Settings"
+                android:icon="@drawable/settings_icon"/>
+            <item
+                android:id="@+id/logout"
+                android:title="Logout"
+                android:icon="@drawable/logout_icon"/>
+        </menu>
+    </item>
+</menu>

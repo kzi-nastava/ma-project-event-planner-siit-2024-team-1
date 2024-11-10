@@ -7,6 +7,29 @@
     android:layout_height="match_parent"
     tools:context=".SplashScreen">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            app:title=""
+            android:background="@color/surface_50"
+            app:titleTextColor="@color/white"
+            app:menu="@menu/toolbar_menu"
+            app:navigationIcon="@drawable/menu_icon"
+            app:popupTheme="@style/ThemeOverlay.Material3.Dark.ActionBar">
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
