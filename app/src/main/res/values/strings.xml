@@ -15,5 +15,9 @@
     <string name="description">Description</string>
     <string name="phone">Phone</string>
     <string name="address">Address</string>
-    <string name="page_title">Page Title</string>
+    <string name="events">Events</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="products">Products</string>
+    <string name="my_products">My Products</string>
+    <string name="shop">Shop</string>
 </resources>

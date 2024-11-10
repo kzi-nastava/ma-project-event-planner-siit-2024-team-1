@@ -10,8 +10,10 @@ import android.widget.ProgressBar;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
+import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
@@ -20,12 +22,18 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.navigation.NavigationView;
 
 public class SplashScreen extends AppCompatActivity {
 
     private Handler handler;
     private Button button;
+
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +54,36 @@ public class SplashScreen extends AppCompatActivity {
 
         MaterialToolbar toolbar = findViewById(R.id.topAppBar);
         setSupportActionBar(toolbar);
+
+        drawerLayout = findViewById(R.id.drawerLayout);
+        navigationView = findViewById(R.id.navigation_drawer);
+
+        // Set up the navigation icon click listener (hamburger icon)
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Open or close the drawer when the hamburger icon is clicked
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawer(GravityCompat.START); // Close the drawer if it's open
+                    navigationView.setElevation(0);
+                } else {
+                    drawerLayout.openDrawer(GravityCompat.START); // Open the drawer if it's closed
+                    navigationView.setElevation(999);
+                }
+            }
+        });
+
+        // Optional: Handle navigation item clicks
+        NavigationView navigationView = findViewById(R.id.navigation_drawer);
+        navigationView.setNavigationItemSelectedListener(item -> {
+            // Handle item clicks here
+            int id = item.getItemId();
+            //if (id == R.id.nav_item1) {
+                // Handle item1 click
+            //}
+            drawerLayout.closeDrawer(GravityCompat.START); // Close the drawer after selecting an item
+            return true;
+        });
     }
 
     @Override
