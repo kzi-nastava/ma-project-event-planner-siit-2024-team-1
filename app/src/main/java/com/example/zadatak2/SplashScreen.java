@@ -54,12 +54,8 @@ public class SplashScreen extends NavigationActivity {
         });
         handler = new Handler(Looper.getMainLooper());
 
-        // Find the fragment_container defined in activity_navigation.xml
-        FrameLayout container = findViewById(R.id.fragment_container);
-
-        // Inflate splash_screen layout and add it to the fragment_container
-        View splashView = LayoutInflater.from(this).inflate(R.layout.activity_navigation, container, false);
-        container.addView(splashView);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.topAppBar);
+        setSupportActionBar(toolbar);
     }
 
     @Override

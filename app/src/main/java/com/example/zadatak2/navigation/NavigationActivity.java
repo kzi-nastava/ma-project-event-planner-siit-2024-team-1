@@ -5,6 +5,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewStub;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ public class NavigationActivity extends AppCompatActivity {
     private TextInputLayout searchInputLayout;
     private MenuItem searchMenuItem;
     private View rootLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
