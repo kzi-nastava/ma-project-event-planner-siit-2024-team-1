@@ -5,8 +5,16 @@ import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 
 public class MerchandiseViewModel extends ViewModel {
-    public ArrayList<Merchandise> merchandises;
+    private ArrayList<Merchandise> merchandises;
     public MerchandiseViewModel(){
-        merchandises=new ArrayList<>(DummyMerchandiseGenerator.createDummyMerchandise(5));
+        setMerchandises(new ArrayList<>(DummyMerchandiseGenerator.createDummyMerchandise(5)));
+    }
+
+    public ArrayList<Merchandise> getMerchandises() {
+        return merchandises;
+    }
+
+    public void setMerchandises(ArrayList<Merchandise> merchandises) {
+        this.merchandises = merchandises;
     }
 }

@@ -10,6 +10,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,8 +32,20 @@ import com.example.zadatak2.databinding.ActivityHomeScreenBinding;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.zadatak2.databinding.ActivityHomeScreenBinding;
+import com.example.zadatak2.event.Event;
+import com.example.zadatak2.event.EventViewModel;
+import com.example.zadatak2.eventmerchandise.EventMerchandise;
+import com.example.zadatak2.eventmerchandise.EventMerchandiseViewModel;
+import com.example.zadatak2.eventmerchandise.EventsMerchandiseAdapter;
+import com.example.zadatak2.merchandise.Merchandise;
+import com.example.zadatak2.merchandise.MerchandiseViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeScreen extends AppCompatActivity {
 
@@ -66,7 +82,6 @@ public class HomeScreen extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        // Rest of your code...
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,6 +98,24 @@ public class HomeScreen extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
             drawerLayout.closeDrawer(GravityCompat.START);
+            if(id==R.id.sidebar_top) {
+                navController.navigate(R.id.nav_events_merchandise_list);
+            }
+            else if(id==R.id.sidebar_all) {
+                Bundle args = new Bundle();
+                args.putString("type", "all");
+                args.putString("title", getString(R.string.all));
+                navController.navigate(R.id.nav_events_merchandise_list,args);
+            }
+//            switch(id) {
+//                case R.id.sidebar_top:
+//                    navController.navigate(R.id.nav_events_merchandise_list);
+//                    break;
+//                case R.id.sidebar_all:
+//                    navController.navigate(R.id.nav_events_merchandise_list);
+//                    break;
+//                // Add more cases as needed
+//            }
             return true;
         });
 
@@ -95,6 +128,14 @@ public class HomeScreen extends AppCompatActivity {
                 return false;
             }
         });
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            if(arguments!=null && arguments.getString("title")!=null){
+                toolbar.setTitle(arguments.getString("title"));
+            }
+
+
+        });
+
     }
     @Override
     public boolean onSupportNavigateUp() {

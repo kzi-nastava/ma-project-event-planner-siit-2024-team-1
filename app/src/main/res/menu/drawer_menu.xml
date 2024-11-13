@@ -3,39 +3,39 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/main_item"
-        android:title="@string/events">
+        android:title="@string/events_merchandise">
         <menu>
             <item
-                android:id="@+id/nav_events"
-                android:title="@string/dashboard"
+                android:id="@+id/sidebar_top"
+                android:title="@string/top"
                 android:checkable="true"
                 app:showAsAction="ifRoom"
                 android:icon="@drawable/dashboard_icon"/>
             <item
-                android:id="@+id/nav_products"
-                android:title="@string/events"
+                android:id="@+id/sidebar_all"
+                android:title="@string/all"
                 android:icon="@drawable/dashboard_icon"
                 android:checkable="true"
                 app:showAsAction="ifRoom"/>
         </menu>
     </item>
-    <item
-        android:id="@+id/labels_item"
-        android:title="@string/products">
-        <menu>
-            <item
-                android:id="@+id/label_one"
-                android:title="@string/my_products"
-                android:checkable="true"
-                android:icon="@drawable/dashboard_icon"
-                app:showAsAction="ifRoom"/>
-            <item
-                android:id="@+id/label_two"
-                android:title="@string/shop"
-                android:icon="@drawable/dashboard_icon"
-                android:checkable="true"
-                app:showAsAction="ifRoom"/>
-        </menu>
-    </item>
+<!--    <item-->
+<!--        android:id="@+id/labels_item"-->
+<!--        android:title="@string/products">-->
+<!--        <menu>-->
+<!--            <item-->
+<!--                android:id="@+id/label_one"-->
+<!--                android:title="@string/my_products"-->
+<!--                android:checkable="true"-->
+<!--                android:icon="@drawable/dashboard_icon"-->
+<!--                app:showAsAction="ifRoom"/>-->
+<!--            <item-->
+<!--                android:id="@+id/label_two"-->
+<!--                android:title="@string/shop"-->
+<!--                android:icon="@drawable/dashboard_icon"-->
+<!--                android:checkable="true"-->
+<!--                app:showAsAction="ifRoom"/>-->
+<!--        </menu>-->
+<!--    </item>-->
 
 </menu>
