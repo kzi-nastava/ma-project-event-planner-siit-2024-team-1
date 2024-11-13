@@ -1,5 +1,7 @@
 package com.example.zadatak2;
 
+import static androidx.navigation.Navigation.findNavController;
+
 import android.opengl.Visibility;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,6 +19,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import com.example.zadatak2.databinding.ActivityHomeScreenBinding;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -33,23 +38,24 @@ public class HomeScreen extends AppCompatActivity {
     private TextInputLayout searchInputLayout;
     private MenuItem searchMenuItem;
     private View rootLayout;
+    private NavController navController;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         activityHomeScreenBinding=ActivityHomeScreenBinding.inflate(getLayoutInflater());
         setContentView(R.layout.activity_home_screen);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
         searchInputLayout = findViewById(R.id.search_input_layout);
 
+        navController = findNavController(this, R.id.nav_host_fragment);
+
+        // Link NavigationView with NavController
+        NavigationUI.setupWithNavController(navigationView, navController);
+
         MaterialToolbar toolbar = findViewById(R.id.topAppBar);
         setSupportActionBar(toolbar);
-
+        NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout);
 
         rootLayout = findViewById(R.id.drawerLayout);
         drawerLayout = findViewById(R.id.drawerLayout);
@@ -92,7 +98,10 @@ public class HomeScreen extends AppCompatActivity {
             }
         });
     }
-
+    @Override
+    public boolean onSupportNavigateUp() {
+        return NavigationUI.navigateUp(navController, drawerLayout) || super.onSupportNavigateUp();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
