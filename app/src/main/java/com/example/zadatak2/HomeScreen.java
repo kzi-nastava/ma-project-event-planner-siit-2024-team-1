@@ -1,9 +1,8 @@
 package com.example.zadatak2;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Adapter;
-import android.widget.ListView;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,17 +16,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.zadatak2.databinding.ActivityHomeScreenBinding;
 import com.example.zadatak2.event.Event;
 import com.example.zadatak2.event.EventViewModel;
-import com.example.zadatak2.event.EventsList;
+import com.example.zadatak2.eventmerchandise.EventMerchandise;
+import com.example.zadatak2.eventmerchandise.EventMerchandiseViewModel;
+import com.example.zadatak2.eventmerchandise.EventsMerchandiseAdapter;
 import com.example.zadatak2.merchandise.Merchandise;
-import com.example.zadatak2.merchandise.MerchandiseList;
 import com.example.zadatak2.merchandise.MerchandiseViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeScreen extends AppCompatActivity {
-    private MerchandiseViewModel merchandiseViewModel;
-    private EventViewModel eventViewModel;
+
+    private EventMerchandiseViewModel eventMerchandiseViewModel;
     ActivityHomeScreenBinding activityHomeScreenBinding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,16 +40,22 @@ public class HomeScreen extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        List<EventMerchandise> eventMerchandiseList=new ArrayList<>();
-        merchandiseViewModel=new ViewModelProvider(this).get(MerchandiseViewModel.class);
-        eventViewModel=new ViewModelProvider(this).get(EventViewModel.class);
-        for (Merchandise merchandise:merchandiseViewModel.merchandises
-             ) {
-            eventMerchandiseList.add(new EventMerchandise(EventMerchandise.MERCHANDISE,merchandise));
+        String extraValue = getIntent().getStringExtra("your_key_here");
+        if (extraValue == null) {
+            extraValue = "top";
         }
-        for (Event event:eventViewModel.events
-        ) {
-            eventMerchandiseList.add(new EventMerchandise(EventMerchandise.EVENT,event));
+        Log.i("nesto1",extraValue);
+        eventMerchandiseViewModel=new ViewModelProvider(this).get(EventMerchandiseViewModel.class);
+        List<EventMerchandise> eventMerchandiseList=new ArrayList<>();
+        switch (extraValue) {
+            case "top":
+            case "Top":
+                eventMerchandiseList = eventMerchandiseViewModel.getTop();
+            break;
+            case "all":
+            case "All":
+                eventMerchandiseList = eventMerchandiseViewModel.getAll();
+                break;
         }
         EventsMerchandiseAdapter adapter= new EventsMerchandiseAdapter(eventMerchandiseList);
         RecyclerView recyclerView = findViewById(R.id.events_merchandise_recycler_view);

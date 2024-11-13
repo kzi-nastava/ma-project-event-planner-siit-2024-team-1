@@ -1,4 +1,4 @@
-package com.example.zadatak2;
+package com.example.zadatak2.eventmerchandise;
 
 import com.example.zadatak2.event.Event;
 import com.example.zadatak2.merchandise.Merchandise;

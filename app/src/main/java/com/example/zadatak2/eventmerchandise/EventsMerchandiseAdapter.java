@@ -1,4 +1,4 @@
-package com.example.zadatak2;
+package com.example.zadatak2.eventmerchandise;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.zadatak2.R;
 import com.example.zadatak2.event.Event;
 import com.example.zadatak2.merchandise.Merchandise;
 
