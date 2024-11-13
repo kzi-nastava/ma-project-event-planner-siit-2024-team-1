@@ -6,6 +6,8 @@
         <item name="colorOnPrimary">@color/primary_text_color</item>
         <item name="colorSecondary">@color/accent_color</item>
         <item name="materialCardViewFilledStyle">@style/Card.Night</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
     <style name="Secondary.Button.Primary.Text" parent="Widget.Material3.Button">
         <item name="backgroundTint">?attr/colorSecondary</item>

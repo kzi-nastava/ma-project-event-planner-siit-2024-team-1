@@ -51,22 +51,6 @@
         </com.google.android.material.appbar.AppBarLayout>
 
 
-        <include
-            android:id="@+id/include"
-            layout="@layout/activity_home_content" />
-
-        <!-- NavHostFragment for navigation -->
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/nav_host_fragment"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:defaultNavHost="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-            app:navGraph="@navigation/base_navigation" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -78,7 +62,3 @@
         app:menu="@menu/drawer_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
-
-
-
-

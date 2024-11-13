@@ -69,7 +69,7 @@ public class MerchandiseList extends Fragment {
         // Inflate the layout for this fragment
         merchandisesListBinding=FragmentMerchandisesListBinding.inflate(getLayoutInflater());
         merchandiseViewModel =new ViewModelProvider(this).get(MerchandiseViewModel.class);
-        MerchandiseListAdapter mla = new MerchandiseListAdapter(requireContext(), merchandiseViewModel.merchandises);
+        MerchandiseListAdapter mla = new MerchandiseListAdapter(requireContext(), merchandiseViewModel.getMerchandises());
         ListView merchandiseListView = merchandisesListBinding.merchandisesList;
         merchandiseListView.setAdapter(mla);
 

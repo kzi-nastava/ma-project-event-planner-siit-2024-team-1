@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.zadatak2.databinding.FragmentEventsListBinding;
-import com.example.zadatak2.event.EventsListAdapter;
-import com.example.zadatak2.event.EventViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,7 +67,7 @@ public class EventsList extends Fragment {
                              Bundle savedInstanceState) {
         eventsListBinding= FragmentEventsListBinding.inflate(getLayoutInflater());
         eventViewModel =new ViewModelProvider(this).get(EventViewModel.class);
-        EventsListAdapter mla = new EventsListAdapter(requireContext(), eventViewModel.events);
+        EventsListAdapter mla = new EventsListAdapter(requireContext(), eventViewModel.getEvents());
         ListView eventListView = eventsListBinding.eventsList;
         eventListView.setAdapter(mla);
 
