@@ -51,14 +51,21 @@
         </com.google.android.material.appbar.AppBarLayout>
 
 
-        <include layout="@layout/activity_login_screen" />
+        <include
+            android:id="@+id/include"
+            layout="@layout/activity_home_content" />
 
         <!-- NavHostFragment for navigation -->
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:defaultNavHost="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/appBarLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/appBarLayout"
             app:navGraph="@navigation/base_navigation" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

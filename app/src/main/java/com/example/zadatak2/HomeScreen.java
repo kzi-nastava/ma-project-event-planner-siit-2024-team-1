@@ -21,6 +21,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.zadatak2.databinding.ActivityHomeScreenBinding;
@@ -43,48 +44,45 @@ public class HomeScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        activityHomeScreenBinding=ActivityHomeScreenBinding.inflate(getLayoutInflater());
-        setContentView(R.layout.activity_home_screen);
+        // Initialize binding and set the root view
+        activityHomeScreenBinding = ActivityHomeScreenBinding.inflate(getLayoutInflater());
+        setContentView(activityHomeScreenBinding.getRoot());  // Use binding root instead of layout resource
 
-        searchInputLayout = findViewById(R.id.search_input_layout);
+        // Initialize views using binding
+        searchInputLayout = activityHomeScreenBinding.searchInputLayout;
+        rootLayout = activityHomeScreenBinding.drawerLayout;
+        drawerLayout = activityHomeScreenBinding.drawerLayout;
+        navigationView = activityHomeScreenBinding.navigationDrawer;
+        MaterialToolbar toolbar = activityHomeScreenBinding.topAppBar;
+        NavHostFragment navHostFragment =
+                (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        NavController navController = navHostFragment.getNavController();
 
-        navController = findNavController(this, R.id.nav_host_fragment);
+        // Set up NavController
+        //navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
-        // Link NavigationView with NavController
-        NavigationUI.setupWithNavController(navigationView, navController);
-
-        MaterialToolbar toolbar = findViewById(R.id.topAppBar);
+        // Set up toolbar and navigation
         setSupportActionBar(toolbar);
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout);
+        NavigationUI.setupWithNavController(navigationView, navController);
 
-        rootLayout = findViewById(R.id.drawerLayout);
-        drawerLayout = findViewById(R.id.drawerLayout);
-        navigationView = findViewById(R.id.navigation_drawer);
-
-        // Set up the navigation icon click listener (hamburger icon)
+        // Rest of your code...
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Open or close the drawer when the hamburger icon is clicked
                 if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                    drawerLayout.closeDrawer(GravityCompat.START); // Close the drawer if it's open
+                    drawerLayout.closeDrawer(GravityCompat.START);
                     navigationView.setElevation(0);
                 } else {
-                    drawerLayout.openDrawer(GravityCompat.START); // Open the drawer if it's closed
+                    drawerLayout.openDrawer(GravityCompat.START);
                     navigationView.setElevation(999);
                 }
             }
         });
 
-        // Optional: Handle navigation item clicks
-        NavigationView navigationView = findViewById(R.id.navigation_drawer);
         navigationView.setNavigationItemSelectedListener(item -> {
-            // Handle item clicks here
             int id = item.getItemId();
-            //if (id == R.id.nav_item1) {
-            // Handle item1 click
-            //}
-            drawerLayout.closeDrawer(GravityCompat.START); // Close the drawer after selecting an item
+            drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });
 
