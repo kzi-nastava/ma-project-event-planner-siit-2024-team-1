@@ -2,15 +2,23 @@ package com.example.zadatak2.event;
 
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
+import com.example.zadatak2.DotsIndicatorDecoration;
+import com.example.zadatak2.R;
 import com.example.zadatak2.databinding.FragmentEventsListBinding;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,9 +75,33 @@ public class EventsList extends Fragment {
                              Bundle savedInstanceState) {
         eventsListBinding= FragmentEventsListBinding.inflate(getLayoutInflater());
         eventViewModel =new ViewModelProvider(this).get(EventViewModel.class);
-        EventsListAdapter mla = new EventsListAdapter(requireContext(), eventViewModel.getEvents());
-        ListView eventListView = eventsListBinding.eventsList;
-        eventListView.setAdapter(mla);
+        ArrayList<Event> eventList=new ArrayList<>();
+        String topString=getString(R.string.top);
+        String extraValue = topString; // Default value
+        if (getArguments() != null) {
+            extraValue = getArguments().getString("type", topString);
+        }
+        switch (extraValue){
+            case "top":
+            case "Top":
+                eventList=eventViewModel.getTop();
+                break;
+            case "all":
+            case "All":
+                eventList=eventViewModel.getAll();
+                eventsListBinding.eventsHeader.setText(getString(R.string.all_events));
+                break;
+
+        }
+        EventsAdapter eventsAdapter = new EventsAdapter(requireContext(), eventList);
+        RecyclerView recyclerView = eventsListBinding.eventsRecyclerViewHorizontal;
+        recyclerView.setAdapter(eventsAdapter);
+        recyclerView.addItemDecoration(new DotsIndicatorDecoration(
+                ContextCompat.getColor(getContext(), R.color.accent_color),
+                ContextCompat.getColor(getContext(), R.color.primary_color)
+        ));
+        LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
 
         return eventsListBinding.getRoot();
     }

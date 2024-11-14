@@ -2,15 +2,22 @@ package com.example.zadatak2.merchandise;
 
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
+import com.example.zadatak2.DotsIndicatorDecoration;
+import com.example.zadatak2.R;
 import com.example.zadatak2.databinding.FragmentMerchandisesListBinding;
+import com.example.zadatak2.event.Event;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,9 +76,33 @@ public class MerchandiseList extends Fragment {
         // Inflate the layout for this fragment
         merchandisesListBinding=FragmentMerchandisesListBinding.inflate(getLayoutInflater());
         merchandiseViewModel =new ViewModelProvider(this).get(MerchandiseViewModel.class);
-        MerchandiseListAdapter mla = new MerchandiseListAdapter(requireContext(), merchandiseViewModel.getMerchandises());
-        ListView merchandiseListView = merchandisesListBinding.merchandisesList;
-        merchandiseListView.setAdapter(mla);
+        ArrayList<Merchandise> merchandiseList=new ArrayList<>();
+        String topString=getString(R.string.top);
+        String extraValue = topString; // Default value
+        if (getArguments() != null) {
+            extraValue = getArguments().getString("type", topString);
+        }
+        switch (extraValue){
+            case "top":
+            case "Top":
+                merchandiseList=merchandiseViewModel.getTop();
+                break;
+            case "all":
+            case "All":
+                merchandiseList=merchandiseViewModel.getAll();
+                merchandisesListBinding.merchandiseHeader.setText(getString(R.string.all_merchandise));
+                break;
+
+        }
+        MerchandiseAdapter merchandiseAdapter = new MerchandiseAdapter(requireContext(), merchandiseList);
+        RecyclerView recyclerView = merchandisesListBinding.merchandisesListHorizontal;
+        recyclerView.setAdapter(merchandiseAdapter);
+        recyclerView.addItemDecoration(new DotsIndicatorDecoration(
+                ContextCompat.getColor(getContext(), R.color.accent_color),
+                ContextCompat.getColor(getContext(), R.color.primary_color)
+        ));
+        LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
 
         return merchandisesListBinding.getRoot();
     }

@@ -23,6 +23,11 @@
     <string name="events_merchandise">Events and Merchandise</string>
     <string name="top">Top</string>
     <string name="all">All</string>
+    <string name="top_merchandise">Top Products/Services</string>
+    <string name="top_events">Top Events</string>
+    <string name="see_details">See details</string>
+    <string name="all_events">All Events</string>
+    <string name="all_merchandise">All Products/Services</string>
 
 
 </resources>

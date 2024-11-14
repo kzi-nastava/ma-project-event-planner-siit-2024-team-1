@@ -99,23 +99,14 @@ public class HomeScreen extends AppCompatActivity {
             int id = item.getItemId();
             drawerLayout.closeDrawer(GravityCompat.START);
             if(id==R.id.sidebar_top) {
-                navController.navigate(R.id.nav_events_merchandise_list);
+                navController.navigate(R.id.nav_events_merchandise_list_horizontal);
             }
             else if(id==R.id.sidebar_all) {
                 Bundle args = new Bundle();
                 args.putString("type", "all");
                 args.putString("title", getString(R.string.all));
-                navController.navigate(R.id.nav_events_merchandise_list,args);
+                navController.navigate(R.id.nav_events_merchandise_list_horizontal,args);
             }
-//            switch(id) {
-//                case R.id.sidebar_top:
-//                    navController.navigate(R.id.nav_events_merchandise_list);
-//                    break;
-//                case R.id.sidebar_all:
-//                    navController.navigate(R.id.nav_events_merchandise_list);
-//                    break;
-//                // Add more cases as needed
-//            }
             return true;
         });
 
