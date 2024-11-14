@@ -14,6 +14,7 @@
     </style>
     <style name="Card.Night" parent="Widget.Material3.CardView.Filled">
         <item name="cardBackgroundColor">@color/surface_card</item>
+        <item name="android:shadowColor">@color/primary_color</item>
     </style>
     <style name="RatingBar" parent="Widget.AppCompat.RatingBar.Small">
         <item name="android:progressTint">@color/primary_color</item>

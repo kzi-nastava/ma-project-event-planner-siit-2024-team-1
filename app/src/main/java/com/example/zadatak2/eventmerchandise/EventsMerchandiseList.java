@@ -1,4 +1,4 @@
-package com.example.zadatak2;
+package com.example.zadatak2.eventmerchandise;
 
 import android.os.Bundle;
 
@@ -13,9 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.zadatak2.databinding.FragmentEventsMerchandiseListBinding;
-import com.example.zadatak2.eventmerchandise.EventMerchandise;
-import com.example.zadatak2.eventmerchandise.EventMerchandiseViewModel;
-import com.example.zadatak2.eventmerchandise.EventsMerchandiseAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

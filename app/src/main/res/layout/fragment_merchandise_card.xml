@@ -4,23 +4,28 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="4dp">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="4dp"
-        app:cardCornerRadius="12dp"
+        android:elevation="8dp"
+        app:cardElevation="8dp"
+        app:cardMaxElevation="12dp"
+        app:cardCornerRadius="8dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true"
         style="?attr/materialCardViewFilledStyle">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
+            <!-- Left side: Image -->
             <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="200dp">
+                android:layout_width="120dp"
+                android:layout_height="match_parent">
 
                 <ImageView
                     android:id="@+id/merchandise_image"
@@ -40,12 +45,13 @@
                     android:visibility="gone"/>
             </FrameLayout>
 
+            <!-- Right side: Content -->
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="16dp">
-
 
                 <TextView
                     android:id="@+id/merchandise_title"
@@ -54,14 +60,14 @@
                     android:text="Signature Portrait Session"
                     android:textAppearance="?attr/textAppearanceTitleMedium"
                     android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/merchandise_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="category/type"
                     android:textAppearance="?attr/textAppearanceBodyMedium"
-                    android:textColor="?android:attr/textColorSecondary"
-                    />
+                    android:textColor="?android:attr/textColorSecondary" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -73,24 +79,25 @@
                     <ImageView
                         android:layout_width="16dp"
                         android:layout_height="16dp"
-                        android:src="@android:drawable/ic_menu_mylocation"
-                         />
+                        android:src="@android:drawable/ic_menu_mylocation" />
+
                     <TextView
                         android:id="@+id/merchandise_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:text="Bulevar Oslobodenja 76, Novi Sad"
-                        android:textAppearance="?attr/textAppearanceBodySmall" />
-
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:maxLines="1"
+                        android:ellipsize="end" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
 
                     <RatingBar
                         android:id="@+id/merchandise_rating"
@@ -107,17 +114,18 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:text="4.5"
-                        android:textAppearance="?attr/textAppearanceBodySmall" />
-                </LinearLayout>
+                        android:textAppearance="?attr/textAppearanceBodyMedium" />
 
-                <TextView
-                    android:id="@+id/merchandise_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="299.99"
-                    android:textAppearance="?attr/textAppearanceTitleMedium"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/merchandise_price"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="299.99"
+                        android:textAppearance="?attr/textAppearanceTitleMedium"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/merchandise_description"
