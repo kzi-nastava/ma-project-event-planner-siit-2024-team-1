@@ -6,15 +6,84 @@
     android:orientation="vertical"
     tools:context=".EventsMerchindisesHorizontal">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerViewEvent"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+    <!-- Search Bar -->
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerViewMerchandise"
+    <!-- Filters Row -->
+    <HorizontalScrollView
+        android:id="@+id/filters_options_horizontal_scroll"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <Button
+                android:id="@+id/filters_button"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+
+                android:text="@string/filters"
+                android:textColor="@color/primary_text_color" />
+
+            <Button
+                android:id="@+id/sort_events_by_button"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+
+                android:text="@string/sort_events"
+                android:textColor="@color/primary_text_color" />
+
+            <Button
+                android:id="@+id/sort_merchandise_by_button"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+
+                android:text="@string/sort_merchandise_by"
+                android:textColor="@color/primary_text_color" />
+
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- Your existing Fragment Containers -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fragmentContainerViewFilters"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fragmentContainerViewEvent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fragmentContainerViewMerchandise"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </ScrollView>
+
 </LinearLayout>

@@ -28,6 +28,28 @@
     <string name="see_details">See details</string>
     <string name="all_events">All Events</string>
     <string name="all_merchandise">All Products/Services</string>
+    <string name="filters">Filters</string>
+    <string name="sort_merchandise_by">Sort Products/Services by</string>
+    <string name="sort_events">Sort Events by</string>
+    <string name="sort_events_by_title">Title</string>
+    <string name="sort_events_by_description">Description</string>
+    <string name="sort_events_by_city">City</string>
+    <string name="sort_events_by_date">Date</string>
+    <string name="sort_events_by_type">Type</string>
+    <string name="sort_merchandise_by_price">Price</string>
+    <string name="sort_merchandise_by_discount">Discount</string>
+    <string name="sort_merchandise_by_rating">Rating</string>
+    <string name="services">Services</string>
+    <string name="event_filters">Event Filters</string>
+    <string name="type">Type</string>
+    <string name="service_filters">Service Filters</string>
+    <string name="price_min">Price Min</string>
+    <string name="price_max">Price Max</string>
+    <string name="category">Category</string>
+    <string name="duration_min">Duration Min</string>
+    <string name="duration_max">Duration Max</string>
+    <string name="product_filters">Product Filters</string>
+    <string name="apply_filters">Apply filters</string>
 
 
 </resources>

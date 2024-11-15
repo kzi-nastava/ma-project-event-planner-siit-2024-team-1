@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_title"
+        android:title="@string/sort_events_by_title" />
+
+    <item
+        android:id="@+id/menu_description"
+        android:title="@string/sort_events_by_description" />
+
+    <item
+        android:id="@+id/menu_city"
+        android:title="@string/sort_events_by_city" />
+
+    <item
+        android:id="@+id/menu_price"
+        android:title="@string/sort_merchandise_by_price" />
+
+    <item
+        android:id="@+id/menu_discount"
+        android:title="@string/sort_merchandise_by_discount" />
+    <item
+        android:id="@+id/menu_rating"
+        android:title="@string/sort_merchandise_by_rating" />
+</menu>

@@ -60,6 +60,7 @@ public class HomeScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         // Initialize binding and set the root view
         activityHomeScreenBinding = ActivityHomeScreenBinding.inflate(getLayoutInflater());
         setContentView(activityHomeScreenBinding.getRoot());  // Use binding root instead of layout resource
