@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SplashScreen">
-    <include layout="@layout/activity_navigation" />
 
             <ProgressBar
                 android:id="@+id/progressBar"

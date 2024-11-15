@@ -11,21 +11,21 @@
         android:id="@+id/iconContainer"
         android:layout_width="0dp"
         android:layout_height="150dp"
-        android:background="#D3D3D3"
-    android:orientation="vertical"
-    android:gravity="center"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    >
+        android:background="@color/primary_color"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <!-- User icon -->
+        <!-- Person Icon -->
         <ImageView
-            android:id="@+id/userIcon"
-            android:layout_width="413dp"
-            android:layout_height="80dp"
-            android:contentDescription="User Icon"
-            android:src="@drawable/user_icon" />
-</LinearLayout>
+            android:id="@+id/personIcon"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/add_user"
+        />
+    </LinearLayout>
 
     <!-- Form Fields -->
 <EditText
@@ -110,23 +110,24 @@ app:layout_constraintEnd_toEndOf="parent"
 app:layout_constraintHorizontal_bias="0.5"
 app:layout_constraintWidth_percent="0.9" />
 
-<Button
-android:id="@+id/choosePhotosButton"
-android:layout_width="0dp"
-android:layout_height="wrap_content"
-android:text="@string/photo"
-app:layout_constraintTop_toBottomOf="@id/editTextConfirmPassword"
-app:layout_constraintStart_toStartOf="parent"
-app:layout_constraintEnd_toEndOf="parent"
-app:layout_constraintHorizontal_bias="0.5"
-app:layout_constraintWidth_percent="0.9" />
+    <Button
+        android:id="@+id/choosePhotosButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/photo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextConfirmPassword"
+        app:layout_constraintWidth_percent="0.9" />
 
 <Button
 android:id="@+id/createAccountButton"
 android:layout_width="0dp"
 android:layout_height="wrap_content"
 android:text="@string/register"
-app:layout_constraintTop_toBottomOf="@id/choosePhotosButton"
+app:layout_constraintBottom_toBottomOf="parent"
 app:layout_constraintStart_toStartOf="parent"
 app:layout_constraintEnd_toEndOf="parent"
 app:layout_constraintHorizontal_bias="0.5"

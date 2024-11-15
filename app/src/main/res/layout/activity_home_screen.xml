@@ -37,7 +37,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
-                    android:hint="Search">
+                    android:hint="Search"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/close_search_icon">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/search_edit_text"
