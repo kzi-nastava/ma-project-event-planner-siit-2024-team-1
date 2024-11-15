@@ -128,6 +128,9 @@ public class HomeScreen extends AppCompatActivity {
 
         });
 
+        searchInputLayout.setEndIconOnClickListener(v -> {
+            hideSearchInput();
+        });
     }
     @Override
     public boolean onSupportNavigateUp() {
@@ -160,38 +163,37 @@ public class HomeScreen extends AppCompatActivity {
             return true;
         }else if (itemId == R.id.search_icon)
         {
-            showSearchInput();
+            // Show search input and hide search icon
+            searchInputLayout.setVisibility(View.VISIBLE);
+            searchMenuItem.setVisible(false);
+
+            // Focus on the input field
+            searchInputLayout.getEditText().requestFocus();
+
+            // Set focus change listener
+            searchInputLayout.getEditText().setOnFocusChangeListener((view, hasFocus) -> {
+                if (!hasFocus) {
+                    hideSearchInput();
+                }
+            });
+
+            searchInputLayout.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (!hasFocus) {
+                        hideSearchInput();
+                    }
+                }
+            });
+
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void showSearchInput() {
-        // Hide the search icon and show the search input field
-        searchMenuItem.setVisible(false);
-        searchInputLayout.setVisibility(View.VISIBLE);
-        setContentView(R.layout.activity_home_screen);
-        // Focus on the search input field
-        findViewById(R.id.search_edit_text).requestFocus();
-
-        findViewById(R.id.search_edit_text).setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    // Hide search input and show the search icon again when focus is lost
-                    hideSearchInput();
-                }
-            }
-        });
-    }
-
     private void hideSearchInput() {
-        // Hide the search input field and show the search icon
         searchInputLayout.setVisibility(View.GONE);
         searchMenuItem.setVisible(true);
-        searchInputLayout.clearFocus();
-        // Clear the search text
-        findViewById(R.id.search_edit_text).clearFocus();
     }
 
     @Override
