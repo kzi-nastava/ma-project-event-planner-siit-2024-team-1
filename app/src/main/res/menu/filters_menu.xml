@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:id="@+id/show_options">
+        <item
+            android:id="@+id/menu_show_events"
+            android:checkable="true"
+            android:title="Events" />
+        <item
+            android:id="@+id/menu_show_services"
+            android:checkable="true"
+            android:title="Services" />
+        <item
+            android:id="@+id/menu_show_products"
+            android:checkable="true"
+            android:title="Products" />
+    </group>
+
+    <item
+        android:id="@+id/menu_event_filters"
+        android:title="Event filters">
+        <menu>
+            <item
+                android:id="@+id/menu_event_date"
+                android:title="Event date" />
+            <item
+                android:id="@+id/menu_event_type"
+                android:title="Type" />
+            <item
+                android:id="@+id/menu_event_city"
+                android:title="City" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/menu_service_filters"
+        android:title="Service filters">
+        <menu>
+            <item
+                android:id="@+id/menu_service_price_min"
+                android:title="Price Min" />
+            <item
+                android:id="@+id/menu_service_price_max"
+                android:title="Price Max" />
+            <item
+                android:id="@+id/menu_service_category"
+                android:title="Category" />
+            <item
+                android:id="@+id/menu_service_duration_min"
+                android:title="Duration Min" />
+            <item
+                android:id="@+id/menu_service_duration_max"
+                android:title="Duration Max" />
+            <item
+                android:id="@+id/menu_service_city"
+                android:title="City" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/menu_product_filters"
+        android:title="Product filters">
+        <menu>
+            <item
+                android:id="@+id/menu_product_price_min"
+                android:title="Price Min" />
+            <item
+                android:id="@+id/menu_product_price_max"
+                android:title="Price Max" />
+            <item
+                android:id="@+id/menu_product_category"
+                android:title="Category" />
+            <item
+                android:id="@+id/menu_product_duration_min"
+                android:title="Duration Min" />
+            <item
+                android:id="@+id/menu_product_duration_max"
+                android:title="Duration Max" />
+            <item
+                android:id="@+id/menu_product_city"
+                android:title="City" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/menu_apply_filters"
+        android:title="Apply filters"
+        app:showAsAction="always" />
+
+</menu>

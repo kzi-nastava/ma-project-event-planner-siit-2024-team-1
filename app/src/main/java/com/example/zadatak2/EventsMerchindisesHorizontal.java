@@ -2,26 +2,21 @@ package com.example.zadatak2;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.FragmentContainerView;
+import androidx.fragment.app.FragmentResultListener;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.zadatak2.databinding.FragmentEventsMerchandiseListBinding;
 import com.example.zadatak2.databinding.FragmentEventsMerchindisesHorizontalBinding;
+import com.example.zadatak2.databinding.FragmentFiltersBinding;
 import com.example.zadatak2.event.EventsList;
-import com.example.zadatak2.eventmerchandise.EventMerchandise;
-import com.example.zadatak2.eventmerchandise.EventMerchandiseViewModel;
-import com.example.zadatak2.eventmerchandise.EventsMerchandiseAdapter;
 import com.example.zadatak2.merchandise.MerchandiseList;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.widget.Button;
+import android.widget.PopupMenu;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,6 +31,11 @@ public class EventsMerchindisesHorizontal extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     private FragmentEventsMerchindisesHorizontalBinding eventsMerchandiseHorizontalBinding;
+    private Button sortByEventsButton;
+    private Button sortByMerchandiseButton;
+    private Button filtersButton;
+    private FragmentContainerView filterFragmentContainer;
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -70,30 +70,98 @@ public class EventsMerchindisesHorizontal extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        getChildFragmentManager()
+                .setFragmentResultListener("applyFilters", this, new FragmentResultListener() {
+                    @Override
+                    public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
+                        String result = bundle.getString("filter_result");
+                        hideFilterFragment();
+                    }
+                });
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        eventsMerchandiseHorizontalBinding= FragmentEventsMerchindisesHorizontalBinding.inflate(getLayoutInflater());
-        String extraValue = "top"; // Default value
-        if (getArguments() != null) {
-            extraValue = getArguments().getString("type", "top");
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        eventsMerchandiseHorizontalBinding = FragmentEventsMerchindisesHorizontalBinding.inflate(getLayoutInflater());
+        View view = eventsMerchandiseHorizontalBinding.getRoot();
+
+        String extraValue = getArguments() != null ? getArguments().getString("type", "top") : "top";
+        switch (extraValue){
+            case "top":
+            case "Top":
+                eventsMerchandiseHorizontalBinding.filtersOptionsHorizontalScroll.setVisibility(View.GONE);
+                break;
+            case "all":
+            case "All":
+                eventsMerchandiseHorizontalBinding.filtersOptionsHorizontalScroll.setVisibility(View.VISIBLE);
+                break;
         }
         Bundle bundle = new Bundle();
         bundle.putString("type", extraValue);
         EventsList eventsList=new EventsList();
         eventsList.setArguments(bundle);
-        getChildFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainerViewEvent, eventsList)
-                .commit();
         MerchandiseList merchandiseList=new MerchandiseList();
         merchandiseList.setArguments(bundle);
+
+
         getChildFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainerViewEvent, eventsList)
                 .replace(R.id.fragmentContainerViewMerchandise, merchandiseList)
                 .commit();
 
-        return  eventsMerchandiseHorizontalBinding.getRoot();
+        Button sortByEventsButton = eventsMerchandiseHorizontalBinding.sortEventsByButton;
+        Button sortByMerchandiseButton = eventsMerchandiseHorizontalBinding.sortMerchandiseByButton;
+        Button filtersButton = eventsMerchandiseHorizontalBinding.filtersButton;
+        filterFragmentContainer = eventsMerchandiseHorizontalBinding.fragmentContainerViewFilters;
+
+        sortByEventsButton.setOnClickListener(this::showSortByEventsMenu);
+        sortByMerchandiseButton.setOnClickListener(this::showSortByMerchandiseMenu);
+        filtersButton.setOnClickListener(this::handleFiltersButtonClick);
+
+
+
+
+        return view;
+    }
+
+    private void handleFiltersButtonClick(View v) {
+        if (filterFragmentContainer.getVisibility() == View.GONE) {
+            getChildFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContainerViewFilters, new Filters())
+                    .commit();
+            filterFragmentContainer.setVisibility(View.VISIBLE);
+            eventsMerchandiseHorizontalBinding.fragmentContainerViewEvent.setVisibility(View.GONE);
+            eventsMerchandiseHorizontalBinding.fragmentContainerViewMerchandise.setVisibility(View.GONE);
+        } else {
+            hideFilterFragment();
+        }
+    }
+    private void hideFilterFragment() {
+        Filters filterFragment = (Filters) getChildFragmentManager().findFragmentById(R.id.fragment_filters);
+        if (filterFragment != null) {
+            getChildFragmentManager().beginTransaction()
+                    .remove(filterFragment)
+                    .commit();
+        }
+        filterFragmentContainer.setVisibility(View.GONE);
+        eventsMerchandiseHorizontalBinding.fragmentContainerViewEvent.setVisibility(View.VISIBLE);
+        eventsMerchandiseHorizontalBinding.fragmentContainerViewMerchandise.setVisibility(View.VISIBLE);
+    }
+
+    private void showSortByEventsMenu(View view) {
+        PopupMenu popup = new PopupMenu(getContext(), view);
+        popup.getMenuInflater().inflate(R.menu.sort_by_events_menu, popup.getMenu());
+        popup.show();
+    }
+
+    private void showSortByMerchandiseMenu(View view) {
+        PopupMenu popup = new PopupMenu(getContext(), view);
+        popup.getMenuInflater().inflate(R.menu.sort_by_merchandise_menu, popup.getMenu());
+        popup.show();
+    }
+    private void showFiltersMenu(View view) {
+        PopupMenu popup = new PopupMenu(getContext(), view);
+        popup.getMenuInflater().inflate(R.menu.filters_menu, popup.getMenu());
+        popup.show();
     }
 }
