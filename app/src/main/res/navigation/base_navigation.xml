@@ -11,7 +11,7 @@
         tools:layout="@layout/fragment_merchandises_list"/>
     <fragment
         android:id="@+id/nav_events_merchandise_list_horizontal"
-        android:name="com.example.zadatak2.EventsMerchindisesHorizontal"
+        android:name="com.example.zadatak2.eventmerchandise.EventsMerchindisesHorizontal"
         android:label="@string/top"
         tools:layout="@layout/fragment_events_merchindises_horizontal"/>
 </navigation>

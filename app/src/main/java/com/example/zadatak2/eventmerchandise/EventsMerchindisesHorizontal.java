@@ -1,4 +1,4 @@
-package com.example.zadatak2;
+package com.example.zadatak2.eventmerchandise;
 
 import android.os.Bundle;
 
@@ -11,8 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.zadatak2.R;
 import com.example.zadatak2.databinding.FragmentEventsMerchindisesHorizontalBinding;
-import com.example.zadatak2.databinding.FragmentFiltersBinding;
 import com.example.zadatak2.event.EventsList;
 import com.example.zadatak2.merchandise.MerchandiseList;
 import android.widget.Button;

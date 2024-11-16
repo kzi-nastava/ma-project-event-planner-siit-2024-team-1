@@ -12,10 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.zadatak2.DotsIndicatorDecoration;
+import com.example.zadatak2.eventmerchandise.DotsIndicatorDecoration;
 import com.example.zadatak2.R;
 import com.example.zadatak2.databinding.FragmentMerchandisesListBinding;
-import com.example.zadatak2.event.Event;
 
 import java.util.ArrayList;
 
