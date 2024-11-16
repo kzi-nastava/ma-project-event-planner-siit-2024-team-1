@@ -75,7 +75,7 @@ public class MerchandiseList extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         merchandisesListBinding=FragmentMerchandisesListBinding.inflate(getLayoutInflater());
-        merchandiseViewModel =new ViewModelProvider(this).get(MerchandiseViewModel.class);
+        merchandiseViewModel =new ViewModelProvider(requireActivity()).get(MerchandiseViewModel.class);
         ArrayList<Merchandise> merchandiseList=new ArrayList<>();
         String topString=getString(R.string.top);
         String extraValue = topString; // Default value

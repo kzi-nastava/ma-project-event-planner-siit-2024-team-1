@@ -36,7 +36,6 @@
                         android:layout_height="wrap_content"
                         android:maxLines="1"
                         android:ellipsize="end"
-                        android:text="Signature Portrait Session"
                         android:textAppearance="?attr/textAppearanceTitleMedium"
                         android:textStyle="bold" />
 
@@ -46,7 +45,6 @@
                         android:layout_height="wrap_content"
                         android:maxLines="1"
                         android:ellipsize="end"
-                        android:text="category/type"
                         android:textAppearance="?attr/textAppearanceBodyMedium"
                         android:textColor="?android:attr/textColorSecondary" />
                 </LinearLayout>
@@ -78,7 +76,6 @@
                             android:layout_marginStart="4dp"
                             android:maxLines="1"
                             android:ellipsize="end"
-                            android:text="September 15, 2024 at 14:30"
                             android:textAppearance="?attr/textAppearanceBodySmall" />
                     </LinearLayout>
 
@@ -101,7 +98,6 @@
                             android:layout_marginStart="4dp"
                             android:maxLines="1"
                             android:ellipsize="end"
-                            android:text="Bulevar Oslobodenja 76, Novi Sad"
                             android:textAppearance="?attr/textAppearanceBodySmall" />
                     </LinearLayout>
                 </LinearLayout>
@@ -112,7 +108,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="4dp"
-                    android:text="Professional Photography Session that captures your unique personality and style"
                     android:maxLines="2"
                     android:ellipsize="end"
                     android:textAppearance="?attr/textAppearanceBodyMedium" />

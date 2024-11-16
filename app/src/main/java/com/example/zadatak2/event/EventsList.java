@@ -74,7 +74,7 @@ public class EventsList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         eventsListBinding= FragmentEventsListBinding.inflate(getLayoutInflater());
-        eventViewModel =new ViewModelProvider(this).get(EventViewModel.class);
+        eventViewModel =new ViewModelProvider(requireActivity()).get(EventViewModel.class);
         ArrayList<Event> eventList=new ArrayList<>();
         String topString=getString(R.string.top);
         String extraValue = topString; // Default value
