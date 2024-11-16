@@ -57,7 +57,6 @@
                     android:id="@+id/merchandise_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Signature Portrait Session"
                     android:textAppearance="?attr/textAppearanceTitleMedium"
                     android:textStyle="bold" />
 
@@ -65,7 +64,6 @@
                     android:id="@+id/merchandise_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="category/type"
                     android:textAppearance="?attr/textAppearanceBodyMedium"
                     android:textColor="?android:attr/textColorSecondary" />
 
@@ -86,7 +84,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:text="Bulevar Oslobodenja 76, Novi Sad"
                         android:textAppearance="?attr/textAppearanceBodyMedium"
                         android:maxLines="1"
                         android:ellipsize="end" />
@@ -113,26 +110,22 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:text="4.5"
                         android:textAppearance="?attr/textAppearanceBodyMedium" />
 
-                    <TextView
-                        android:id="@+id/merchandise_price"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:text="299.99"
-                        android:textAppearance="?attr/textAppearanceTitleMedium"
-                        android:textStyle="bold" />
+
                 </LinearLayout>
+                <TextView
+                    android:id="@+id/merchandise_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/merchandise_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Professional Photography Session that captures your unique personality and style"
                     android:maxLines="2"
                     android:ellipsize="end"
                     android:textAppearance="?attr/textAppearanceBodyMedium" />
@@ -141,8 +134,8 @@
                     android:id="@+id/see_details_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@string/see_details"
                     android:layout_marginTop="8dp"
-                    android:text="See details"
                     android:textAllCaps="false"
                     style="@style/Secondary.Button.Primary.Text" />
             </LinearLayout>

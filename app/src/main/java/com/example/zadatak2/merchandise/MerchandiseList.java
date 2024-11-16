@@ -12,10 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.zadatak2.DotsIndicatorDecoration;
+import com.example.zadatak2.eventmerchandise.DotsIndicatorDecoration;
 import com.example.zadatak2.R;
 import com.example.zadatak2.databinding.FragmentMerchandisesListBinding;
-import com.example.zadatak2.event.Event;
 
 import java.util.ArrayList;
 
@@ -75,7 +74,7 @@ public class MerchandiseList extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         merchandisesListBinding=FragmentMerchandisesListBinding.inflate(getLayoutInflater());
-        merchandiseViewModel =new ViewModelProvider(this).get(MerchandiseViewModel.class);
+        merchandiseViewModel =new ViewModelProvider(requireActivity()).get(MerchandiseViewModel.class);
         ArrayList<Merchandise> merchandiseList=new ArrayList<>();
         String topString=getString(R.string.top);
         String extraValue = topString; // Default value

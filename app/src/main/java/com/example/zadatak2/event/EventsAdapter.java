@@ -41,9 +41,10 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
 
         holder.eventTitle.setText(event.getTitle());
         holder.eventDescription.setText(event.getDescription());
-        holder.eventLocation.setText(String.format("%s, %s",
+        holder.eventLocation.setText(String.format("%s, %s %s",
                 event.getAddress().getCity(),
-                event.getAddress().getStreet()));
+                event.getAddress().getStreet(),
+                event.getAddress().getNumber()));
         holder.eventType.setText(String.format(Locale.getDefault(), "%s", event.getType().getTitle()));
         if (event.getDate() != null) {
             // Format the date as per your requirement (e.g., "MM/dd/yyyy")

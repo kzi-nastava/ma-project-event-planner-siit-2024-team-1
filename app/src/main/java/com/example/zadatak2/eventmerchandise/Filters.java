@@ -1,4 +1,4 @@
-package com.example.zadatak2;
+package com.example.zadatak2.eventmerchandise;
 
 import android.os.Bundle;
 
