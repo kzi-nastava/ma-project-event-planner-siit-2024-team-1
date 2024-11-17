@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.zadatak2"
+    namespace = "com.example.EventPlanner"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.zadatak2"
+        applicationId = "com.example.EventPlanner"
         minSdk = 30
         targetSdk = 34
         versionCode = 1
