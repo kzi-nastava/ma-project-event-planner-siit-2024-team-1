@@ -1,5 +1,6 @@
 package com.example.zadatak2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -96,6 +97,21 @@ public class ServiceForm extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
+        });
+
+        serviceFormBinding.submitServiceButton.setOnClickListener(v -> {
+            Intent intent=new Intent(ServiceForm.this, HomeScreen.class);
+            startActivity(intent);
+        });
+
+        serviceFormBinding.deleteServiceButton.setOnClickListener(v -> {
+            int serviceId = getIntent().getIntExtra("SERVICE_ID", -1);
+            if(serviceId != -1) {
+                Service service = serviceViewModel.findServiceById(serviceId);
+                serviceViewModel.services.remove(service);
+            }
+            Intent intent=new Intent(ServiceForm.this, HomeScreen.class);
+            startActivity(intent);
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
