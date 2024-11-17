@@ -1,8 +1,7 @@
-package com.example.zadatak2;
+package com.example.zadatak2.eventmerchandise;
 
 import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;

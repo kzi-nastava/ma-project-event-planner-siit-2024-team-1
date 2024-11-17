@@ -8,17 +8,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.zadatak2.DotsIndicatorDecoration;
+import com.example.zadatak2.eventmerchandise.DotsIndicatorDecoration;
 import com.example.zadatak2.R;
 import com.example.zadatak2.databinding.FragmentEventsListBinding;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,7 +72,7 @@ public class EventsList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         eventsListBinding= FragmentEventsListBinding.inflate(getLayoutInflater());
-        eventViewModel =new ViewModelProvider(this).get(EventViewModel.class);
+        eventViewModel =new ViewModelProvider(requireActivity()).get(EventViewModel.class);
         ArrayList<Event> eventList=new ArrayList<>();
         String topString=getString(R.string.top);
         String extraValue = topString; // Default value

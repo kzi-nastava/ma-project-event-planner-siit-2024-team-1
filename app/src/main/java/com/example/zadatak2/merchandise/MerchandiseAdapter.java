@@ -48,7 +48,7 @@ public class MerchandiseAdapter extends RecyclerView.Adapter<MerchandiseAdapter.
         holder.merchandiseDescription.setText(merchandise.getDescription());
 
         double finalPrice = merchandise.getPrice() * (1 - merchandise.getDiscount());
-        holder.merchandisePrice.setText(String.format("$%.2f", finalPrice));
+        holder.merchandisePrice.setText(String.format("%.2f RSD", finalPrice));
 
         if (merchandise.getDiscount() > 0) {
             holder.merchandiseDiscount.setVisibility(View.VISIBLE);

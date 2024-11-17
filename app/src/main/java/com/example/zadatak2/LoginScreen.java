@@ -24,12 +24,17 @@ public class LoginScreen extends AppCompatActivity {
         });
         Button loginButton=(Button) findViewById(R.id.loginButton);
         Button registerButton=(Button) findViewById(R.id.registerButton);
+        Button skipLoginButton=(Button) findViewById(R.id.skipLogin);
         loginButton.setOnClickListener(v -> {
             Intent intent=new Intent(LoginScreen.this,HomeScreen.class);
             startActivity(intent);
         });
         registerButton.setOnClickListener(v -> {
             Intent intent=new Intent(LoginScreen.this, RegisterPupScreen.class);
+            startActivity(intent);
+        });
+        skipLoginButton.setOnClickListener(v -> {
+            Intent intent=new Intent(LoginScreen.this, HomeScreen.class);
             startActivity(intent);
         });
     }

@@ -20,6 +20,7 @@
     <string name="products">Products</string>
     <string name="my_products">My Products</string>
     <string name="shop">Shop</string>
+    <string name="skip_login">Login as a guest</string>
     <string name="events_merchandise">Events and Merchandise</string>
     <string name="top">Top</string>
     <string name="all">All</string>

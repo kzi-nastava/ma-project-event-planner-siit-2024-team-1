@@ -19,8 +19,6 @@ import com.example.zadatak2.navigation.NavigationActivity;
 
 public class SplashScreen extends NavigationActivity {
 
-    private Handler handler;
-    private Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,15 +30,13 @@ public class SplashScreen extends NavigationActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        button=(Button) findViewById(R.id.button);
-        button.setOnClickListener(v -> {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(() -> {
             Intent intent= new Intent(SplashScreen.this,LoginScreen.class);
             startActivity(intent);
-        });
-        handler = new Handler(Looper.getMainLooper());
+            finish();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.topAppBar);
-        setSupportActionBar(toolbar);
+        }, 1500);
     }
 
     @Override
@@ -56,16 +52,6 @@ public class SplashScreen extends NavigationActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        button.setEnabled(false);
-
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                button.setEnabled(true);
-                ProgressBar progressBar=(ProgressBar) findViewById(R.id.progressBar);
-                progressBar.setVisibility(View.GONE);
-            }
-        }, 1);
     }
 
     @Override
