@@ -57,9 +57,10 @@ public class MerchandiseAdapter extends RecyclerView.Adapter<MerchandiseAdapter.
             holder.merchandiseDiscount.setVisibility(View.GONE);
         }
 
-        holder.merchandiseLocation.setText(String.format("%s, %s",
+        holder.merchandiseLocation.setText(String.format("%s, %s %s",
                 merchandise.getAddress().getCity(),
-                merchandise.getAddress().getStreet()));
+                merchandise.getAddress().getStreet(),
+                merchandise.getAddress().getNumber()));
 
         holder.merchandiseRating.setRating(merchandise.getRating().floatValue());
         holder.merchandiseRatingText.setText(String.format(Locale.getDefault(), "%.1f", merchandise.getRating()));

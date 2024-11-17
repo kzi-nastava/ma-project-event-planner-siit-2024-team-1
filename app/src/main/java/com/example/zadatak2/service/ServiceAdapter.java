@@ -87,9 +87,10 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
             serviceCategory.setText(String.format(Locale.getDefault(), "%s/%s",
                     service.getCategory().getTitle(),
                     service.getClass().getSimpleName()));
-            serviceLocation.setText(String.format("%s, %s",
+            serviceLocation.setText(String.format("%s, %s %s",
                     service.getAddress().getCity(),
-                    service.getAddress().getStreet()));
+                    service.getAddress().getStreet(),
+                    service.getAddress().getNumber()));
             double finalPrice = service.getPrice() * (1 - service.getDiscount());
             servicePrice.setText(String.format("$%.2f", finalPrice));
             serviceDescription.setText(service.getDescription());
