@@ -153,12 +153,12 @@
         android:layout_width="114dp"
         android:layout_height="48dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="160dp"
         android:ems="10"
         android:hint="@string/min_Duration"
         android:inputType="numberDecimal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/category_spinner" />
+        app:layout_constraintTop_toTopOf="@+id/editTextNumberDecimal" />
 
     <EditText
         android:id="@+id/editTextNumberDecimal4"
@@ -167,7 +167,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:ems="10"
-        android:hint="Duration"
+        android:hint="@string/duration"
         android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/event_type_spinner" />
@@ -261,5 +261,31 @@
         android:text="@string/reservation_type"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal6" />
+
+    <TextView
+        android:id="@+id/category_change_text"
+        android:layout_width="161dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/category_change"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <EditText
+        android:id="@+id/category_input"
+        android:layout_width="162dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="48dp"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="@string/category"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

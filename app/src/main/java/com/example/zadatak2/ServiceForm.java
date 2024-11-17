@@ -5,7 +5,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -41,11 +43,14 @@ public class ServiceForm extends AppCompatActivity {
             formTitle.setText("Edit Service");
             serviceFormBinding.serviceVisibleCheckbox.setVisibility(View.VISIBLE);
             serviceFormBinding.serviceAvailableCheckbox.setVisibility(View.VISIBLE);
+            serviceFormBinding.categorySpinner.setVisibility(View.GONE);
+            serviceFormBinding.categoryChangeText.setVisibility(View.VISIBLE);
         }
 
         //adding items to category spinner
+        EditText categoryEditText = serviceFormBinding.categoryInput;
         Spinner categorySpinner = serviceFormBinding.categorySpinner;
-        String[] categoryOptions = {"options", "space", "food", "drinks", "music", "decorations"};
+        String[] categoryOptions = {"options", "space", "food", "drinks", "music", "decorations", "other"};
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, categoryOptions);
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -57,6 +62,26 @@ public class ServiceForm extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, eventTypeOptions);
         eventTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         eventTypeSpinner.setAdapter(eventTypeAdapter);
+
+
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedOption = categoryOptions[position];
+                if (selectedOption.equals("other")) {
+                    categorySpinner.setVisibility(View.GONE);
+                    categoryEditText.setVisibility(View.VISIBLE);
+                } else {
+                    categoryEditText.setVisibility(View.GONE);
+                    categorySpinner.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

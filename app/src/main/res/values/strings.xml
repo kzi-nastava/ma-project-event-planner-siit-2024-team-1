@@ -73,7 +73,8 @@
     <string name="automatic">Automatic</string>
     <string name="manual">Manual</string>
     <string name="submit">Submit</string>
-
+    <string name="duration">Duration</string>
+    <string name="category_change">Category can\'t be changed</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
