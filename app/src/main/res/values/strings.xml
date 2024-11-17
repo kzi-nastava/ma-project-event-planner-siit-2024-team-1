@@ -50,6 +50,7 @@
     <string name="duration_max">Duration Max</string>
     <string name="product_filters">Product Filters</string>
     <string name="apply_filters">Apply filters</string>
-
-
+    <string name="edit">Edit</string>
+    <string name="reserve">Reserve</string>
+    <string name="my_services">My Services</string>
 </resources>

@@ -107,6 +107,8 @@ public class HomeScreen extends AppCompatActivity {
                 args.putString("type", "all");
                 args.putString("title", getString(R.string.all));
                 navController.navigate(R.id.nav_events_merchandise_list_horizontal,args);
+            }else if(id==R.id.sidebar_services) {
+                navController.navigate(R.id.nav_services_list_vertical);
             }
             return true;
         });
