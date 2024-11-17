@@ -1,5 +1,6 @@
 package com.example.zadatak2;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.zadatak2.databinding.FragmentServiceCrudBinding;
 import com.example.zadatak2.databinding.FragmentServiceListBinding;
@@ -68,6 +70,13 @@ public class ServiceCRUD extends Fragment {
         ServiceList serviceList = new ServiceList();
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainerViewService, serviceList).commit();
+
+        Button addServiceButton = (Button) serviceCrudBinding.addServiceButton;
+        addServiceButton.setOnClickListener((v) -> {
+            Intent intent = new Intent(requireActivity(), ServiceForm.class);
+            intent.putExtra("FORM_TYPE", "NEW_FORM");
+            startActivity(intent);
+        });
         // Inflate the layout for this fragment
         return view;
     }

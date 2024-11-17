@@ -1,6 +1,7 @@
 package com.example.zadatak2.service;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.zadatak2.R;
+import com.example.zadatak2.ServiceForm;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -38,6 +40,12 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
     public void onBindViewHolder(@NonNull ServiceViewHolder holder, int position) {
         Service service = allServices.get(position);
         holder.bind(service);
+
+        holder.itemView.findViewById(R.id.edit_service).setOnClickListener(v -> {
+            Intent intent = new Intent(context, ServiceForm.class);
+            intent.putExtra("FORM_TYPE", "EDIT_FORM");
+            context.startActivity(intent);
+        });
     }
 
     @Override
