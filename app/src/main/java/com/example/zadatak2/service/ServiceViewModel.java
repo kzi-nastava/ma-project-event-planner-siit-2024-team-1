@@ -17,6 +17,15 @@ public class ServiceViewModel extends ViewModel {
         return services;
     }
 
+    public Service findServiceById(int id) {
+        for(Service service : services) {
+            if(service.getId() == id) {
+                return service;
+            }
+        }
+        return null;
+    }
+
     public void setServices(ArrayList<Service> services) {
         this.services = services;
     }

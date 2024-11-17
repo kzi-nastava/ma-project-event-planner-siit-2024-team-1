@@ -44,6 +44,7 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
         holder.itemView.findViewById(R.id.edit_service).setOnClickListener(v -> {
             Intent intent = new Intent(context, ServiceForm.class);
             intent.putExtra("FORM_TYPE", "EDIT_FORM");
+            intent.putExtra("SERVICE_ID", service.getId());
             context.startActivity(intent);
         });
     }
