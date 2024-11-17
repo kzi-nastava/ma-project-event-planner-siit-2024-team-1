@@ -45,6 +45,7 @@ public class ServiceForm extends AppCompatActivity {
             serviceFormBinding.serviceAvailableCheckbox.setVisibility(View.VISIBLE);
             serviceFormBinding.categorySpinner.setVisibility(View.GONE);
             serviceFormBinding.categoryChangeText.setVisibility(View.VISIBLE);
+            serviceFormBinding.deleteServiceButton.setVisibility(View.VISIBLE);
         }
 
         //adding items to category spinner
