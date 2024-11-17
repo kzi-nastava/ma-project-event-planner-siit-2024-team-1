@@ -16,19 +16,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.zadatak2.databinding.ActivityServiceFormBinding;
 import com.example.zadatak2.databinding.FragmentServiceCrudBinding;
+import com.example.zadatak2.service.Service;
+import com.example.zadatak2.service.ServiceViewModel;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ServiceForm extends AppCompatActivity {
     private ActivityServiceFormBinding serviceFormBinding;
+    private ServiceViewModel serviceViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         serviceFormBinding = ActivityServiceFormBinding.inflate(getLayoutInflater());
+        serviceViewModel = new ViewModelProvider(this).get(ServiceViewModel.class);
+        ArrayList<Service> allServices = new ArrayList<Service>();
+        allServices = serviceViewModel.getAll();
 
         EdgeToEdge.enable(this);
         setContentView(serviceFormBinding.getRoot());
@@ -46,6 +54,12 @@ public class ServiceForm extends AppCompatActivity {
             serviceFormBinding.categorySpinner.setVisibility(View.GONE);
             serviceFormBinding.categoryChangeText.setVisibility(View.VISIBLE);
             serviceFormBinding.deleteServiceButton.setVisibility(View.VISIBLE);
+
+            int serviceId = getIntent().getIntExtra("SERVICE_ID", -1);
+            if(serviceId != -1) {
+                Service service = serviceViewModel.findServiceById(serviceId);
+                setFields(service);
+            }
         }
 
         //adding items to category spinner
@@ -89,5 +103,31 @@ public class ServiceForm extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    private void setFields(Service service) {
+        serviceFormBinding.editTextText2.setText(service.getTitle());
+        serviceFormBinding.editTextTextMultiLine.setText(service.getDescription());
+        serviceFormBinding.editTextText5.setText(service.getSpecificity());
+        serviceFormBinding.editTextNumberDecimal.setText(String.format("$%.2f", service.getPrice()));
+        serviceFormBinding.editTextNumberDecimal2.setText(String.format("%.2f", service.getDiscount()*100));
+        serviceFormBinding.editTextNumberDecimal3.setText(Integer.toString(service.getMinDuration()));
+        serviceFormBinding.editTextNumberDecimal5.setText(Integer.toString(service.getMaxDuration()));
+        serviceFormBinding.editTextNumberDecimal4.setText(Integer.toString(service.getMaxDuration() - service.getMinDuration()));
+        serviceFormBinding.editTextNumberDecimal6.setText(Integer.toString(service.getReservationDeadline()));
+        serviceFormBinding.editTextNumberDecimal7.setText(Integer.toString(service.getCancelReservation()));
+
+        if(service.isAutomaticReservation()) {
+            serviceFormBinding.automaticServiceReservationTypeButton.setChecked(true);
+        }else {
+            serviceFormBinding.manualServiceReservationTypeButton.setChecked(true);
+        }
+
+        if(service.isAvailable()) {
+            serviceFormBinding.serviceAvailableCheckbox.setChecked(true);
+        }
+        if(service.isVisible()) {
+            serviceFormBinding.serviceVisibleCheckbox.setChecked(true);
+        }
     }
 }
