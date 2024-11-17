@@ -6,17 +6,17 @@
     app:startDestination="@+id/nav_events_merchandise_list_horizontal">
     <fragment
         android:id="@+id/nav_events_merchandise_list"
-        android:name="com.example.zadatak2.eventmerchandise.EventsMerchandiseList"
+        android:name="com.example.EventPlanner.eventmerchandise.EventsMerchandiseList"
         android:label="@string/top"
         tools:layout="@layout/fragment_merchandises_list"/>
     <fragment
         android:id="@+id/nav_events_merchandise_list_horizontal"
-        android:name="com.example.zadatak2.eventmerchandise.EventsMerchindisesHorizontal"
+        android:name="com.example.EventPlanner.eventmerchandise.EventsMerchindisesHorizontal"
         android:label="@string/top"
         tools:layout="@layout/fragment_events_merchindises_horizontal"/>
     <fragment
         android:id="@+id/nav_services_list_vertical"
-        android:name="com.example.zadatak2.ServiceCRUD"
-
+        android:name="com.example.EventPlanner.ServiceCRUD"
+        android:label="@string/services"
         tools:layout="@layout/fragment_service_crud"/>
 </navigation>
