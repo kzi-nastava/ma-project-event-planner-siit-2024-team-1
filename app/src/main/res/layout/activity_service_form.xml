@@ -207,7 +207,8 @@
             android:layout_marginEnd="24dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/service_reservation_type_label">
+            app:layout_constraintStart_toEndOf="@+id/add_service_photos_button"
+            app:layout_constraintTop_toBottomOf="@+id/service_reservation_type_label">
 
             <RadioButton
                 android:id="@+id/automatic_service_reservation_type_button"
@@ -239,7 +240,8 @@
             android:layout_marginEnd="16dp"
             android:text="@string/available"
             app:layout_constraintEnd_toStartOf="@+id/service_visible_checkbox"
-            app:layout_constraintTop_toTopOf="@+id/add_service_photos_button" />
+            app:layout_constraintStart_toEndOf="@+id/add_service_photos_button"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
         <CheckBox
             android:id="@+id/service_visible_checkbox"
@@ -248,19 +250,18 @@
             android:layout_marginEnd="24dp"
             android:text="@string/visible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/service_available_checkbox" />
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
         <Button
             android:id="@+id/submit_service_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginBottom="24dp"
             android:text="@string/submit"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/add_service_photos_button" />
+            app:layout_constraintTop_toBottomOf="@+id/service_available_checkbox" />
 
         <TextView
             android:id="@+id/category_change_text"

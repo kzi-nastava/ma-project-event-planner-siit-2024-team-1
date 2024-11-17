@@ -131,12 +131,11 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/edit_service"
+                    style="@style/Secondary.Button.Primary.Text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="165dp"
-                    android:text="@string/edit"
-                    style="@style/Secondary.Button.Primary.Text"
-                    />
+                    android:layout_marginStart="8dp"
+                    android:text="@string/edit" />
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
