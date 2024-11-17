@@ -70,7 +70,7 @@ public class ServiceList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         serviceListBinding = FragmentServiceListBinding.inflate(getLayoutInflater());
-        serviceViewModel = new ViewModelProvider(this).get(ServiceViewModel.class);
+        serviceViewModel = new ViewModelProvider(requireActivity()).get(ServiceViewModel.class);
 
         ArrayList<Service> allServices = new ArrayList<Service>();
         allServices = serviceViewModel.getAll();
