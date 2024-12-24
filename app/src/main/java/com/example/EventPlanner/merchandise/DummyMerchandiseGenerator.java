@@ -1,8 +1,10 @@
 package com.example.EventPlanner.merchandise;
 
 import com.example.EventPlanner.address.Address;
+import com.example.EventPlanner.address.Address1;
 import com.example.EventPlanner.category.Category;
 import com.example.EventPlanner.product.Product;
+import com.example.EventPlanner.product.Product1;
 import com.example.EventPlanner.review.Review;
 import com.example.EventPlanner.service.Service;
 import com.example.EventPlanner.user.User;
@@ -12,8 +14,8 @@ import java.util.List;
 import java.util.Random;
 
 public class DummyMerchandiseGenerator {
-    public static List<Product> createDummyProduct(int count) {
-        List<Product>productsList = new ArrayList<>();
+    public static List<Product1> createDummyProduct(int count) {
+        List<Product1>productsList = new ArrayList<>();
         Random random = new Random();
 
         String[] cities = {"New York", "Los Angeles", "Chicago", "Houston", "Phoenix"};
@@ -23,7 +25,7 @@ public class DummyMerchandiseGenerator {
 
         for (int i = 0; i < count; i++) {
             // Create Address
-            Address address = new Address(
+            Address1 address = new Address1(
                     cities[random.nextInt(cities.length)],
                     streets[random.nextInt(streets.length)],
                     String.valueOf(random.nextInt(999) + 1),
@@ -61,7 +63,7 @@ public class DummyMerchandiseGenerator {
             }
 
             // Create Merchandise
-            Product product = new Product(
+            Product1 product = new Product1(
                     i + 1,
                     titles[random.nextInt(titles.length)] + " " + (i + 1),
                     "Detailed description for item " + (i + 1),
@@ -99,7 +101,7 @@ public class DummyMerchandiseGenerator {
 
         for (int i = 0; i < count; i++) {
             // Create Address
-            Address address = new Address(
+            Address1 address = new Address1(
                     cities[random.nextInt(cities.length)],
                     streets[random.nextInt(streets.length)],
                     String.valueOf(random.nextInt(999) + 1),
@@ -171,12 +173,12 @@ public class DummyMerchandiseGenerator {
         return  merchandiseList;
     }
 
-    private static User createDummyUser(int id) {
+    public static User createDummyUser(int id) {
         String[] firstNames = {"John", "Jane", "Mike", "Sarah", "David"};
         String[] lastNames = {"Smith", "Johnson", "Williams", "Brown", "Jones"};
         Random random = new Random();
 
-        Address address = new Address(
+        Address1 address = new Address1(
                 "City" + (id + 1),
                 "Street" + (id + 1),
                 String.valueOf(random.nextInt(999) + 1),

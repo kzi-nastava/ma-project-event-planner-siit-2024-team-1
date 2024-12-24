@@ -1,12 +1,13 @@
 package com.example.EventPlanner.user;
 
 import com.example.EventPlanner.address.Address;
+import com.example.EventPlanner.address.Address1;
 
 public class User {
     private int id;
     private String name;
     private String surname;
-    private Address address;
+    private Address1 address;
     private String phoneNumber;
     private String email;
     private String password;
@@ -14,7 +15,7 @@ public class User {
     private boolean active;
 
     // Constructor
-    public User(int id, String name, String surname, Address address,
+    public User(int id, String name, String surname, Address1 address,
                 String phoneNumber, String email, String password,
                 String photo, boolean active) {
         this.id = id;
@@ -38,8 +39,8 @@ public class User {
     public String getSurname() { return surname; }
     public void setSurname(String surname) { this.surname = surname; }
 
-    public Address getAddress() { return address; }
-    public void setAddress(Address address) { this.address = address; }
+    public Address1 getAddress() { return address; }
+    public void setAddress(Address1 address) { this.address = address; }
 
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }

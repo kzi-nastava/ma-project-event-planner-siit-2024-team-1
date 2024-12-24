@@ -1,6 +1,7 @@
 package com.example.EventPlanner.event;
 
 import com.example.EventPlanner.address.Address;
+import com.example.EventPlanner.address.Address1;
 
 import java.util.Date;
 
@@ -10,7 +11,7 @@ public class Event {
     private String description;
     private int maxParticipants;
     private boolean isPublic;
-    private Address address;
+    private Address1 address;
     private Date date;
     private EventType type;
 
@@ -19,7 +20,7 @@ public class Event {
 
     // Constructor with all fields
     public Event(Long id, String title, String description, int maxParticipants,
-                 boolean isPublic, Address address, Date date, EventType type) {
+                 boolean isPublic, Address1 address, Date date, EventType type) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -71,11 +72,11 @@ public class Event {
         this.isPublic = isPublic;
     }
 
-    public Address getAddress() {
+    public Address1 getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(Address1 address) {
         this.address = address;
     }
 
