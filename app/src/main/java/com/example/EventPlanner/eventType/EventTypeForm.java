@@ -35,6 +35,7 @@ import com.example.EventPlanner.eventType.EventType;
 import com.example.EventPlanner.merchandise.MerchandisePhoto;
 import com.example.EventPlanner.product.Category;
 import com.example.EventPlanner.product.Product;
+import com.example.EventPlanner.product.ProductForm;
 import com.example.EventPlanner.product.ProductViewModel;
 
 import java.util.ArrayList;
@@ -97,12 +98,66 @@ public class EventTypeForm extends AppCompatActivity {
             return insets;
         });
 
+
+        multiSelectSpinner = findViewById(R.id.multiselect_category_spinner);
+
+        // Set the adapter to the Spinner (empty or initial item)
+        ArrayAdapter<String> categoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{"Select Recommended Categories"});
+        categoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        multiSelectSpinner.setAdapter(categoriesAdapter);
+
+        // Set an item click listener for the Spinner
+        multiSelectSpinner.setOnTouchListener((v, event) -> {
+            showMultiSelectDialog();
+            return true;
+        });
     }
 
     // Populate fields when editing a product
     private void setFields(EventType eventType) {
         eventTypeFormBinding.eventTypeTitle.setText(eventType.getTitle());
         eventTypeFormBinding.eventTypeDescription.setText(eventType.getDescription());
+    }
+    private Spinner multiSelectSpinner;
+    private String[] categories = {"Suicidability", "Funerality", "Somethingality"};
+    private boolean[] selectedItems = new boolean[categories.length];
+    private void showMultiSelectDialog() {
+        // Create the dialog for multi-select
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select Recommended Categories");
+
+        // Create checkboxes dynamically for each event type
+        builder.setMultiChoiceItems(categories, selectedItems, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                selectedItems[which] = isChecked;
+            }
+        });
+
+        // Positive button (OK) to capture selected items
+        builder.setPositiveButton("OK", (dialog, id) -> {
+            StringBuilder selectedCategories = new StringBuilder();
+            for (int i = 0; i < selectedItems.length; i++) {
+                if (selectedItems[i]) {
+                    selectedCategories.append(categories[i]).append(", ");
+                }
+            }
+            if (selectedCategories.length() > 0) {
+                selectedCategories.setLength(selectedCategories.length() - 2); // Remove trailing comma and space
+            }
+
+            // Update the Spinner with the selected event types
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(EventTypeForm.this, android.R.layout.simple_spinner_item, new String[]{selectedCategories.toString()});
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            multiSelectSpinner.setAdapter(adapter);
+            Toast.makeText(EventTypeForm.this, "Selected: " + selectedCategories.toString(), Toast.LENGTH_SHORT).show();
+        });
+
+        // Negative button (Cancel)
+        builder.setNegativeButton("Cancel", null);
+
+        // Show the dialog
+        builder.create().show();
     }
 
     // Validate user input

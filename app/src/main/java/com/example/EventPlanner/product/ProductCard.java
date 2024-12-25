@@ -85,6 +85,13 @@ public class ProductCard extends Fragment {
         // Initialize buttons
         Button editProductButton = view.findViewById(R.id.edit_product);
         Button deleteProductButton = view.findViewById(R.id.delete_product);
+        TextView eventTypeActiveView = view.findViewById(R.id.event_type_active);
+        if(eventTypeActiveView.getText().toString().equals("Active")){
+            deleteProductButton.setText("Deactivate");
+        }
+        else{
+            deleteProductButton.setText("Activate");
+        }
 
         // Set listeners for buttons
         editProductButton.setOnClickListener(v -> {

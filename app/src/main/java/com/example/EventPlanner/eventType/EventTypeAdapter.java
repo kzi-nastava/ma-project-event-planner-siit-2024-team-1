@@ -41,6 +41,11 @@ public class EventTypeAdapter extends RecyclerView.Adapter<EventTypeAdapter.Even
     public void onBindViewHolder(@NonNull com.example.EventPlanner.eventType.EventTypeAdapter.EventTypeViewHolder holder, int position) {
         EventType eventType = allEventTypes.get(position);
         holder.bind(eventType);
+        if(eventType.getActive()){
+            holder.eventTypeActive.setText("Active");
+        }else{
+            holder.eventTypeActive.setText("Inactive");
+        }
 
         holder.itemView.findViewById(R.id.edit_event_type).setOnClickListener(v -> {
             Intent intent = new Intent(context, EventTypeForm.class);

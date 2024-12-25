@@ -55,6 +55,8 @@
     <string name="product_filters">Product Filters</string>
     <string name="apply_filters">Apply filters</string>
     <string name="edit">Edit</string>
+    <string name="deactivate">Deactivate</string>
+    <string name="activate">Activate/Deactivate</string>
     <string name="reserve">Reserve</string>
     <string name="my_services">My Services</string>
     <string name="new_service">New Service</string>
