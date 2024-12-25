@@ -5,21 +5,18 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.EventPlanner.product.ProductForm;
 import com.example.EventPlanner.R;
-import com.example.EventPlanner.product.Product;
+import com.example.EventPlanner.merchandise.MerchandisePhoto;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
-import java.util.Locale;
+import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
     private ArrayList<Product> allProducts;
@@ -57,39 +54,47 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     static class ProductViewHolder extends RecyclerView.ViewHolder {
         MaterialCardView productCard; // Change this to MaterialCardView
-        ImageView productImage;
         TextView productTitle;
-        RatingBar productRating;
-        TextView productRatingText;
         TextView productCategory;
-        TextView productLocation;
+        TextView productDiscountedPrice;
         TextView productPrice;
         TextView productDescription;
+        TextView specificity;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             productCard = itemView.findViewById(R.id.product_card); // Cast to MaterialCardView
-            productImage = itemView.findViewById(R.id.product_image);
             productTitle = itemView.findViewById(R.id.product_title);
-            productRating = itemView.findViewById(R.id.product_rating);
-            productRatingText = itemView.findViewById(R.id.product_rating_text);
             productCategory = itemView.findViewById(R.id.product_category);
-            productLocation = itemView.findViewById(R.id.product_location);
             productPrice = itemView.findViewById(R.id.product_price);
+            productDiscountedPrice = itemView.findViewById(R.id.discounted_price);
             productDescription = itemView.findViewById(R.id.product_description);
+            specificity = itemView.findViewById(R.id.product_specificity);
         }
 
         public void bind(Product product) {
-            if (product.getPhotos() != null && !product.getPhotos().getPhoto().isEmpty()) {
-                productImage.setImageResource(R.drawable.dinja); // Use appropriate image logic
-            }
             productTitle.setText(product.getTitle());
-            productRating.setRating(product.getRating().floatValue());
-            productRatingText.setText(String.format(Locale.getDefault(), "%.1f", product.getRating()));
-            productCategory.setText(product.getCategory());
-            productLocation.setText(String.format("%s, %s", product.getAddress().getCity(), product.getAddress().getStreet()));
+            productCategory.setText(product.getCategory().getTitle());
             productPrice.setText(String.format("%.2f RSD", product.getPrice()));
+            productDiscountedPrice.setText(String.format("%.2f RSD", product.getPrice()));
             productDescription.setText(product.getDescription());
+            specificity.setText(product.getSpecificity());
+
+            // Example of loading drawable images
+            List<MerchandisePhoto> photoResources = new ArrayList<>();
+            photoResources.add(new MerchandisePhoto(R.drawable.dinja, null)); // From drawable
+            photoResources.add(new MerchandisePhoto(R.drawable.calendar, null)); // From drawable
+            photoResources.add(new MerchandisePhoto(0, "https://www.google.com/imgres?q=melon&imgurl=https%3A%2F%2Fwww.agroponiente.com%2Fwp-content%2Fuploads%2F2024%2F06%2Fmelon-amarillo-Agroponiente.png&imgrefurl=https%3A%2F%2Fwww.agroponiente.com%2Fen%2Ffruits-vegetables%2Fmelon-en%2Fyellow-melon%2F&docid=Hoxh5ZO0Z6yKcM&tbnid=GDhNQTy8JTFN9M&vet=12ahUKEwiQ3ezttsOKAxU08LsIHf4VK5MQM3oECHcQAA..i&w=768&h=768&hcb=2&ved=2ahUKEwiQ3ezttsOKAxU08LsIHf4VK5MQM3oECHcQAA")); // Online image
+            photoResources.add(new MerchandisePhoto(0, "https://www.google.com/imgres?q=melon&imgurl=https%3A%2F%2Fcdn.britannica.com%2F99%2F143599-050-C3289491%2FWatermelon.jpg&imgrefurl=https%3A%2F%2Fwww.britannica.com%2Fplant%2Fmelon&docid=DslcpmVaaz9dCM&tbnid=Bw4CZ9OZn69IXM&vet=12ahUKEwiQ3ezttsOKAxU08LsIHf4VK5MQM3oECHAQAA..i&w=620&h=600&hcb=2&ved=2ahUKEwiQ3ezttsOKAxU08LsIHf4VK5MQM3oECHAQAA"));
+
+// Set photos in the product and update the adapter
+            product.setMerchandisePhotos(photoResources);
+
+            if (product.getMerchandisePhotos() != null && !product.getMerchandisePhotos().isEmpty()) {
+                PhotoSliderAdapter photoSliderAdapter = new PhotoSliderAdapter(itemView.getContext(), product.getMerchandisePhotos());
+                ViewPager2 photoSlider = itemView.findViewById(R.id.photo_slider);
+                photoSlider.setAdapter(photoSliderAdapter);
+            }
         }
     }
 

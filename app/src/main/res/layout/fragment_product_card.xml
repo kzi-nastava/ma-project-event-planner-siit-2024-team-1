@@ -19,13 +19,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Product Image -->
-            <ImageView
-                android:id="@+id/product_image"
+            <!-- Photo Slider -->
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/photo_slider"
                 android:layout_width="match_parent"
-                android:layout_height="194dp"
-                android:scaleType="centerCrop"
-                android:contentDescription="@string/products" />
+                android:layout_height="200dp"
+                android:layout_marginBottom="8dp"
+                tools:layout_editor_absoluteY="0dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -33,7 +33,7 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <!-- Title and Rating -->
+                <!-- Title and Availability -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -45,25 +45,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingEnd="10dp"
-                        android:text="Sample Product"
                         android:textAppearance="?attr/textAppearanceTitleMedium" />
 
-                    <RatingBar
-                        android:id="@+id/product_rating"
-                        style="@style/RatingBar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:numStars="5"
-                        android:rating="4.5"
-                        android:stepSize="0.5" />
-
                     <TextView
-                        android:id="@+id/product_rating_text"
+                        android:id="@+id/available"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="4.5"
-                        android:textAppearance="?attr/textAppearanceBodyMedium" />
+                        android:paddingEnd="10dp"
+                        android:textAppearance="?attr/textAppearanceTitleMedium" />
                 </LinearLayout>
 
                 <!-- Category -->
@@ -72,32 +61,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Category: Electronics"
                     android:textAppearance="?attr/textAppearanceBodyMedium"
                     android:textColor="?android:attr/textColorSecondary" />
-
-                <!-- Location -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:src="@android:drawable/ic_menu_mylocation" />
-
-                    <TextView
-                        android:id="@+id/product_location"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="Location: New York"
-                        android:textAppearance="?attr/textAppearanceBodyMedium"
-                        android:textColor="?android:attr/textColorSecondary" />
-                </LinearLayout>
 
                 <!-- Price -->
                 <TextView
@@ -105,9 +70,41 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="$499.99"
                     android:textAppearance="?attr/textAppearanceTitleMedium"
                     android:textStyle="bold" />
+
+                <!-- Discounted Price -->
+                <TextView
+                    android:id="@+id/discounted_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:textStyle="bold" />
+
+                <!-- Event Types -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Event Types"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/event_types_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp" />
+
+                <!-- Specificity -->
+                <TextView
+                    android:id="@+id/product_specificity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:textColor="?android:attr/textColorPrimary" />
 
                 <!-- Product Description -->
                 <TextView
@@ -115,7 +112,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="This is a brief description of the product."
                     android:textAppearance="?attr/textAppearanceBodyMedium"
                     android:textColor="?android:attr/textColorPrimary" />
             </LinearLayout>
@@ -128,20 +124,20 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/reserve_product"
+                    android:id="@+id/edit_product"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:text="@string/reserve"
+                    android:text="@string/edit"
                     style="@style/Secondary.Button.Primary.Text" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/edit_product"
+                    android:id="@+id/delete_product"
                     style="@style/Secondary.Button.Primary.Text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="@string/edit" />
+                    android:text="@string/delete" />
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
