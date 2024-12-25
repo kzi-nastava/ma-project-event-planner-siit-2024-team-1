@@ -29,6 +29,12 @@
                 android:icon="@drawable/dashboard_icon"
                 android:checkable="true"
                 app:showAsAction="ifRoom"/>
+            <item
+                android:id="@+id/event_types"
+                android:title="@string/event_types"
+                android:icon="@drawable/dashboard_icon"
+                android:checkable="true"
+                app:showAsAction="ifRoom"/>
         </menu>
     </item>
 

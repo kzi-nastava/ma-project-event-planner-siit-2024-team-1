@@ -12,17 +12,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -34,18 +30,11 @@ import com.example.EventPlanner.HomeScreen;
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.address.Address;
 import com.example.EventPlanner.databinding.ActivityProductFormBinding;
-import com.example.EventPlanner.event.Event;
-import com.example.EventPlanner.event.EventType;
+import com.example.EventPlanner.eventType.EventType;
 import com.example.EventPlanner.merchandise.MerchandisePhoto;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-
-import kotlin.collections.ArrayDeque;
 
 public class ProductForm extends AppCompatActivity {
     private ActivityProductFormBinding productFormBinding;
@@ -290,8 +279,8 @@ public class ProductForm extends AppCompatActivity {
 
             boolean automaticReservation = productFormBinding.radioAutomatic.isChecked();
 
-            List<com.example.EventPlanner.product.EventType> eventTypes = new ArrayList<>();
-            eventTypes.add(new com.example.EventPlanner.product.EventType(1, "Tip Eventa", "Opis", true, null));
+            List<EventType> eventTypes = new ArrayList<>();
+            eventTypes.add(new EventType(1, "Tip Eventa", "Opis", true, null));
 
             List<MerchandisePhoto> photos = new ArrayList<>();
             photos.add(new MerchandisePhoto(1, "Merc Slika"));

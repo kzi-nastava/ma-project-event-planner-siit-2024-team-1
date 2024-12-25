@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/base_navigation"
-    app:startDestination="@+id/nav_products_list_vertical">
+    app:startDestination="@+id/nav_event_types_crud">
     <fragment
         android:id="@+id/nav_events_merchandise_list"
         android:name="com.example.EventPlanner.eventmerchandise.EventsMerchandiseList"
@@ -23,5 +23,10 @@
         android:id="@+id/nav_products_list_vertical"
         android:name="com.example.EventPlanner.product.ProductCRUD"
         android:label="@string/products"
+        tools:layout="@layout/fragment_product_crud"/>
+    <fragment
+        android:id="@+id/nav_event_types_crud"
+        android:name="com.example.EventPlanner.eventType.EventTypeCRUD"
+        android:label="@string/event_types"
         tools:layout="@layout/fragment_product_crud"/>
 </navigation>

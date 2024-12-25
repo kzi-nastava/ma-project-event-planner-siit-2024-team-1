@@ -1,67 +1,40 @@
-package com.example.EventPlanner.product;
+package com.example.EventPlanner.eventType;
 
 import com.example.EventPlanner.address.Address;
 import com.example.EventPlanner.address.Address1;
 import com.example.EventPlanner.eventType.EventType;
 import com.example.EventPlanner.merchandise.MerchandisePhoto;
+import com.example.EventPlanner.product.Product;
 import com.example.EventPlanner.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class DummyProductGenerator {
+public class DummyEventTypeGenerator {
 
-    public static List<Product> createDummyProduct(int count) {
-        List<Product> productsList = new ArrayList<>();
+    public static List<EventType> createDummyEventType(int count) {
+        List<EventType> eventTypesList = new ArrayList<>();
         Random random = new Random();
 
         // Example data
         int id = 1;
-        String title = "Product Title";
-        String description = "Product Description";
-        String specificity = "High-quality material";
-        double price = 499.99;
-        int discount = 10;
-        boolean visible = true;
-        boolean available = true;
-        int minDuration = 30; // e.g., in minutes
-        int maxDuration = 120; // e.g., in minutes
-        int reservationDeadline = 24; // e.g., in hours
-        int cancellationDeadline = 12; // e.g., in hours
-        boolean automaticReservation = false;
-
-// Assuming you have these objects
-        List<MerchandisePhoto> merchandisePhotos = new ArrayList<>();
-        List<EventType> eventTypes = new ArrayList<>();
-        Address address = new Address("Vojvode Putnika", "Rumenka", "8", 22.0, 34.0);
-        com.example.EventPlanner.product.Category category = new com.example.EventPlanner.product.Category(1, "Funerality", "Opis", false);
+        String title = "Tech Conference";
+        String description = "Orgijanje";
 
 // Creating a Product instance
-        Product product = new Product(
+        EventType eventType = new EventType(
                 id,
                 title,
                 description,
-                specificity,
-                price,
-                discount,
-                visible,
-                available,
-                minDuration,
-                maxDuration,
-                reservationDeadline,
-                cancellationDeadline,
-                automaticReservation,
-                merchandisePhotos,
-                eventTypes,
-                address,
-                category
+                true,
+                null
         );
 
-        productsList.add(product);
-        productsList.add(product);
+        eventTypesList.add(eventType);
+        eventTypesList.add(eventType);
 
-        return productsList;
+        return eventTypesList;
     }
 
     // Helper method to create a dummy user

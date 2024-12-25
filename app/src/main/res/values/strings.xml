@@ -18,6 +18,7 @@
     <string name="events">Events</string>
     <string name="dashboard">Dashboard</string>
     <string name="products">Products</string>
+    <string name="event_types">Event Types</string>
     <string name="add_product">Add Product</string>
     <string name="edit_product">Edit Product</string>
     <string name="my_products">My Products</string>
@@ -58,8 +59,10 @@
     <string name="my_services">My Services</string>
     <string name="new_service">New Service</string>
     <string name="edit_service">Edit Service</string>
-    <string name="title">Title</string>
+    <string name="title">Title</string>add_event_type
     <string name="price">Price</string>
+    <string name="add_event_type">Add Event Type</string>
+    <string name="edit_event_type">Edit Event Type</string>
     <string name="specificity">Specificity</string>
     <string name="discount">Discount</string>
     <string name="city">City</string>

@@ -1,7 +1,10 @@
 
-package com.example.EventPlanner.product; ;
+package com.example.EventPlanner.eventType; ;
 
 import javax.annotation.Generated;
+import java.util.List;
+
+import com.example.EventPlanner.product.Category;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -22,7 +25,7 @@ public class EventType {
     private Boolean active;
     @SerializedName("recommendedCategories")
     @Expose
-    private Object recommendedCategories;
+    private List<Category> recommendedCategories;
 
     /**
      * No args constructor for use in serialization
@@ -31,7 +34,7 @@ public class EventType {
     public EventType() {
     }
 
-    public EventType(Integer id, String title, String description, Boolean active, Object recommendedCategories) {
+    public EventType(Integer id, String title, String description, Boolean active, List<Category> recommendedCategories) {
         super();
         this.id = id;
         this.title = title;
@@ -72,11 +75,11 @@ public class EventType {
         this.active = active;
     }
 
-    public Object getRecommendedCategories() {
+    public List<Category> getRecommendedCategories() {
         return recommendedCategories;
     }
 
-    public void setRecommendedCategories(Object recommendedCategories) {
+    public void setRecommendedCategories(List<Category> recommendedCategories) {
         this.recommendedCategories = recommendedCategories;
     }
 
