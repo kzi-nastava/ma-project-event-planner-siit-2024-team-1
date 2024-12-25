@@ -2,6 +2,7 @@ package com.example.EventPlanner;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
@@ -9,6 +10,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.EventPlanner.category.Category1;
+import com.example.EventPlanner.config.ClientUtils;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class LoginScreen extends AppCompatActivity {
 
@@ -36,6 +47,21 @@ public class LoginScreen extends AppCompatActivity {
         skipLoginButton.setOnClickListener(v -> {
             Intent intent=new Intent(LoginScreen.this, HomeScreen.class);
             startActivity(intent);
+        });
+        Call<ArrayList<Category1>> call = ClientUtils.category1Service.getAll();
+        call.enqueue(new Callback<ArrayList<Category1>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Category1>> call, Response<ArrayList<Category1>> response) {
+                for ( Category1 cat : response.body())
+                {
+                    Log.d("Records:Button--", cat.getTitle());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Category1>> call, Throwable throwable) {
+                Log.d("Records:Button--", "s");
+            }
         });
     }
     @Override

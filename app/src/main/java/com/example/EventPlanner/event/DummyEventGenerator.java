@@ -1,6 +1,7 @@
 package com.example.EventPlanner.event;
 
 import com.example.EventPlanner.address.Address;
+import com.example.EventPlanner.address.Address1;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,7 +32,7 @@ public class DummyEventGenerator {
 
         for (int i = 0; i < count; i++) {
             // Create Address
-            Address address = new Address(
+            Address1 address = new Address1(
                     cities[random.nextInt(cities.length)],
                     streets[random.nextInt(streets.length)],
                     String.valueOf(random.nextInt(999) + 1),

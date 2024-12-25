@@ -1,34 +1,82 @@
 package com.example.EventPlanner.address;
 
-public class Address {
-    private String city;
-    private String street;
-    private String number;
-    private String longitude;
-    private String latitude;
+import javax.annotation.Generated;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-    // Constructor
-    public Address(String city, String street, String number, String longitude, String latitude) {
-        this.city = city;
+@Generated("jsonschema2pojo")
+public class Address {
+
+    @SerializedName("street")
+    @Expose
+    private String street;
+    @SerializedName("city")
+    @Expose
+    private String city;
+    @SerializedName("number")
+    @Expose
+    private String number;
+    @SerializedName("longitude")
+    @Expose
+    private Double longitude;
+    @SerializedName("latitude")
+    @Expose
+    private Double latitude;
+
+    /**
+     * No args constructor for use in serialization
+     *
+     */
+    public Address() {
+    }
+
+    public Address(String street, String city, String number, Double longitude, Double latitude) {
+        super();
         this.street = street;
+        this.city = city;
         this.number = number;
         this.longitude = longitude;
         this.latitude = latitude;
     }
 
-    // Getters and Setters
-    public String getCity() { return city; }
-    public void setCity(String city) { this.city = city; }
+    public String getStreet() {
+        return street;
+    }
 
-    public String getStreet() { return street; }
-    public void setStreet(String street) { this.street = street; }
+    public void setStreet(String street) {
+        this.street = street;
+    }
 
-    public String getNumber() { return number; }
-    public void setNumber(String number) { this.number = number; }
+    public String getCity() {
+        return city;
+    }
 
-    public String getLongitude() { return longitude; }
-    public void setLongitude(String longitude) { this.longitude = longitude; }
+    public void setCity(String city) {
+        this.city = city;
+    }
 
-    public String getLatitude() { return latitude; }
-    public void setLatitude(String latitude) { this.latitude = latitude; }
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
 }

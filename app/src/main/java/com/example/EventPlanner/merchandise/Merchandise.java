@@ -1,6 +1,7 @@
 package com.example.EventPlanner.merchandise;
 
 import com.example.EventPlanner.address.Address;
+import com.example.EventPlanner.address.Address1;
 import com.example.EventPlanner.category.Category;
 import com.example.EventPlanner.review.Review;
 
@@ -23,7 +24,7 @@ public class Merchandise {
     private boolean deleted;
     private List<String> photos;
     private Category category;
-    private Address address;
+    private Address1 address;
     private List<Review> reviews;
 
     // Constructor
@@ -31,7 +32,7 @@ public class Merchandise {
                        double price, double discount, boolean visible, boolean available,
                        int minDuration, int maxDuration, int reservationDeadline,
                        int cancelReservation, boolean automaticReservation, boolean deleted,
-                       List<String> photos, Category category, Address address, List<Review> reviews) {
+                       List<String> photos, Category category, Address1 address, List<Review> reviews) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -101,8 +102,8 @@ public class Merchandise {
     public Category getCategory() { return category; }
     public void setCategory(Category category) { this.category = category; }
 
-    public Address getAddress() { return address; }
-    public void setAddress(Address address) { this.address = address; }
+    public Address1 getAddress() { return address; }
+    public void setAddress(Address1 address) { this.address = address; }
 
     public List<Review> getReviews() { return reviews; }
     public Double getRating(){
