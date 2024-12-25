@@ -18,6 +18,8 @@
     <string name="events">Events</string>
     <string name="dashboard">Dashboard</string>
     <string name="products">Products</string>
+    <string name="add_product">Add Product</string>
+    <string name="edit_product">Edit Product</string>
     <string name="my_products">My Products</string>
     <string name="shop">Shop</string>
     <string name="skip_login">Login as a guest</string>
@@ -60,9 +62,17 @@
     <string name="price">Price</string>
     <string name="specificity">Specificity</string>
     <string name="discount">Discount</string>
+    <string name="city">City</string>
+    <string name="street">Street</string>
+    <string name="number">Number</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>reservation_deadline
+    <string name="reservation_deadline">Reservation Deadline</string>
+    <string name="cancelation_deadline">Cancelation Deadline</string>
     <string name="service_photos">Service photos</string>
     <string name="event_type">Choose event type</string>
     <string name="visible">Visible</string>
+    <string name="delete">Delete</string>
     <string name="available">Available</string>
     <string name="min_Duration">min Duration</string>
     <string name="max_duration">max Duration</string>
@@ -73,6 +83,8 @@
     <string name="automatic">Automatic</string>
     <string name="manual">Manual</string>
     <string name="submit">Submit</string>
+    <string name="min">Min Duration</string>
+    <string name="max">Max Duration</string>
     <string name="duration">Duration</string>
     <string name="category_change">Category can\'t be changed</string>
     <!-- Strings used for fragments for navigation -->
@@ -80,7 +92,12 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-
+    <string-array name="category_array">
+        <item>Category 1</item>
+        <item>Category 2</item>
+        <item>Category 3</item>
+        <item>Category 4</item>
+    </string-array>
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus

@@ -1,9 +1,7 @@
 package com.example.EventPlanner.merchandise;
 
-import com.example.EventPlanner.address.Address;
 import com.example.EventPlanner.address.Address1;
 import com.example.EventPlanner.category.Category;
-import com.example.EventPlanner.product.Product;
 import com.example.EventPlanner.product.Product1;
 import com.example.EventPlanner.review.Review;
 import com.example.EventPlanner.service.Service;

@@ -20,33 +20,19 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
             android:textSize="24sp"
-            android:text="@string/products"
+            android:text="@string/add_product"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Product Name Input -->
         <EditText
-            android:id="@+id/category_input"
+            android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="24dp"
-            android:hint="@string/products"
-            android:inputType="text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/form_title" />
-
-        <!-- Product Name Input -->
-        <EditText
-            android:id="@+id/product_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="24dp"
-            android:hint="@string/products"
+            android:hint="@string/title"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -66,7 +52,21 @@
             android:minLines="3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/product_name" />
+            app:layout_constraintTop_toBottomOf="@+id/title" />
+
+        <!-- Specificity -->
+        <EditText
+            android:id="@+id/specificity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:hint="@string/specificity"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/product_description" />
 
         <!-- Product Price Input -->
         <EditText
@@ -80,7 +80,7 @@
             android:inputType="numberDecimal"
             app:layout_constraintEnd_toStartOf="@+id/product_discount"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/product_description" />
+            app:layout_constraintTop_toBottomOf="@+id/specificity" />
 
         <!-- Product Discount Input -->
         <EditText
@@ -89,80 +89,219 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="24dp"
+            android:layout_marginTop="16dp"
             android:hint="@string/discount"
             android:inputType="numberDecimal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/product_price"
-            app:layout_constraintTop_toTopOf="@+id/product_price" />
+            app:layout_constraintTop_toBottomOf="@+id/specificity" />
 
-        <!-- Product Category Label -->
-        <TextView
-            android:id="@+id/product_category_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/category"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/product_price" />
-
-        <!-- Product Category Spinner -->
+        <!-- Product Category (Single Select ComboBox) -->
         <Spinner
-            android:id="@+id/product_category_spinner"
+            android:id="@+id/category_spinner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
+            android:hint="Category"
+            app:layout_constraintEnd_toStartOf="@+id/multiselect_spinner"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/product_discount"
+            app:layout_constraintBottom_toTopOf="@+id/city"/>
+
+        <Spinner
+            android:id="@+id/multiselect_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:hint="Event Types"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/category_spinner"
+            app:layout_constraintTop_toBottomOf="@+id/product_discount"
+            app:layout_constraintBottom_toTopOf="@id/city" />
+
+
+
+        <!-- City Input -->
+        <EditText
+            android:id="@+id/city"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:hint="@string/city"
+            android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/product_category_label" />
+            app:layout_constraintTop_toBottomOf="@+id/category_spinner" />
 
-        <!-- Product Image Button -->
+        <!-- Street Input -->
+        <EditText
+            android:id="@+id/street"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:hint="@string/street"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/city" />
+
+        <!-- Number Input -->
+        <EditText
+            android:id="@+id/number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:hint="@string/number"
+            android:inputType="text"
+            app:layout_constraintEnd_toStartOf="@id/latitude"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/street" />
+
+        <!-- Latitude Input -->
+        <EditText
+            android:id="@+id/latitude"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:hint="@string/latitude"
+            android:inputType="numberDecimal"
+            app:layout_constraintEnd_toEndOf="@id/longitude"
+            app:layout_constraintStart_toEndOf="@id/number"
+            app:layout_constraintTop_toBottomOf="@+id/street" />
+
+        <!-- Longitude Input -->
+        <EditText
+            android:id="@+id/longitude"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:hint="@string/longitude"
+            android:inputType="numberDecimal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/latitude"
+            app:layout_constraintTop_toBottomOf="@+id/street" />
+
+        <!-- Number Input -->
+        <EditText
+            android:id="@+id/min"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:hint="@string/min"
+            android:inputType="text"
+            app:layout_constraintEnd_toStartOf="@id/max"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/latitude" />
+
+        <!-- Latitude Input -->
+        <EditText
+            android:id="@+id/max"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:hint="@string/max"
+            android:inputType="numberDecimal"
+            app:layout_constraintStart_toEndOf="@id/min"
+            app:layout_constraintTop_toBottomOf="@+id/latitude"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <!-- Longitude Input -->
+
+        <!-- Reservation Deadline -->
+        <EditText
+            android:id="@+id/reservation_deadline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:hint="@string/reservation_deadline"
+            android:inputType="number"
+            app:layout_constraintEnd_toStartOf="@id/cancelation_deadline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/min"
+            tools:layout_editor_absoluteY="645dp" />
+
+        <!-- Cancelation Deadline -->
+        <EditText
+            android:id="@+id/cancelation_deadline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/min"
+            android:layout_marginEnd="24dp"
+            android:hint="@string/cancelation_deadline"
+            android:inputType="number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/reservation_deadline"
+            tools:layout_editor_absoluteY="645dp" />
+
+        <!-- Radio Buttons Section -->
+        <RadioGroup
+            android:id="@+id/radio_group_reservation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="24dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/reservation_deadline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <RadioButton
+                android:id="@+id/radio_automatic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/automatic"
+                android:checked="true"
+                />
+
+            <RadioButton
+                android:id="@+id/radio_manual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/manual" />
+
+        </RadioGroup>
+
+
         <Button
-            android:id="@+id/add_product_image_button"
+            android:id="@+id/add_photos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="24dp"
-            android:text="@string/products"
+            android:text="@string/add_photos"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/product_category_spinner" />
-
-        <!-- Product Availability Checkbox -->
-        <CheckBox
-            android:id="@+id/product_available_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/available"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/add_product_image_button" />
-
-        <!-- Product Visibility Checkbox -->
-        <CheckBox
-            android:id="@+id/product_visible_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/visible"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/product_available_checkbox" />
+            app:layout_constraintTop_toBottomOf="@+id/radio_group_reservation"
+            />
 
         <!-- Submit Button -->
         <Button
             android:id="@+id/submit_product_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="54dp"
             android:layout_marginBottom="24dp"
             android:text="@string/submit"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/product_visible_checkbox" />
-
+            app:layout_constraintTop_toBottomOf="@+id/add_photos" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

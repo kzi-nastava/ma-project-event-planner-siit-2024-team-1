@@ -19,65 +19,50 @@ public class DummyProductGenerator {
         List<Product> productsList = new ArrayList<>();
         Random random = new Random();
 
-        String[] cities = {"New York", "Los Angeles", "Chicago", "Houston", "Phoenix"};
-        String[] streets = {"Main St", "Broadway", "Park Ave", "Oak Lane", "Maple Dr"};
-        String[] categories = {"Electronics", "Furniture", "Sports", "Books", "Fashion"};
-        String[] titles = {"Premium Item", "Best Seller", "New Arrival", "Featured Product", "Limited Edition"};
+        // Example data
+        int id = 1;
+        String title = "Product Title";
+        String description = "Product Description";
+        String specificity = "High-quality material";
+        double price = 499.99;
+        int discount = 10;
+        boolean visible = true;
+        boolean available = true;
+        int minDuration = 30; // e.g., in minutes
+        int maxDuration = 120; // e.g., in minutes
+        int reservationDeadline = 24; // e.g., in hours
+        int cancellationDeadline = 12; // e.g., in hours
+        boolean automaticReservation = false;
 
-        for (int i = 0; i < count; i++) {
-            // Create Address
-            Address address = new Address(
-                    cities[random.nextInt(cities.length)],
-                    streets[random.nextInt(streets.length)],
-                    String.valueOf(random.nextInt(999) + 1),
-                    22.0,  // longitude
-                    23.0   // latitude
-            );
+// Assuming you have these objects
+        List<MerchandisePhoto> merchandisePhotos = new ArrayList<>();
+        List<EventType> eventTypes = new ArrayList<>();
+        Address address = new Address("Vojvode Putnika", "Rumenka", "8", 22.0, 34.0);
+        com.example.EventPlanner.product.Category category = new com.example.EventPlanner.product.Category(1, "Funerality", "Opis", false);
 
-            // Create Category
-            Category category = new Category(
-                    i + 1,
-                    categories[random.nextInt(categories.length)],
-                    "Description for " + categories[random.nextInt(categories.length)],
-                    random.nextBoolean()
-            );
+// Creating a Product instance
+        Product product = new Product(
+                id,
+                title,
+                description,
+                specificity,
+                price,
+                discount,
+                visible,
+                available,
+                minDuration,
+                maxDuration,
+                reservationDeadline,
+                cancellationDeadline,
+                automaticReservation,
+                merchandisePhotos,
+                eventTypes,
+                address,
+                category
+        );
 
-            // Create some reviews
-            List<Review> reviews = new ArrayList<>();
-            int numReviews = random.nextInt(5) + 1;
-            for (int j = 0; j < numReviews; j++) {
-                User user = createDummyUser(j);
-                Review review = new Review(
-                        j + 1,
-                        user,
-                        "Great product! Review #" + (j + 1),
-                        random.nextInt(5) + 1
-                );
-                reviews.add(review);
-            }
-
-            // Create photo list
-            List<MerchandisePhoto> photos = new ArrayList<>();
-            int numPhotos = random.nextInt(3) + 1;
-            for (int k = 0; k < numPhotos; k++) {
-                photos.add(new MerchandisePhoto(k + 1, "photo_" + (i + 1) + "_" + (k + 1) + ".jpg"));
-            }
-
-            // Create Product
-            Product product = new Product(
-                    i + 1,
-                    categories[random.nextInt(categories.length)],
-                    "Product Type " + (i + 1),
-                    photos.isEmpty() ? null : photos.get(0),  // Assuming the photos list has at least one item
-                    titles[random.nextInt(titles.length)] + " " + (i + 1),
-                    random.nextDouble() * 5,  // Random rating between 0 and 5
-                    address,
-                    random.nextDouble() * 1000 + 10,  // Price between 10 and 1010
-                    "Detailed description for item " + (i + 1)
-            );
-
-            productsList.add(product);
-        }
+        productsList.add(product);
+        productsList.add(product);
 
         return productsList;
     }
