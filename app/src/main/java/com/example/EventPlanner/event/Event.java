@@ -6,21 +6,21 @@ import com.example.EventPlanner.address.Address1;
 import java.util.Date;
 
 public class Event {
-    private Long id;
+    private Integer id;
     private String title;
     private String description;
     private int maxParticipants;
     private boolean isPublic;
-    private Address1 address;
+    private Address address;
     private Date date;
-    private EventType type;
+    private com.example.EventPlanner.eventType.EventType type;
 
     // Default constructor
     public Event() {}
 
     // Constructor with all fields
-    public Event(Long id, String title, String description, int maxParticipants,
-                 boolean isPublic, Address1 address, Date date, EventType type) {
+    public Event(Integer id, String title, String description, int maxParticipants,
+                 boolean isPublic, Address address, Date date, com.example.EventPlanner.eventType.EventType type) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -32,11 +32,11 @@ public class Event {
     }
 
     // Getters and Setters
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -72,11 +72,11 @@ public class Event {
         this.isPublic = isPublic;
     }
 
-    public Address1 getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(Address1 address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
@@ -88,11 +88,11 @@ public class Event {
         this.date = date;
     }
 
-    public EventType getType() {
+    public com.example.EventPlanner.eventType.EventType getType() {
         return type;
     }
 
-    public void setType(EventType type) {
+    public void setType(com.example.EventPlanner.eventType.EventType type) {
         this.type = type;
     }
 }

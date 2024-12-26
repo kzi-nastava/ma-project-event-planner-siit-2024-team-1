@@ -32,12 +32,12 @@ public class DummyEventGenerator {
 
         for (int i = 0; i < count; i++) {
             // Create Address
-            Address1 address = new Address1(
+            Address address = new Address(
                     cities[random.nextInt(cities.length)],
                     streets[random.nextInt(streets.length)],
                     String.valueOf(random.nextInt(999) + 1),
-                    String.format("%.6f", random.nextDouble() * 180 - 90),  // longitude
-                    String.format("%.6f", random.nextDouble() * 180 - 90)   // latitude
+                    22.1,  // longitude
+                    22.1   // latitude
             );
 
 
@@ -45,14 +45,14 @@ public class DummyEventGenerator {
 
             // Create Event
             Event event = new Event(
-                    (long) (i + 1),
+                    (i + 1),
                     titles[random.nextInt(titles.length)] + " " + (i + 1),
                     descriptions[random.nextInt(descriptions.length)],
                     20 + random.nextInt(181), // maxParticipants between 20 and 200
                     random.nextBoolean(),     // isPublic
                     address,
                     eventDate,
-                    eventTypeList.get(random.nextInt(eventTypeList.size()))
+                    new com.example.EventPlanner.eventType.EventType(1, "Tech konferencija", "Desc", true, null)
             );
 
             eventsList.add(event);

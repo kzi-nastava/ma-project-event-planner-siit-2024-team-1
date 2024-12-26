@@ -22,7 +22,13 @@
             android:name=".ServiceForm"
             android:exported="false" />
         <activity
+            android:name=".eventType.EventTypeForm"
+            android:exported="false" />
+        <activity
             android:name=".product.ProductForm"
+            android:exported="false" />
+        <activity
+            android:name=".event.EventForm"
             android:exported="false" />
         <activity
             android:name=".HomeContent"

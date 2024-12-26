@@ -116,13 +116,32 @@
                     android:textColor="?android:attr/textColorPrimary" />
             </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:orientation="horizontal">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/show_product"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/show_hide"
+                style="@style/Secondary.Button.Primary.Text" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/avail_product"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/enable_disable"
+                style="@style/Secondary.Button.Primary.Text" />
+        </LinearLayout>
             <!-- Buttons (Reserve & Edit) -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:orientation="horizontal">
-
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/edit_product"
                     android:layout_width="wrap_content"

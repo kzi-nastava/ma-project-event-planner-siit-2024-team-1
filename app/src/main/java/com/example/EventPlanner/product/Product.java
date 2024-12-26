@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import com.example.EventPlanner.address.Address;
+import com.example.EventPlanner.eventType.EventType;
 import com.example.EventPlanner.merchandise.MerchandisePhoto;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
