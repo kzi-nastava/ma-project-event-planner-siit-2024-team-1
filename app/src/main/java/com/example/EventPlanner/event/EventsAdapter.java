@@ -1,6 +1,7 @@
 package com.example.EventPlanner.event;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.EventPlanner.R;
+import com.example.EventPlanner.eventType.EventTypeForm;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,6 +53,22 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
             String formattedDate = sdf.format(event.getDate());
             holder.eventDate.setText(formattedDate);
         }
+        holder.itemView.findViewById(R.id.see_agenda).setOnClickListener(v -> {
+            //
+        });
+        holder.itemView.findViewById(R.id.see_details_button).setOnClickListener(v -> {
+            //
+        });
+        holder.itemView.findViewById(R.id.edit_event).setOnClickListener(v -> {
+            Intent intent = new Intent(context, EventTypeForm.class);
+            intent.putExtra("FORM_TYPE", "EDIT_FORM");
+            intent.putExtra("EVENT_TYPE_ID", event.getId());
+            context.startActivity(intent);
+        });
+        holder.itemView.findViewById(R.id.delete_event).setOnClickListener(v -> {
+
+        });
+
         holder.eventCard.setOnClickListener(v -> {
             Toast.makeText(context, event.getTitle(), Toast.LENGTH_SHORT).show();
         });
@@ -71,7 +89,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
         TextView eventDate;
         public EventViewHolder(@NonNull View itemView) {
             super(itemView);
-            eventCard = itemView.findViewById(R.id.event_card_item);
+            eventCard = itemView.findViewById(R.id.event_card);
             eventTitle = itemView.findViewById(R.id.event_title);
             eventDescription = itemView.findViewById(R.id.event_description);
             eventLocation = itemView.findViewById(R.id.event_location);

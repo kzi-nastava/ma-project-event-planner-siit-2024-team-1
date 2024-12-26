@@ -49,7 +49,7 @@ public class EventsMerchandiseAdapter extends RecyclerView.Adapter<RecyclerView.
             address = itemView.findViewById(R.id.event_location);
             date = itemView.findViewById(R.id.event_date);
             type = itemView.findViewById(R.id.event_type);
-            eventCard = itemView.findViewById(R.id.event_card_item);
+            eventCard = itemView.findViewById(R.id.event_card);
         }
 
         private void setViews(String titleText, String descriptionText, String addressText, String dateText, String typeText) {

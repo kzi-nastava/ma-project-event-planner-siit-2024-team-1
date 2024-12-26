@@ -1,4 +1,4 @@
-package com.example.EventPlanner.eventType;
+package com.example.EventPlanner.event;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,35 +9,38 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.EventPlanner.R;
+import com.example.EventPlanner.databinding.FragmentEventCrudBinding;
 import com.example.EventPlanner.databinding.FragmentEventTypeCrudBinding;
 import com.example.EventPlanner.databinding.FragmentProductCrudBinding;
+import com.example.EventPlanner.eventType.EventTypeForm;
+import com.example.EventPlanner.eventType.EventTypeList;
 import com.example.EventPlanner.product.ProductForm;
 import com.example.EventPlanner.product.ProductList;
 import com.example.EventPlanner.user.EventOrganizer;
 
-public class EventTypeCRUD extends Fragment {
+public class EventCRUD extends Fragment {
 
-    private FragmentEventTypeCrudBinding eventTypeCrudBinding;
+    private FragmentEventCrudBinding eventCrudBinding;
 
-    public EventTypeCRUD() {
+    public EventCRUD() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        eventTypeCrudBinding = FragmentEventTypeCrudBinding.inflate(getLayoutInflater());
-        View view = eventTypeCrudBinding.getRoot();
+        eventCrudBinding = FragmentEventCrudBinding.inflate(getLayoutInflater());
+        View view = eventCrudBinding.getRoot();
 
         // Initialize Product List Fragment
-        EventTypeList eventTypeList = new EventTypeList();
+        EventList eventList = new EventList();
         getChildFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainerViewEventType, eventTypeList).commit();
+                .replace(R.id.fragmentContainerViewEvent, eventList).commit();
 
         // Add new product button listener
-        Button addEventTypeButton = eventTypeCrudBinding.addEventTypeButton;
-        addEventTypeButton.setOnClickListener((v) -> {
-            Intent intent = new Intent(requireActivity(), EventTypeForm.class);
+        Button addEventButton = eventCrudBinding.addEventButton;
+        addEventButton.setOnClickListener((v) -> {
+            Intent intent = new Intent(requireActivity(), EventForm.class);
             intent.putExtra("FORM_TYPE", "NEW_FORM");
             startActivity(intent);
         });

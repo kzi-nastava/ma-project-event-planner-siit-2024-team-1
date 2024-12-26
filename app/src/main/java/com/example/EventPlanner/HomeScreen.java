@@ -85,6 +85,15 @@ public class HomeScreen extends AppCompatActivity {
             }else if(id==R.id.sidebar_services) {
                 navController.navigate(R.id.nav_services_list_vertical);
             }
+            else if(id==R.id.sidebar_products) {
+                navController.navigate(R.id.nav_products_list_vertical);
+            }
+            else if(id==R.id.sidebar_event_types) {
+                navController.navigate(R.id.nav_event_types_crud);
+            }
+            else if(id==R.id.sidebar_events) {
+                navController.navigate(R.id.nav_events_crud);
+            }
             return true;
         });
 

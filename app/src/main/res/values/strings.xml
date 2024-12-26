@@ -13,6 +13,7 @@
     <string name="confirmPassword">Confirm Password</string>
     <string name="company">Company</string>
     <string name="description">Description</string>
+    <string name="max_participants">Max Participants</string>
     <string name="phone">Phone</string>
     <string name="address">Address</string>
     <string name="events">Events</string>
@@ -29,6 +30,8 @@
     <string name="all">All</string>
     <string name="top_merchandise">Top Products/Services</string>
     <string name="top_events">Top Events</string>
+    <string name="my_events">My Events</string>
+    <string name="agenda">Agenda</string>
     <string name="see_details">See details</string>
     <string name="all_events">All Events</string>
     <string name="all_merchandise">All Products/Services</string>
@@ -55,6 +58,8 @@
     <string name="product_filters">Product Filters</string>
     <string name="apply_filters">Apply filters</string>
     <string name="edit">Edit</string>
+    <string name="show_hide">Show/Hide</string>
+    <string name="enable_disable">Enable/Disable</string>
     <string name="deactivate">Deactivate</string>
     <string name="activate">Activate/Deactivate</string>
     <string name="reserve">Reserve</string>
@@ -79,6 +84,10 @@
     <string name="visible">Visible</string>
     <string name="delete">Delete</string>
     <string name="available">Available</string>
+    <string name="public1">Public</string>
+    <string name="private1">Private</string>
+    <string name="add_event">Add Event</string>
+    <string name="edit_event">Edit Event</string>
     <string name="min_Duration">min Duration</string>
     <string name="max_duration">max Duration</string>
     <string name="reservation_Deadline">Reservation Deadline</string>
@@ -102,6 +111,12 @@
         <item>Category 2</item>
         <item>Category 3</item>
         <item>Category 4</item>
+    </string-array>
+    <string-array name="event_type_array">
+        <item>Tech Conference</item>
+        <item>Orgijanje</item>
+        <item>Rucak</item>
+        <item>Seminar</item>
     </string-array>
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris

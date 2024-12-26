@@ -81,7 +81,6 @@ public class EventTypeCard extends Fragment {
         // Initialize buttons
         Button editEventTypeButton = view.findViewById(R.id.edit_event_type);
         Button deleteEventTypeButton = view.findViewById(R.id.delete_event_type);
-
         // Set listeners for buttons
         editEventTypeButton.setOnClickListener(v -> {
             // Handle the "Edit" button click

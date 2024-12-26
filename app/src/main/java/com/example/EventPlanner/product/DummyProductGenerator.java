@@ -70,27 +70,29 @@ public class DummyProductGenerator {
         String[] lastNames = {"Smith", "Johnson", "Williams", "Brown", "Jones"};
         Random random = new Random();
 
-        Address1 address = new Address1(
+        Address address = new Address(
                 "City" + (id + 1),
                 "Street" + (id + 1),
                 String.valueOf(random.nextInt(999) + 1),
-                String.format("%.6f", random.nextDouble() * 180 - 90),
-                String.format("%.6f", random.nextDouble() * 180 - 90)
+                11.0,
+                12.2
         );
 
+        // Create a User object using the constructor
         return new User(
-                id + 1,
-                firstNames[random.nextInt(firstNames.length)],
-                lastNames[random.nextInt(lastNames.length)],
-                address,
-                String.format("+1-%03d-%03d-%04d",
-                        random.nextInt(1000),
-                        random.nextInt(1000),
-                        random.nextInt(10000)),
-                "user" + (id + 1) + "@example.com",
-                "password" + (id + 1),
-                "profile_" + (id + 1) + ".jpg",
-                true
+                1,                                // id
+                "John",                           // name
+                "Doe",                            // surname
+                "+123456789",                     // phoneNumber
+                address,                          // address
+                "johndoe",                        // username
+                "password123",                    // password
+                "https://example.com/photo.jpg",  // photo
+                2,                                // role (e.g., Admin or User role ID)
+                "ROLE_USER",                      // authorities
+                true,                             // active
+                "abc123activationToken",          // activationToken
+                "2024-12-31T23:59:59Z"           // tokenExpiration
         );
     }
 }

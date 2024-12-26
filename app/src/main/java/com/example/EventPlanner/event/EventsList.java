@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.EventPlanner.eventmerchandise.DotsIndicatorDecoration;
 import com.example.EventPlanner.R;
-import com.example.EventPlanner.databinding.FragmentEventsListBinding;
+import com.example.EventPlanner.databinding.FragmentEventListBinding;
 
 import java.util.ArrayList;
 
@@ -31,7 +31,7 @@ public class EventsList extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private EventViewModel eventViewModel;
 
-    private FragmentEventsListBinding eventsListBinding;
+    private FragmentEventListBinding eventsListBinding;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -71,7 +71,7 @@ public class EventsList extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        eventsListBinding= FragmentEventsListBinding.inflate(getLayoutInflater());
+        eventsListBinding= FragmentEventListBinding.inflate(getLayoutInflater());
         eventViewModel =new ViewModelProvider(requireActivity()).get(EventViewModel.class);
         ArrayList<Event> eventList=new ArrayList<>();
         String topString=getString(R.string.top);

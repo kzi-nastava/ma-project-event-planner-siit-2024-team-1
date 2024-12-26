@@ -28,6 +28,9 @@
             android:name=".product.ProductForm"
             android:exported="false" />
         <activity
+            android:name=".event.EventForm"
+            android:exported="false" />
+        <activity
             android:name=".HomeContent"
             android:exported="false" />
         <activity

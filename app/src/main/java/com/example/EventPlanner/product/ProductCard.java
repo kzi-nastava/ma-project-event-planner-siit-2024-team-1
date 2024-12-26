@@ -85,13 +85,7 @@ public class ProductCard extends Fragment {
         // Initialize buttons
         Button editProductButton = view.findViewById(R.id.edit_product);
         Button deleteProductButton = view.findViewById(R.id.delete_product);
-        TextView eventTypeActiveView = view.findViewById(R.id.event_type_active);
-        if(eventTypeActiveView.getText().toString().equals("Active")){
-            deleteProductButton.setText("Deactivate");
-        }
-        else{
-            deleteProductButton.setText("Activate");
-        }
+
 
         // Set listeners for buttons
         editProductButton.setOnClickListener(v -> {
@@ -104,6 +98,40 @@ public class ProductCard extends Fragment {
         });
 
         deleteProductButton.setOnClickListener(v -> {
+            // Handle the "Delete" button click
+            // You can show a confirmation dialog before deleting
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Delete Product")
+                    .setMessage("Are you sure you want to delete this product?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        // Perform delete operation here, e.g., remove product from database
+                        Toast.makeText(getContext(), "Product deleted", Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+        });
+
+        // Initialize buttons
+        Button showProductButton = view.findViewById(R.id.show_product);
+        Button availProductButton = view.findViewById(R.id.avail_product);
+
+
+        // Set listeners for buttons
+        showProductButton.setOnClickListener(v -> {
+            // Handle the "Delete" button click
+            // You can show a confirmation dialog before deleting
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Delete Product")
+                    .setMessage("Are you sure you want to delete this product?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        // Perform delete operation here, e.g., remove product from database
+                        Toast.makeText(getContext(), "Product deleted", Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+        });
+
+        availProductButton.setOnClickListener(v -> {
             // Handle the "Delete" button click
             // You can show a confirmation dialog before deleting
             new AlertDialog.Builder(getContext())
