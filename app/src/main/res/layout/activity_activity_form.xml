@@ -10,7 +10,7 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".activities.EventForm">
+        tools:context=".activities.ActivityForm">
 
         <!-- Title Section -->
         <TextView
@@ -20,13 +20,13 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
             android:textSize="24sp"
-            android:text="@string/add_event"
+            android:text="@string/add_activity"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Product Name Input -->
         <EditText
-            android:id="@+id/event_title"
+            android:id="@+id/activity_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -40,7 +40,7 @@
 
         <!-- Product Description Input -->
         <EditText
-            android:id="@+id/event_description"
+            android:id="@+id/activity_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -52,50 +52,7 @@
             android:minLines="3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/event_title" />
-
-        <!-- Specificity -->
-        <EditText
-            android:id="@+id/max_participants"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="24dp"
-            android:hint="@string/max_participants"
-            android:inputType="number"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/event_description" />
-
-        <!-- Product Category (Single Select ComboBox) -->
-        <Spinner
-            android:id="@+id/event_types_spinner"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="24dp"
-            android:hint="Event Type"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/max_participants"
-            />
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/event_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="24dp"
-            android:focusable="false"
-            android:inputType="none"
-            android:hint="@string/date"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/event_types_spinner"/>
-
+            app:layout_constraintTop_toBottomOf="@+id/activity_title" />
 
         <!-- City Input -->
         <EditText
@@ -109,7 +66,7 @@
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/event_date" />
+            app:layout_constraintTop_toBottomOf="@+id/activity_description" />
 
         <!-- Street Input -->
         <EditText
@@ -167,45 +124,45 @@
             app:layout_constraintStart_toEndOf="@id/latitude"
             app:layout_constraintTop_toBottomOf="@+id/street" />
 
-        <!-- Radio Buttons Section -->
-        <RadioGroup
-            android:id="@+id/radio_group_publicity"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/activity_start"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
-            android:layout_marginTop="24dp"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/longitude"
+            android:hint="@string/start"
+            android:focusable="false"
+            android:clickable="true"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/longitude" />
 
-            <RadioButton
-                android:id="@+id/radio_public"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/public1"
-                android:checked="true"
-                />
-
-            <RadioButton
-                android:id="@+id/radio_private"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/private1" />
-
-        </RadioGroup>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/activity_end"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:hint="@string/end"
+            android:focusable="false"
+            android:clickable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/activity_start" />
 
         <!-- Submit Button -->
         <Button
-            android:id="@+id/submit_event_button"
+            android:id="@+id/submit_activity_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:layout_marginBottom="24dp"
             android:text="@string/submit"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radio_group_publicity" />
+            app:layout_constraintTop_toBottomOf="@+id/activity_end" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

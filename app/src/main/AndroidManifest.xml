@@ -31,6 +31,15 @@
             android:name=".activities.EventForm"
             android:exported="false" />
         <activity
+            android:name=".activities.ActivityForm"
+            android:exported="false" />
+        <activity
+            android:name=".fragments.activity.ActivityCRUD"
+            android:exported="false" />
+        <activity
+            android:name=".activities.EventDetails"
+            android:exported="false" />
+        <activity
             android:name=".activities.HomeContent"
             android:exported="false" />
         <activity

@@ -1,5 +1,6 @@
 package com.example.EventPlanner.activities;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -27,6 +28,7 @@ import com.example.EventPlanner.model.event.Event;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class EventForm extends AppCompatActivity {
@@ -45,6 +47,9 @@ public class EventForm extends AppCompatActivity {
 
         String formType = getIntent().getStringExtra("FORM_TYPE");
         TextView formTitle = eventFormBinding.formTitle;
+
+
+        findViewById(R.id.event_date).setOnClickListener(view -> showDatePickerDialog());
 
         // Setup form title and visibility based on form type
         if ("NEW_FORM".equals(formType)) {
@@ -107,6 +112,24 @@ public class EventForm extends AppCompatActivity {
                 // Handle the case when no item is selected (optional)
             }
         });
+    }
+
+    private void showDatePickerDialog() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    // Update the EditText with the selected date
+                    String date = selectedYear + "-" + (selectedMonth + 1) + "-" + selectedDay;
+                    eventFormBinding.eventDate.setText(date);
+                },
+                year, month, day
+        );
+        datePickerDialog.show();
     }
 
     // Populate fields when editing a product
