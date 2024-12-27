@@ -3,24 +3,31 @@ package com.example.EventPlanner.activities;
 import static androidx.navigation.Navigation.findNavController;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.databinding.ActivityHomeScreenBinding;
+import com.example.EventPlanner.fragments.eventmerchandise.SearchViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class HomeScreen extends AppCompatActivity {
@@ -31,6 +38,8 @@ public class HomeScreen extends AppCompatActivity {
     private TextInputLayout searchInputLayout;
     private MenuItem searchMenuItem;
     private View rootLayout;
+
+    private SearchViewModel searchViewModel;
     private NavController navController;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +126,33 @@ public class HomeScreen extends AppCompatActivity {
 
         searchInputLayout.setEndIconOnClickListener(v -> {
             hideSearchInput();
+        });
+
+        TextInputEditText searchEditText = findViewById(R.id.search_edit_text);
+        searchViewModel=new ViewModelProvider(this).get(SearchViewModel.class);
+        searchViewModel.getSearchText().observe(this,searchText->{
+            Log.d("searchText", searchText);
+            Bundle args = new Bundle();
+            args.putString("type", "all");
+            args.putString("title", getString(R.string.all));
+            navController.navigate(R.id.nav_events_merchandise_list_horizontal,args);
+        });
+
+        // Set an OnEditorActionListener
+        searchEditText.setOnEditorActionListener((TextView v, int actionId, KeyEvent event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE ||
+                    actionId == EditorInfo.IME_ACTION_SEARCH ||
+                    (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
+
+                // Get the text entered by the user
+                String searchText = searchEditText.getText().toString().trim();
+
+                // Perform the desired action with the entered text
+                searchViewModel.setSearchText(searchText);
+
+                return true; // Return true to consume the event
+            }
+            return false; // Return false to let the event propagate
         });
     }
     @Override

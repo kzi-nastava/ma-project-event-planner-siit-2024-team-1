@@ -12,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.EventPlanner.adapters.event.EventOverviewAdapter;
 import com.example.EventPlanner.adapters.merchandise.MerchandiseAdapter;
+import com.example.EventPlanner.adapters.merchandise.MerchandiseOverviewAdapter;
 import com.example.EventPlanner.fragments.eventmerchandise.DotsIndicatorDecoration;
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.databinding.FragmentMerchandisesListBinding;
@@ -77,7 +79,6 @@ public class MerchandiseList extends Fragment {
         // Inflate the layout for this fragment
         merchandisesListBinding=FragmentMerchandisesListBinding.inflate(getLayoutInflater());
         merchandiseViewModel =new ViewModelProvider(requireActivity()).get(MerchandiseViewModel.class);
-        ArrayList<Merchandise> merchandiseList=new ArrayList<>();
         String topString=getString(R.string.top);
         String extraValue = topString; // Default value
         if (getArguments() != null) {
@@ -86,24 +87,28 @@ public class MerchandiseList extends Fragment {
         switch (extraValue){
             case "top":
             case "Top":
-                merchandiseList=merchandiseViewModel.getTop();
+                merchandiseViewModel.getMerchandise().observe(getViewLifecycleOwner(),merchandise->{
+                    MerchandiseOverviewAdapter merchandiseAdapter = new MerchandiseOverviewAdapter(requireContext(), merchandise);
+                    RecyclerView recyclerView = merchandisesListBinding.merchandisesListHorizontal;
+                    recyclerView.setAdapter(merchandiseAdapter);
+                    recyclerView.addItemDecoration(new DotsIndicatorDecoration(
+                            ContextCompat.getColor(getContext(), R.color.accent_color),
+                            ContextCompat.getColor(getContext(), R.color.primary_color)
+                    ));
+                    LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
+                    recyclerView.setLayoutManager(layoutManager);
+                    merchandiseAdapter.notifyDataSetChanged();
+
+                });
+                merchandiseViewModel.getTop();
                 break;
             case "all":
             case "All":
-                merchandiseList=merchandiseViewModel.getAll();
-                merchandisesListBinding.merchandiseHeader.setText(getString(R.string.all_merchandise));
+
                 break;
 
         }
-        MerchandiseAdapter merchandiseAdapter = new MerchandiseAdapter(requireContext(), merchandiseList);
-        RecyclerView recyclerView = merchandisesListBinding.merchandisesListHorizontal;
-        recyclerView.setAdapter(merchandiseAdapter);
-        recyclerView.addItemDecoration(new DotsIndicatorDecoration(
-                ContextCompat.getColor(getContext(), R.color.accent_color),
-                ContextCompat.getColor(getContext(), R.color.primary_color)
-        ));
-        LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
+
 
         return merchandisesListBinding.getRoot();
     }

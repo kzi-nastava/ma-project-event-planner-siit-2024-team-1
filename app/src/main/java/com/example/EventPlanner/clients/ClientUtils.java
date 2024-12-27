@@ -5,6 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import com.example.EventPlanner.BuildConfig;
 import com.example.EventPlanner.clients.services.event.EventService;
 import com.example.EventPlanner.clients.services.merchandise.Category1Service;
+import com.example.EventPlanner.clients.services.merchandise.MerchandiseService;
 
 public class ClientUtils {
     public static final String SERVICE_API_PATH = "http://" + BuildConfig.IP_ADDR + ":8080/api/v1/";
@@ -15,4 +16,5 @@ public class ClientUtils {
 
     public static Category1Service category1Service = retrofit.create(Category1Service.class);
     public static EventService eventService=retrofit.create(EventService.class);
+    public static MerchandiseService merchandiseService=retrofit.create(MerchandiseService.class);
 }

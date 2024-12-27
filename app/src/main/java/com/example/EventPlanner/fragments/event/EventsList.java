@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.example.EventPlanner.adapters.event.EventsAdapter;
 import com.example.EventPlanner.fragments.eventmerchandise.DotsIndicatorDecoration;
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.databinding.FragmentEventListBinding;
+import com.example.EventPlanner.fragments.eventmerchandise.SearchViewModel;
 import com.example.EventPlanner.model.event.Event;
 
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ public class EventsList extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private EventViewModel eventViewModel;
+    private SearchViewModel searchViewModel;
 
     private FragmentEventListBinding eventsListBinding;
 
@@ -76,7 +79,7 @@ public class EventsList extends Fragment {
                              Bundle savedInstanceState) {
         eventsListBinding= FragmentEventListBinding.inflate(getLayoutInflater());
         eventViewModel =new ViewModelProvider(requireActivity()).get(EventViewModel.class);
-        ArrayList<Event> eventList=new ArrayList<>();
+        searchViewModel=new ViewModelProvider(requireActivity()).get(SearchViewModel.class);
         String topString=getString(R.string.top);
         String extraValue = topString; // Default value
         if (getArguments() != null) {
@@ -115,7 +118,8 @@ public class EventsList extends Fragment {
                     eventsAdapter.notifyDataSetChanged();
 
                 });
-                eventViewModel.search();
+                eventViewModel.search(searchViewModel.getSearchText().getValue(),searchViewModel.getStartDate().getValue(),searchViewModel.getEndDate().getValue(),
+                        searchViewModel.getType().getValue(),searchViewModel.getCity().getValue());
                 break;
 
         }
