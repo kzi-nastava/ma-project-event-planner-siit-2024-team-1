@@ -1,4 +1,4 @@
-package com.example.EventPlanner.fragments.event;
+package com.example.EventPlanner.fragments.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,16 +15,15 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.EventPlanner.R;
-import com.example.EventPlanner.activities.EventDetails;
+import com.example.EventPlanner.activities.ActivityForm;
 import com.example.EventPlanner.activities.EventForm;
-import com.example.EventPlanner.fragments.activity.ActivityCRUD;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link EventCard#newInstance} factory method to
+ * Use the {@link com.example.EventPlanner.fragments.event.EventCard#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EventCard extends Fragment {
+public class ActivityCard extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,7 +34,7 @@ public class EventCard extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public EventCard() {
+    public ActivityCard() {
         // Required empty public constructor
     }
 
@@ -48,8 +47,8 @@ public class EventCard extends Fragment {
      * @return A new instance of fragment EventCard.
      */
     // TODO: Rename and change types and number of parameters
-    public static EventCard newInstance(String param1, String param2) {
-        EventCard fragment = new EventCard();
+    public static ActivityCard newInstance(String param1, String param2) {
+        ActivityCard fragment = new ActivityCard();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -70,7 +69,7 @@ public class EventCard extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_event_card, container, false);
+        return inflater.inflate(R.layout.fragment_activity_card, container, false);
     }
 
     @Override
@@ -78,22 +77,20 @@ public class EventCard extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Initialize buttons
-        Button editEventButton = view.findViewById(R.id.edit_event);
-        Button deleteEventButton = view.findViewById(R.id.delete_event);
+        Button editActivityButton = view.findViewById(R.id.edit_activity);
+        Button deleteActivityButton = view.findViewById(R.id.delete_activity);
 
-        Button agendaButton = view.findViewById(R.id.see_agenda);
-        Button seeDetailsButton = view.findViewById(R.id.see_details_button);
         // Set listeners for buttons
-        editEventButton.setOnClickListener(v -> {
+        editActivityButton.setOnClickListener(v -> {
             // Handle the "Edit" button click
             // You can navigate to an edit screen or show an edit dialog
-            Intent intent = new Intent(getActivity(), EventForm.class);
+            Intent intent = new Intent(getActivity(), ActivityForm.class);
             intent.putExtra("FORM_TYPE", "EDIT_FORM");
-            intent.putExtra("EVENT_ID", 1);
+            intent.putExtra("ACTIVITY_ID", 1);
             startActivity(intent);
         });
 
-        deleteEventButton.setOnClickListener(v -> {
+        deleteActivityButton.setOnClickListener(v -> {
             // Handle the "Delete" button click
             // You can show a confirmation dialog before deleting
             new AlertDialog.Builder(getContext())
@@ -101,26 +98,10 @@ public class EventCard extends Fragment {
                     .setMessage("Are you sure you want to delete this Event Type?")
                     .setPositiveButton("Yes", (dialog, which) -> {
                         // Perform delete operation here, e.g., remove product from database
-                        Toast.makeText(getContext(), "Event deleted", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Activity deleted", Toast.LENGTH_SHORT).show();
                     })
                     .setNegativeButton("No", null)
                     .show();
-        });
-
-        // Set listeners for buttons
-        agendaButton.setOnClickListener(v -> {
-            // Handle the "Edit" button click
-            // You can navigate to an edit screen or show an edit dialog
-            Intent intent = new Intent(getActivity(), ActivityCRUD.class);
-            intent.putExtra("EVENT_ID", 1);
-            startActivity(intent);
-        });
-
-        // Set listeners for buttons
-        seeDetailsButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), EventDetails.class);
-            intent.putExtra("EVENT_ID", 1);
-            startActivity(intent);
         });
     }
 }
