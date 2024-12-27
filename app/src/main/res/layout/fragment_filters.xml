@@ -18,20 +18,26 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginBottom="16dp">
+
         <CheckBox
             android:id="@+id/cb_show_events"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="@string/events" />
+
         <CheckBox
             android:id="@+id/cb_show_services"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="@string/services" />
+
         <CheckBox
             android:id="@+id/cb_show_products"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="@string/products" />
     </LinearLayout>
 
@@ -59,8 +65,25 @@
                     android:text="@string/event_filters"
                     android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/Start_Date" />
+
                 <CalendarView
-                    android:id="@+id/event_date_picker"
+                    android:id="@+id/event_date_picker_start"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/end_date" />
+
+                <CalendarView
+                    android:id="@+id/event_date_picker_end"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentResultListener;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.databinding.FragmentEventsMerchindisesHorizontalBinding;
+import com.example.EventPlanner.fragments.event.EventViewModel;
 import com.example.EventPlanner.fragments.event.EventsList;
 import com.example.EventPlanner.fragments.merchandise.MerchandiseList;
 import android.widget.Button;
@@ -35,6 +37,8 @@ public class EventsMerchindisesHorizontal extends Fragment {
     private Button sortByMerchandiseButton;
     private Button filtersButton;
     private FragmentContainerView filterFragmentContainer;
+    private SearchViewModel searchViewModel;
+    private EventViewModel eventViewModel;
 
 
     // TODO: Rename and change types of parameters
@@ -70,13 +74,16 @@ public class EventsMerchindisesHorizontal extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        searchViewModel=new ViewModelProvider(requireActivity()).get(SearchViewModel.class);
+        eventViewModel=new ViewModelProvider(requireActivity()).get(EventViewModel.class);
         getChildFragmentManager()
                 .setFragmentResultListener("applyFilters", this, new FragmentResultListener() {
                     @Override
                     public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
                         String result = bundle.getString("filter_result");
                         hideFilterFragment();
-                    }
+                        eventViewModel.search(searchViewModel.getSearchText().getValue(),searchViewModel.getStartDate().getValue(),searchViewModel.getEndDate().getValue(),
+                                searchViewModel.getType().getValue(),searchViewModel.getCity().getValue());                    }
                 });
     }
 

@@ -12,6 +12,8 @@ import com.example.EventPlanner.model.common.PageResponse;
 import com.example.EventPlanner.model.event.Event;
 import com.example.EventPlanner.model.event.EventOverview;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -51,8 +53,8 @@ public class EventViewModel extends ViewModel {
         });
     }
     // Returns all products
-    public void search() {
-        Call<PageResponse<EventOverview>> call = ClientUtils.eventService.searchEvents(-1);
+    public void search(String searchText, LocalDate startDate, LocalDate endDate, String type,String city) {
+        Call<PageResponse<EventOverview>> call = ClientUtils.eventService.searchEvents(-1,searchText,startDate,endDate,type,city);
         call.enqueue(new Callback<PageResponse<EventOverview>>() {
             @Override
             public void onResponse(Call<PageResponse<EventOverview>> call, Response<PageResponse<EventOverview>> response) {
@@ -66,7 +68,7 @@ public class EventViewModel extends ViewModel {
 
             @Override
             public void onFailure(Call<PageResponse<EventOverview>> call, Throwable t) {
-                Log.d("jaje",t.getMessage());
+                Log.d("ja",t.getMessage());
             }
         });
     }

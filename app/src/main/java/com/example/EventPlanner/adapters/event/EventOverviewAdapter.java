@@ -3,6 +3,7 @@ package com.example.EventPlanner.adapters.event;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import com.example.EventPlanner.model.event.Event;
 import com.example.EventPlanner.model.event.EventOverview;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -56,16 +59,26 @@ public class EventOverviewAdapter extends RecyclerView.Adapter<EventOverviewAdap
 
         holder.eventTitle.setText(event.getTitle());
         holder.eventDescription.setText(event.getDescription());
-        holder.eventLocation.setText(String.format("%s, %s %s",
+        String formattedAddress=String.format("%s, %s %s",
                 event.getAddress().getCity(),
                 event.getAddress().getStreet(),
-                event.getAddress().getNumber()));
+                event.getAddress().getNumber());
+        holder.eventLocation.setText(formattedAddress);
+        Log.d("adresa", formattedAddress);
         holder.eventType.setText(String.format(Locale.getDefault(), "%s", event.getType()));
         if (event.getDate() != null) {
             // Format the date as per your requirement (e.g., "MM/dd/yyyy")
-//            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
-//            String formattedDate = sdf.format(event.getDate());
-            holder.eventDate.setText(event.getDate());
+            String inputDate = event.getDate();
+
+            // Parse the input string to LocalDateTime
+            LocalDateTime dateTime = LocalDateTime.parse(inputDate);
+
+            // Define the desired output format
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+            // Format the date to the desired string
+            String formattedDate = dateTime.format(formatter);
+            holder.eventDate.setText(formattedDate);
         }
         holder.itemView.findViewById(R.id.see_agenda).setOnClickListener(v -> {
             //
