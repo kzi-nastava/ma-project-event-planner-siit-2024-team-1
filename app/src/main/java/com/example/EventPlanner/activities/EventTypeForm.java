@@ -52,7 +52,6 @@ public class EventTypeForm extends AppCompatActivity {
             int eventTypeId = getIntent().getIntExtra("EVENT_TYPE_ID", -1);
             if (eventTypeId != -1) {
                 EventType eventType = eventTypeViewModel.findEventTypeById(eventTypeId);
-                Log.d("Naziv proizvoda", eventType.getTitle());
                 if (eventType != null) setFields(eventType);
             }
         }
