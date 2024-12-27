@@ -6,32 +6,32 @@
     app:startDestination="@+id/nav_events_merchandise_list">
     <fragment
         android:id="@+id/nav_events_merchandise_list"
-        android:name="com.example.EventPlanner.eventmerchandise.EventsMerchandiseList"
+        android:name="com.example.EventPlanner.fragments.eventmerchandise.EventsMerchandiseList"
         android:label="@string/top"
         tools:layout="@layout/fragment_merchandises_list"/>
     <fragment
         android:id="@+id/nav_events_merchandise_list_horizontal"
-        android:name="com.example.EventPlanner.eventmerchandise.EventsMerchindisesHorizontal"
+        android:name="com.example.EventPlanner.fragments.eventmerchandise.EventsMerchindisesHorizontal"
         android:label="@string/top"
         tools:layout="@layout/fragment_events_merchindises_horizontal"/>
     <fragment
         android:id="@+id/nav_services_list_vertical"
-        android:name="com.example.EventPlanner.ServiceCRUD"
+        android:name="com.example.EventPlanner.activities.ServiceCRUD"
         android:label="@string/services"
         tools:layout="@layout/fragment_service_crud"/>
     <fragment
         android:id="@+id/nav_products_list_vertical"
-        android:name="com.example.EventPlanner.product.ProductCRUD"
+        android:name="com.example.EventPlanner.fragments.merchandise.product.ProductCRUD"
         android:label="@string/products"
         tools:layout="@layout/fragment_product_crud"/>
     <fragment
         android:id="@+id/nav_event_types_crud"
-        android:name="com.example.EventPlanner.eventType.EventTypeCRUD"
+        android:name="com.example.EventPlanner.fragments.eventtype.EventTypeCRUD"
         android:label="@string/event_types"
         tools:layout="@layout/fragment_product_crud"/>
     <fragment
         android:id="@+id/nav_events_crud"
-        android:name="com.example.EventPlanner.event.EventCRUD"
+        android:name="com.example.EventPlanner.fragments.event.EventCRUD"
         android:label="@string/events"
         tools:layout="@layout/fragment_event_crud"/>
 </navigation>

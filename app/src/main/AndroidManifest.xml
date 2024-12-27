@@ -19,37 +19,37 @@
         android:usesCleartextTraffic="true"
         >
         <activity
-            android:name=".ServiceForm"
+            android:name=".activities.ServiceForm"
             android:exported="false" />
         <activity
-            android:name=".eventType.EventTypeForm"
+            android:name=".activities.EventTypeForm"
             android:exported="false" />
         <activity
-            android:name=".product.ProductForm"
+            android:name=".activities.ProductForm"
             android:exported="false" />
         <activity
-            android:name=".event.EventForm"
+            android:name=".activities.EventForm"
             android:exported="false" />
         <activity
-            android:name=".HomeContent"
+            android:name=".activities.HomeContent"
             android:exported="false" />
         <activity
-            android:name=".navigation.NavigationActivity"
+            android:name=".activities.NavigationActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterodScreenActivity"
+            android:name=".activities.RegisterodScreenActivity"
             android:exported="false" />
         <activity
-            android:name=".HomeScreen"
+            android:name=".activities.HomeScreen"
             android:exported="false" />
         <activity
-            android:name=".RegisterPupScreen"
+            android:name=".activities.RegisterPupScreen"
             android:exported="false" />
         <activity
-            android:name=".LoginScreen"
+            android:name=".activities.LoginScreen"
             android:exported="false" />
         <activity
-            android:name=".SplashScreen"
+            android:name=".activities.SplashScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="0dp"
         android:paddingBottom="16dp"
-        tools:context=".RegisterPupScreen">
+        tools:context=".activities.RegisterPupScreen">
 
         <!-- Header Section -->
         <LinearLayout

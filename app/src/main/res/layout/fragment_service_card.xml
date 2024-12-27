@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="4dp"
-    tools:context=".service.ServiceCard">
+    tools:context=".fragments.merchandise.service.ServiceCard">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card"

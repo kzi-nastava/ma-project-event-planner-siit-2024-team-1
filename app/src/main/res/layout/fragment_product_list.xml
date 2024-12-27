@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".product.ProductList">
+    tools:context=".fragments.merchandise.product.ProductList">
 
     <!-- RecyclerView for displaying the list of products -->
     <androidx.recyclerview.widget.RecyclerView

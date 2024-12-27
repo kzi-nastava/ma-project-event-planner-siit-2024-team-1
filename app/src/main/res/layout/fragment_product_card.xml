@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="4dp"
-    tools:context="com.example.EventPlanner.product.ProductCard">
+    tools:context="com.example.EventPlanner.fragments.merchandise.product.ProductCard">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/product_card"

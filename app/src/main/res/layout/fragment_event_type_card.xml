@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="4dp"
-    tools:context="com.example.EventPlanner.eventType.EventTypeCard">
+    tools:context="com.example.EventPlanner.fragments.eventtype.EventTypeCard">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/event_type_card"
