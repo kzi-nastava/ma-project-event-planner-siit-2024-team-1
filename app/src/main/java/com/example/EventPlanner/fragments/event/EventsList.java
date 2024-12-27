@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.EventPlanner.adapters.event.EventOverviewAdapter;
 import com.example.EventPlanner.adapters.event.EventsAdapter;
 import com.example.EventPlanner.fragments.eventmerchandise.DotsIndicatorDecoration;
 import com.example.EventPlanner.R;
@@ -84,24 +85,41 @@ public class EventsList extends Fragment {
         switch (extraValue){
             case "top":
             case "Top":
-                eventList=eventViewModel.getTop();
+                eventViewModel.getEvents().observe(getViewLifecycleOwner(),events->{
+                    EventOverviewAdapter eventsAdapter = new EventOverviewAdapter(requireActivity(), events);
+                    RecyclerView recyclerView = eventsListBinding.eventsRecyclerViewHorizontal;
+                    recyclerView.setAdapter(eventsAdapter);
+                    recyclerView.addItemDecoration(new DotsIndicatorDecoration(
+                            ContextCompat.getColor(getContext(), R.color.accent_color),
+                            ContextCompat.getColor(getContext(), R.color.primary_color)
+                    ));
+                    LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
+                    recyclerView.setLayoutManager(layoutManager);
+                    eventsAdapter.notifyDataSetChanged();
+
+                });
+                eventViewModel.getTop();
                 break;
             case "all":
             case "All":
-                eventList=eventViewModel.getAll();
-                eventsListBinding.eventsHeader.setText(getString(R.string.all_events));
+                eventViewModel.getEvents().observe(getViewLifecycleOwner(),events->{
+                    EventOverviewAdapter eventsAdapter = new EventOverviewAdapter(requireActivity(), events);
+                    RecyclerView recyclerView = eventsListBinding.eventsRecyclerViewHorizontal;
+                    recyclerView.setAdapter(eventsAdapter);
+                    recyclerView.addItemDecoration(new DotsIndicatorDecoration(
+                            ContextCompat.getColor(getContext(), R.color.accent_color),
+                            ContextCompat.getColor(getContext(), R.color.primary_color)
+                    ));
+                    LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
+                    recyclerView.setLayoutManager(layoutManager);
+                    eventsAdapter.notifyDataSetChanged();
+
+                });
+                eventViewModel.search();
                 break;
 
         }
-        EventsAdapter eventsAdapter = new EventsAdapter(requireContext(), eventList);
-        RecyclerView recyclerView = eventsListBinding.eventsRecyclerViewHorizontal;
-        recyclerView.setAdapter(eventsAdapter);
-        recyclerView.addItemDecoration(new DotsIndicatorDecoration(
-                ContextCompat.getColor(getContext(), R.color.accent_color),
-                ContextCompat.getColor(getContext(), R.color.primary_color)
-        ));
-        LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
+
 
         return eventsListBinding.getRoot();
     }

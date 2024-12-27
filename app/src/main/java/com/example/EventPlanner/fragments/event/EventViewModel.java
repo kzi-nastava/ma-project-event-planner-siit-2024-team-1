@@ -1,26 +1,74 @@
 package com.example.EventPlanner.fragments.event;
 
+import android.util.Log;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.EventPlanner.DummyEventGenerator;
+import com.example.EventPlanner.clients.ClientUtils;
+import com.example.EventPlanner.model.common.PageResponse;
 import com.example.EventPlanner.model.event.Event;
+import com.example.EventPlanner.model.event.EventOverview;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class EventViewModel extends ViewModel {
-    private ArrayList<Event> events;
+    public ArrayList<Event> events;
+    private final MutableLiveData<ArrayList<EventOverview>> eventsLiveData=new MutableLiveData<>();
 
     public EventViewModel() {
         // Set products with dummy data for now
         setEvents(new ArrayList<>(DummyEventGenerator.createDummyEvents(5)));
     }
 
-    public ArrayList<Event> getTop() {
-        return events;
+    public LiveData<ArrayList<EventOverview>> getEvents(){
+        return eventsLiveData;
+    }
+
+    public void getTop() {
+        Call<PageResponse<EventOverview>> call = ClientUtils.eventService.getTop(-1);
+        call.enqueue(new Callback<PageResponse<EventOverview>>() {
+            @Override
+            public void onResponse(Call<PageResponse<EventOverview>> call, Response<PageResponse<EventOverview>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    eventsLiveData.postValue(new ArrayList<>(response.body().getContent()));  // This gets just the list of events
+
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PageResponse<EventOverview>> call, Throwable t) {
+                Log.d("jaje",t.getMessage());
+            }
+        });
     }
     // Returns all products
-    public ArrayList<Event> getAll() {
-        return events;
+    public void search() {
+        Call<PageResponse<EventOverview>> call = ClientUtils.eventService.searchEvents(-1);
+        call.enqueue(new Callback<PageResponse<EventOverview>>() {
+            @Override
+            public void onResponse(Call<PageResponse<EventOverview>> call, Response<PageResponse<EventOverview>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    eventsLiveData.postValue(new ArrayList<>(response.body().getContent()));  // This gets just the list of events
+
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PageResponse<EventOverview>> call, Throwable t) {
+                Log.d("jaje",t.getMessage());
+            }
+        });
     }
 
     // Finds a product by ID
