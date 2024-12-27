@@ -3,6 +3,7 @@ package com.example.EventPlanner.clients;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import com.example.EventPlanner.BuildConfig;
+import com.example.EventPlanner.clients.services.event.EventService;
 import com.example.EventPlanner.clients.services.merchandise.Category1Service;
 
 public class ClientUtils {
@@ -13,4 +14,5 @@ public class ClientUtils {
             .build();
 
     public static Category1Service category1Service = retrofit.create(Category1Service.class);
+    public static EventService eventService=retrofit.create(EventService.class);
 }

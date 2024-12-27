@@ -29,7 +29,7 @@ public class EventList extends Fragment {
         eventListBinding = FragmentEventListBinding.inflate(getLayoutInflater());
         eventViewModel = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
 
-        ArrayList<Event> allEvents = eventViewModel.getAll();
+        ArrayList<Event> allEvents = eventViewModel.events;
 
         EventsAdapter adapter = new EventsAdapter(requireContext(), allEvents);
         RecyclerView recyclerView = eventListBinding.eventsRecyclerViewHorizontal;
