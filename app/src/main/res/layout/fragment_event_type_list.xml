@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".eventType.EventTypeList">
+    tools:context=".fragments.eventtype.EventTypeList">
 
     <!-- RecyclerView for displaying the list of products -->
     <androidx.recyclerview.widget.RecyclerView
