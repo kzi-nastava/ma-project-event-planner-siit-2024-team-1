@@ -2,7 +2,8 @@
     <string name="app_name">Event Planner</string>
     <string name="signin">SIGN IN</string>
     <string name="home">Home</string>
-    <string name="register">CREATE ACCOUNT</string>
+    <string name="register">Register</string>
+    <string name="invite">Invite</string>
     <string name="name">Name</string>
     <string name="surname">Surname</string>
     <string name="photo">CHOOSE PROFILE PHOTO</string>
@@ -12,7 +13,11 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="confirmPassword">Confirm Password</string>
     <string name="company">Company</string>
+    <string name="dont_have_account">Don"'"t have an account</string>
     <string name="description">Description</string>
+    <string name="select_registration_type">Select registration type</string>
+    <string name="register_as_eo">Register as Event Organizer</string>
+    <string name="register_as_sp">Register as Service Provider</string>
     <string name="max_participants">Max Participants</string>
     <string name="phone">Phone</string>
     <string name="address">Address</string>
@@ -102,6 +107,9 @@
     <string name="automatic">Automatic</string>
     <string name="manual">Manual</string>
     <string name="submit">Submit</string>
+    <string name="old_password">Current Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
     <string name="min">Min Duration</string>
     <string name="max">Max Duration</string>
     <string name="duration">Duration</string>
