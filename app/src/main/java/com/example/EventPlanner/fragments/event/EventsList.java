@@ -85,40 +85,27 @@ public class EventsList extends Fragment {
         if (getArguments() != null) {
             extraValue = getArguments().getString("type", topString);
         }
+        RecyclerView recyclerView = eventsListBinding.eventsRecyclerViewHorizontal;
+        eventViewModel.getEvents().observe(getViewLifecycleOwner(),events->{
+            EventOverviewAdapter eventsAdapter = new EventOverviewAdapter(requireActivity(), events);
+            recyclerView.setAdapter(eventsAdapter);
+            eventsAdapter.notifyDataSetChanged();
+
+        });
+        recyclerView.addItemDecoration(new DotsIndicatorDecoration(
+                ContextCompat.getColor(getContext(), R.color.accent_color),
+                ContextCompat.getColor(getContext(), R.color.primary_color)
+        ));
+        LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
         switch (extraValue){
             case "top":
             case "Top":
-                eventViewModel.getEvents().observe(getViewLifecycleOwner(),events->{
-                    EventOverviewAdapter eventsAdapter = new EventOverviewAdapter(requireActivity(), events);
-                    RecyclerView recyclerView = eventsListBinding.eventsRecyclerViewHorizontal;
-                    recyclerView.setAdapter(eventsAdapter);
-                    recyclerView.addItemDecoration(new DotsIndicatorDecoration(
-                            ContextCompat.getColor(getContext(), R.color.accent_color),
-                            ContextCompat.getColor(getContext(), R.color.primary_color)
-                    ));
-                    LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
-                    recyclerView.setLayoutManager(layoutManager);
-                    eventsAdapter.notifyDataSetChanged();
-
-                });
                 eventViewModel.getTop();
                 break;
             case "all":
             case "All":
-                eventViewModel.getEvents().observe(getViewLifecycleOwner(),events->{
-                    EventOverviewAdapter eventsAdapter = new EventOverviewAdapter(requireActivity(), events);
-                    RecyclerView recyclerView = eventsListBinding.eventsRecyclerViewHorizontal;
-                    recyclerView.setAdapter(eventsAdapter);
-                    recyclerView.addItemDecoration(new DotsIndicatorDecoration(
-                            ContextCompat.getColor(getContext(), R.color.accent_color),
-                            ContextCompat.getColor(getContext(), R.color.primary_color)
-                    ));
-                    LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
-                    recyclerView.setLayoutManager(layoutManager);
-                    eventsAdapter.notifyDataSetChanged();
-
-                });
-                eventViewModel.search(searchViewModel.getSearchText().getValue(),searchViewModel.getStartDate().getValue(),searchViewModel.getEndDate().getValue(),
+                eventViewModel.search(Boolean.TRUE.equals(searchViewModel.getShowEvents().getValue()),searchViewModel.getSearchText().getValue(),searchViewModel.getStartDate().getValue(),searchViewModel.getEndDate().getValue(),
                         searchViewModel.getType().getValue(),searchViewModel.getCity().getValue());
                 break;
 

@@ -170,4 +170,5 @@
     <string name="plus">+</string>
     <string name="Start_Date">Start Date</string>
     <string name="end_date">End Date</string>
+    <string name="reset_filter_values">Reset filters</string>
 </resources>

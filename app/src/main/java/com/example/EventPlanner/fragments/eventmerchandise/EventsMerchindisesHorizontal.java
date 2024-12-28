@@ -17,6 +17,8 @@ import com.example.EventPlanner.databinding.FragmentEventsMerchindisesHorizontal
 import com.example.EventPlanner.fragments.event.EventViewModel;
 import com.example.EventPlanner.fragments.event.EventsList;
 import com.example.EventPlanner.fragments.merchandise.MerchandiseList;
+import com.example.EventPlanner.fragments.merchandise.MerchandiseViewModel;
+
 import android.widget.Button;
 import android.widget.PopupMenu;
 
@@ -39,6 +41,7 @@ public class EventsMerchindisesHorizontal extends Fragment {
     private FragmentContainerView filterFragmentContainer;
     private SearchViewModel searchViewModel;
     private EventViewModel eventViewModel;
+    private MerchandiseViewModel merchandiseViewModel;
 
 
     // TODO: Rename and change types of parameters
@@ -76,14 +79,25 @@ public class EventsMerchindisesHorizontal extends Fragment {
         }
         searchViewModel=new ViewModelProvider(requireActivity()).get(SearchViewModel.class);
         eventViewModel=new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+        merchandiseViewModel=new ViewModelProvider(requireActivity()).get(MerchandiseViewModel.class);
+
         getChildFragmentManager()
                 .setFragmentResultListener("applyFilters", this, new FragmentResultListener() {
                     @Override
                     public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
                         String result = bundle.getString("filter_result");
                         hideFilterFragment();
-                        eventViewModel.search(searchViewModel.getSearchText().getValue(),searchViewModel.getStartDate().getValue(),searchViewModel.getEndDate().getValue(),
-                                searchViewModel.getType().getValue(),searchViewModel.getCity().getValue());                    }
+                        eventViewModel.search(Boolean.TRUE.equals(searchViewModel.getShowEvents().getValue()),searchViewModel.getSearchText().getValue(),searchViewModel.getStartDate().getValue(),searchViewModel.getEndDate().getValue(),
+                                searchViewModel.getType().getValue(),searchViewModel.getCity().getValue());
+                        merchandiseViewModel.search(Boolean.TRUE.equals(searchViewModel.getShowServices().getValue()),
+                                Boolean.TRUE.equals(searchViewModel.getShowProducts().getValue())
+                                ,searchViewModel.getSearchText().getValue(),searchViewModel.getProductPriceMin().getValue(),
+                                searchViewModel.getProductPriceMax().getValue(),searchViewModel.getProductDurationMin().getValue(),
+                                searchViewModel.getProductDurationMax().getValue(),
+                                searchViewModel.getProductCity().getValue(),searchViewModel.getProductCategory().getValue(),
+                                searchViewModel.getServicePriceMin().getValue(),searchViewModel.getServicePriceMax().getValue(),searchViewModel.getServiceDurationMin().getValue(),
+                                searchViewModel.getServiceDurationMax().getValue(),searchViewModel.getServiceCity().getValue(),searchViewModel.getServiceCategory().getValue());
+                    }
                 });
     }
 
