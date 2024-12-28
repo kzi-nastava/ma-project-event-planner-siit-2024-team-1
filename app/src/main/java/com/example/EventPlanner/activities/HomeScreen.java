@@ -131,7 +131,7 @@ public class HomeScreen extends AppCompatActivity {
         TextInputEditText searchEditText = findViewById(R.id.search_edit_text);
         searchViewModel=new ViewModelProvider(this).get(SearchViewModel.class);
         searchViewModel.getSearchText().observe(this,searchText->{
-            Log.d("searchText", searchText);
+            searchEditText.setText(searchText);
             Bundle args = new Bundle();
             args.putString("type", "all");
             args.putString("title", getString(R.string.all));

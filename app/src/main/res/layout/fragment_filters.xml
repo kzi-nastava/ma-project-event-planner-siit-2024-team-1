@@ -209,4 +209,10 @@
         android:layout_height="wrap_content"
         android:text="@string/apply_filters" />
 
+    <Button
+        android:id="@+id/btnResetFilters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/reset_filter_values" />
+
 </LinearLayout>

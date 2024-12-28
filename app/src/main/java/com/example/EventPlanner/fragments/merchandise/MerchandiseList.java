@@ -18,6 +18,7 @@ import com.example.EventPlanner.adapters.merchandise.MerchandiseOverviewAdapter;
 import com.example.EventPlanner.fragments.eventmerchandise.DotsIndicatorDecoration;
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.databinding.FragmentMerchandisesListBinding;
+import com.example.EventPlanner.fragments.eventmerchandise.SearchViewModel;
 import com.example.EventPlanner.model.merchandise.Merchandise;
 
 import java.util.ArrayList;
@@ -38,8 +39,10 @@ public class MerchandiseList extends Fragment {
     private String mParam1;
     private String mParam2;
     private MerchandiseViewModel merchandiseViewModel;
+    private SearchViewModel searchViewModel;
 
     private FragmentMerchandisesListBinding merchandisesListBinding;
+
 
     public MerchandiseList() {
         // Required empty public constructor
@@ -79,32 +82,40 @@ public class MerchandiseList extends Fragment {
         // Inflate the layout for this fragment
         merchandisesListBinding=FragmentMerchandisesListBinding.inflate(getLayoutInflater());
         merchandiseViewModel =new ViewModelProvider(requireActivity()).get(MerchandiseViewModel.class);
+        searchViewModel=new ViewModelProvider(requireActivity()).get(SearchViewModel.class);
         String topString=getString(R.string.top);
         String extraValue = topString; // Default value
         if (getArguments() != null) {
             extraValue = getArguments().getString("type", topString);
         }
+        RecyclerView recyclerView = merchandisesListBinding.merchandisesListHorizontal;
+        merchandiseViewModel.getMerchandise().observe(getViewLifecycleOwner(),merchandise->{
+            MerchandiseOverviewAdapter merchandiseAdapter = new MerchandiseOverviewAdapter(requireContext(), merchandise);
+            recyclerView.setAdapter(merchandiseAdapter);
+            merchandiseAdapter.notifyDataSetChanged();
+
+        });
+        recyclerView.addItemDecoration(new DotsIndicatorDecoration(
+                ContextCompat.getColor(getContext(), R.color.accent_color),
+                ContextCompat.getColor(getContext(), R.color.primary_color)
+        ));
+        LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
         switch (extraValue){
             case "top":
             case "Top":
-                merchandiseViewModel.getMerchandise().observe(getViewLifecycleOwner(),merchandise->{
-                    MerchandiseOverviewAdapter merchandiseAdapter = new MerchandiseOverviewAdapter(requireContext(), merchandise);
-                    RecyclerView recyclerView = merchandisesListBinding.merchandisesListHorizontal;
-                    recyclerView.setAdapter(merchandiseAdapter);
-                    recyclerView.addItemDecoration(new DotsIndicatorDecoration(
-                            ContextCompat.getColor(getContext(), R.color.accent_color),
-                            ContextCompat.getColor(getContext(), R.color.primary_color)
-                    ));
-                    LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
-                    recyclerView.setLayoutManager(layoutManager);
-                    merchandiseAdapter.notifyDataSetChanged();
-
-                });
                 merchandiseViewModel.getTop();
                 break;
             case "all":
             case "All":
-
+                merchandiseViewModel.search(Boolean.TRUE.equals(searchViewModel.getShowServices().getValue()),
+                        Boolean.TRUE.equals(searchViewModel.getShowProducts().getValue()),
+                        searchViewModel.getSearchText().getValue(),searchViewModel.getProductPriceMin().getValue(),
+                        searchViewModel.getProductPriceMax().getValue(),searchViewModel.getProductDurationMin().getValue(),
+                        searchViewModel.getProductDurationMax().getValue(),
+                        searchViewModel.getProductCity().getValue(),searchViewModel.getProductCategory().getValue(),
+                        searchViewModel.getServicePriceMin().getValue(),searchViewModel.getServicePriceMax().getValue(),searchViewModel.getServiceDurationMin().getValue(),
+                        searchViewModel.getServiceDurationMax().getValue(),searchViewModel.getServiceCity().getValue(),searchViewModel.getServiceCategory().getValue());
                 break;
 
         }
