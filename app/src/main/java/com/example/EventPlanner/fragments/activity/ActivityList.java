@@ -10,12 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.EventPlanner.adapters.activity.ActivityAdapter;
-import com.example.EventPlanner.adapters.event.EventsAdapter;
 import com.example.EventPlanner.databinding.FragmentActivityListBinding;
-import com.example.EventPlanner.databinding.FragmentEventListBinding;
-import com.example.EventPlanner.fragments.event.EventViewModel;
 import com.example.EventPlanner.model.event.Activity;
-import com.example.EventPlanner.model.event.Event;
 
 import java.util.ArrayList;
 

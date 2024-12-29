@@ -20,7 +20,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.EventPlanner.R;
-import com.example.EventPlanner.fragments.event.EventViewModel;
+import com.example.EventPlanner.fragments.event.EventListViewModel;
 import com.example.EventPlanner.model.common.Address;
 import com.example.EventPlanner.databinding.ActivityEventFormBinding;
 import com.example.EventPlanner.model.event.EventType;
@@ -33,7 +33,7 @@ import java.util.Date;
 
 public class EventForm extends AppCompatActivity {
     private ActivityEventFormBinding eventFormBinding;
-    private EventViewModel eventViewModel;
+    private EventListViewModel eventListViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class EventForm extends AppCompatActivity {
         eventFormBinding = ActivityEventFormBinding.inflate(getLayoutInflater());
         setContentView(eventFormBinding.getRoot());
 
-        eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
+        eventListViewModel = new ViewModelProvider(this).get(EventListViewModel.class);
 
         EdgeToEdge.enable(this);
 
@@ -58,7 +58,7 @@ public class EventForm extends AppCompatActivity {
             formTitle.setText(R.string.edit_event);
             Integer eventId = getIntent().getIntExtra("EVENT_ID", -1);
             if (eventId != -1) {
-                Event event = eventViewModel.findEventById(eventId);
+                Event event = eventListViewModel.findEventById(eventId);
                 Log.d("Naziv proizvoda", event.getTitle());
                 if (eventId != null) setFields(event);
             }
@@ -71,7 +71,7 @@ public class EventForm extends AppCompatActivity {
             if (isValidInput()) {
                 Event event = createEventFromInput();
                 if (event != null) {
-                    eventViewModel.saveEvent(event);
+                    eventListViewModel.saveEvent(event);
 
                     Intent intent = new Intent(EventForm.this, HomeScreen.class);
                     startActivity(intent);

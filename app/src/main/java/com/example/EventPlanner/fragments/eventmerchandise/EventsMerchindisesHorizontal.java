@@ -1,10 +1,5 @@
 package com.example.EventPlanner.fragments.eventmerchandise;
 
-import static android.content.Context.SENSOR_SERVICE;
-import static android.view.Gravity.CENTER;
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-
-import static androidx.core.content.ContextCompat.getSystemService;
 import static androidx.databinding.DataBindingUtil.setContentView;
 
 import android.content.Context;
@@ -12,13 +7,11 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentResultListener;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +19,7 @@ import android.view.ViewGroup;
 
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.databinding.FragmentEventsMerchindisesHorizontalBinding;
-import com.example.EventPlanner.fragments.event.EventViewModel;
+import com.example.EventPlanner.fragments.event.EventListViewModel;
 import com.example.EventPlanner.fragments.event.EventsList;
 import com.example.EventPlanner.fragments.merchandise.MerchandiseList;
 import com.example.EventPlanner.fragments.merchandise.MerchandiseViewModel;
@@ -34,7 +27,6 @@ import com.squareup.seismic.ShakeDetector;
 
 import android.widget.Button;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -55,7 +47,7 @@ public class EventsMerchindisesHorizontal extends Fragment implements ShakeDetec
     private Button filtersButton;
     private FragmentContainerView filterFragmentContainer;
     private SearchViewModel searchViewModel;
-    private EventViewModel eventViewModel;
+    private EventListViewModel eventListViewModel;
     private MerchandiseViewModel merchandiseViewModel;
 
     private ShakeDetector shakeDetector;
@@ -96,7 +88,7 @@ public class EventsMerchindisesHorizontal extends Fragment implements ShakeDetec
         }
 
         searchViewModel = new ViewModelProvider(requireActivity()).get(SearchViewModel.class);
-        eventViewModel = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+        eventListViewModel = new ViewModelProvider(requireActivity()).get(EventListViewModel.class);
         merchandiseViewModel = new ViewModelProvider(requireActivity()).get(MerchandiseViewModel.class);
 
         getChildFragmentManager()
@@ -128,7 +120,7 @@ public class EventsMerchindisesHorizontal extends Fragment implements ShakeDetec
     }
 
     private void searchEvents(){
-        eventViewModel.search(Boolean.TRUE.equals(searchViewModel.getShowEvents().getValue()),searchViewModel.getSearchText().getValue(),searchViewModel.getStartDate().getValue(),searchViewModel.getEndDate().getValue(),
+        eventListViewModel.search(Boolean.TRUE.equals(searchViewModel.getShowEvents().getValue()),searchViewModel.getSearchText().getValue(),searchViewModel.getStartDate().getValue(),searchViewModel.getEndDate().getValue(),
                 searchViewModel.getType().getValue(),searchViewModel.getCity().getValue(),searchViewModel.getEventSortBy().getValue());
     }
 
