@@ -2,6 +2,7 @@ package com.example.EventPlanner.activities;
 
 import static androidx.navigation.Navigation.findNavController;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -23,6 +24,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.EventPlanner.R;
+import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.databinding.ActivityHomeScreenBinding;
 import com.example.EventPlanner.fragments.eventmerchandise.SearchViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -182,7 +184,10 @@ public class HomeScreen extends AppCompatActivity {
 
         } else if (itemId == R.id.logout) {
             // Handle Option 2 click
-            Toast.makeText(this, "Option 2 clicked", Toast.LENGTH_SHORT).show();
+            JwtService.logout();
+            // Navigate to the home screen
+            Intent intent = new Intent(HomeScreen.this, LoginScreen.class);
+            startActivity(intent);
             return true;
         }else if (itemId == R.id.search_icon)
         {

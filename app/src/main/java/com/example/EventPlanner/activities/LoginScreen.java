@@ -3,11 +3,13 @@ package com.example.EventPlanner.activities;
 import static com.example.EventPlanner.clients.ClientUtils.SERVICE_API_PATH;
 
 import android.content.Intent;
+import android.media.session.MediaSession;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
@@ -17,10 +19,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.EventPlanner.R;
+import com.example.EventPlanner.clients.JwtService;
+import com.example.EventPlanner.clients.TokenManager;
+import com.example.EventPlanner.model.auth.LoginRequest;
+import com.example.EventPlanner.model.auth.LoginResponse;
 import com.example.EventPlanner.model.merchandise.Category1;
 import com.example.EventPlanner.clients.ClientUtils;
 
 import java.util.ArrayList;
+import java.util.TooManyListenersException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,13 +46,42 @@ public class LoginScreen extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        EditText username = findViewById(R.id.editTextText);
+        EditText password = findViewById(R.id.editTextTextPassword);
+
         Button loginButton=(Button) findViewById(R.id.loginButton);
         Button registerSelectionButton=(Button) findViewById(R.id.registerSelectionButton);
         Button skipLoginButton=(Button) findViewById(R.id.skipLogin);
 
         loginButton.setOnClickListener(v -> {
-            Intent intent=new Intent(LoginScreen.this,HomeScreen.class);
-            startActivity(intent);
+
+            LoginRequest dto = new LoginRequest();
+            dto.setEmail(username.getText().toString());
+            dto.setPassword(password.getText().toString());
+
+            Call<LoginResponse> call1 = ClientUtils.authService.login(dto);
+            call1.enqueue(new Callback<LoginResponse>() {
+                @Override
+                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        JwtService.setTokens(response.body().getAccessToken(), response.body().getRefreshToken());
+
+                        // Navigate to the home screen
+                        Intent intent = new Intent(LoginScreen.this, HomeScreen.class);
+                        startActivity(intent);
+                    } else {
+                        // Handle error cases
+                        Log.e("Login Error", "Response not successful: " + response.code());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LoginResponse> call, Throwable throwable) {
+                    // Handle network errors
+                    Log.e("Login Failure", "Error: " + throwable.getMessage());
+                }
+            });
         });
         skipLoginButton.setOnClickListener(v -> {
             Intent intent=new Intent(LoginScreen.this, HomeScreen.class);
@@ -57,23 +93,6 @@ public class LoginScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showRegistrationChoiceDialog();
-            }
-        });
-
-        Call<ArrayList<Category1>> call = ClientUtils.category1Service.getAll();
-        call.enqueue(new Callback<ArrayList<Category1>>() {
-            @Override
-            public void onResponse(Call<ArrayList<Category1>> call, Response<ArrayList<Category1>> response) {
-                for ( Category1 cat : response.body())
-                {
-                    Log.d("Records:Button--", cat.getTitle());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<Category1>> call, Throwable throwable) {
-                Log.d("Records:Button--", SERVICE_API_PATH);
-                Log.d("Records:Button--", throwable.getMessage());
             }
         });
     }

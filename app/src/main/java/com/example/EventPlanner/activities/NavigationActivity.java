@@ -1,5 +1,6 @@
 package com.example.EventPlanner.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +14,9 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.EventPlanner.R;
+import com.example.EventPlanner.clients.JwtService;
+import com.example.EventPlanner.clients.TokenManager;
+import com.example.EventPlanner.model.auth.LoginRequest;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
@@ -100,7 +104,10 @@ public class NavigationActivity extends AppCompatActivity {
 
         } else if (itemId == R.id.logout) {
             // Handle Option 2 click
-            Toast.makeText(this, "Option 2 clicked", Toast.LENGTH_SHORT).show();
+            JwtService.logout();
+            // Navigate to the home screen
+            Intent intent = new Intent(NavigationActivity.this, LoginScreen.class);
+            startActivity(intent);
             return true;
         }else if (itemId == R.id.search_icon)
         {
