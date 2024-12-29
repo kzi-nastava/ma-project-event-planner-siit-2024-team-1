@@ -16,8 +16,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.clients.ClientUtils;
 import com.example.EventPlanner.clients.JwtService;
-import com.example.EventPlanner.model.auth.LoginRequest;
-import com.example.EventPlanner.model.auth.LoginResponse;
 import com.example.EventPlanner.model.auth.RegisterEoRequest;
 import com.example.EventPlanner.model.auth.RegisterEoResponse;
 import com.example.EventPlanner.model.auth.Role;
@@ -55,7 +53,7 @@ public class RegisterEoScreen extends AppCompatActivity {
         String photo = "";
 
 
-        Button submitButton = (Button) findViewById(R.id.createAccountButton);
+        Button submitButton = (Button) findViewById(R.id.invite_btn);
 
         submitButton.setOnClickListener(v -> {
             if(!password1.getText().toString().equals(password2.getText().toString())){

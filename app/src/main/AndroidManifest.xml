@@ -58,6 +58,9 @@
             android:name=".activities.LoginScreen"
             android:exported="false" />
         <activity
+            android:name=".activities.SendInvitationScreen"
+            android:exported="false" />
+        <activity
             android:name=".activities.SplashScreen"
             android:exported="true">
             <intent-filter>
