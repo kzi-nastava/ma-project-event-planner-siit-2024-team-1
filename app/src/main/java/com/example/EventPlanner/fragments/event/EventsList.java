@@ -107,6 +107,11 @@ public class EventsList extends Fragment {
                 eventListViewModel.search(Boolean.TRUE.equals(searchViewModel.getShowEvents().getValue()),searchViewModel.getSearchText().getValue(),searchViewModel.getStartDate().getValue(),searchViewModel.getEndDate().getValue(),
                         searchViewModel.getType().getValue(),searchViewModel.getCity().getValue(),searchViewModel.getEventSortBy().getValue());
                 break;
+            case "my":
+            case "My":
+                eventsHeader.setText(R.string.my_events);
+                eventListViewModel.getByEo();
+                break;
 
         }
 

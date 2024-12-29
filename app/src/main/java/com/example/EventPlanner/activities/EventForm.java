@@ -21,10 +21,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.fragments.event.EventListViewModel;
+import com.example.EventPlanner.fragments.eventtype.EventTypeViewModel;
 import com.example.EventPlanner.model.common.Address;
 import com.example.EventPlanner.databinding.ActivityEventFormBinding;
+import com.example.EventPlanner.model.event.CreatedEventResponse;
+import com.example.EventPlanner.model.event.EventOverview;
 import com.example.EventPlanner.model.event.EventType;
 import com.example.EventPlanner.model.event.Event;
+import com.example.EventPlanner.model.event.EventTypeOverview;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -58,9 +62,13 @@ public class EventForm extends AppCompatActivity {
             formTitle.setText(R.string.edit_event);
             Integer eventId = getIntent().getIntExtra("EVENT_ID", -1);
             if (eventId != -1) {
-                Event event = eventListViewModel.findEventById(eventId);
-                Log.d("Naziv proizvoda", event.getTitle());
-                if (eventId != null) setFields(event);
+                formTitle.setText(R.string.edit_event);
+                eventListViewModel.getSelectedEvent().observe(this, event -> {
+                    if (event != null) {
+                        setFields(event);
+                    }
+                });
+                eventListViewModel.findEventById(eventId);
             }
         }
 
@@ -86,30 +94,35 @@ public class EventForm extends AppCompatActivity {
             return insets;
         });
 
-        // Get reference to the Spinner
-        Spinner eventTypesSpinner = findViewById(R.id.event_types_spinner);
+        eventListViewModel = new ViewModelProvider(this).get(EventListViewModel.class);
+        EventTypeViewModel eventTypeViewModel = new ViewModelProvider(this).get(EventTypeViewModel.class);
 
-// Create an ArrayAdapter for the Spinner
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.event_type_array, android.R.layout.simple_spinner_item);
+        EdgeToEdge.enable(this);
 
-// Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Spinner for event types
+        Spinner eventTypesSpinner = eventFormBinding.eventTypesSpinner;
 
-// Set the adapter to the Spinner
-        eventTypesSpinner.setAdapter(adapter);
+        eventTypeViewModel.getEventTypes().observe(this, eventTypes -> {
+            // Create an ArrayAdapter with EventTypeOverview objects
+            ArrayAdapter<EventTypeOverview> adapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_spinner_item, eventTypes);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            eventFormBinding.eventTypesSpinner.setAdapter(adapter);
+        });
 
-// Handle the item selection (optional)
+        // Fetch event types
+        eventTypeViewModel.getAll();
+
+        // Handle the spinner item selection (optional)
         eventTypesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String selectedEventType = parentView.getItemAtPosition(position).toString();
-                Toast.makeText(EventForm.this, "Selected Category: " + selectedEventType, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                // Handle the case when no item is selected (optional)
+                // Handle the case when no item is selected
             }
         });
     }
@@ -133,10 +146,10 @@ public class EventForm extends AppCompatActivity {
     }
 
     // Populate fields when editing a product
-    private void setFields(Event event) {
+    private void setFields(CreatedEventResponse event) {
         eventFormBinding.eventTitle.setText(event.getTitle());
         eventFormBinding.eventDescription.setText(event.getDescription());
-        eventFormBinding.maxParticipants.setText(event.getMaxParticipants());
+        eventFormBinding.maxParticipants.setText(String.valueOf(event.getMaxParticipants()));
         eventFormBinding.eventDate.setText(String.valueOf(event.getDate()));
         eventFormBinding.city.setText(event.getAddress().getCity());
         eventFormBinding.street.setText(event.getAddress().getStreet());
@@ -144,7 +157,22 @@ public class EventForm extends AppCompatActivity {
         eventFormBinding.latitude.setText(String.valueOf(event.getAddress().getLatitude()));
         eventFormBinding.longitude.setText(String.valueOf(event.getAddress().getLongitude()));
         eventFormBinding.radioPublic.setChecked(event.isPublic());
-        eventFormBinding.radioPublic.setChecked(!event.isPublic());
+
+        // Pre-select the event type by ID
+        Integer eventTypeId = event.getEventType().getId();
+        Spinner eventTypesSpinner = eventFormBinding.eventTypesSpinner;
+
+        // Assuming you already have an adapter with a list of EventTypeOverview objects
+        ArrayAdapter<EventTypeOverview> adapter = (ArrayAdapter<EventTypeOverview>) eventTypesSpinner.getAdapter();
+        if (adapter != null) {
+            for (int i = 0; i < adapter.getCount(); i++) {
+                EventTypeOverview eventType = adapter.getItem(i);
+                if (eventType != null && eventType.getId().equals(eventTypeId)) {
+                    eventTypesSpinner.setSelection(i);
+                    break;
+                }
+            }
+        }
     }
 
     // Validate user input

@@ -27,9 +27,9 @@ public class EventCRUD extends Fragment {
         View view = eventCrudBinding.getRoot();
 
         // Initialize Product List Fragment
-        EventList eventList = new EventList();
+        EventsList eventsList = new EventsList();
         getChildFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainerViewEvent, eventList).commit();
+                .replace(R.id.fragmentContainerViewEvent, eventsList).commit();
 
         // Add new product button listener
         Button addEventButton = eventCrudBinding.addEventButton;

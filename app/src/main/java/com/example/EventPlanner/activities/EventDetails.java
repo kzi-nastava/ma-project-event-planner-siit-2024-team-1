@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.databinding.ActivityEventDetailsBinding;
 import com.example.EventPlanner.fragments.event.EventListViewModel;
+import com.example.EventPlanner.model.event.CreatedEventResponse;
 import com.example.EventPlanner.model.event.Event;
 
 import java.text.SimpleDateFormat;
@@ -34,9 +35,12 @@ public class EventDetails extends AppCompatActivity {
 
         Integer eventId = getIntent().getIntExtra("EVENT_ID", -1);
         if (eventId != -1) {
-            Event event = eventListViewModel.findEventById(eventId);
-            Log.d("Naziv proizvoda", event.getTitle());
-            if (eventId != null) setFields(event);
+            eventListViewModel.getSelectedEvent().observe(this, event -> {
+                if (event != null) {
+                    setFields(event);
+                }
+            });
+            eventListViewModel.findEventById(eventId);
         }
 
         // Handle insets for edge-to-edge design
@@ -48,7 +52,7 @@ public class EventDetails extends AppCompatActivity {
     }
 
     // Populate fields when editing a product
-    private void setFields(Event event) {
+    private void setFields(CreatedEventResponse event) {
         eventFormBinding.eventTitle.setText(event.getTitle());
         eventFormBinding.eventDescription.setText(event.getDescription());
         eventFormBinding.publicity.setText(event.isPublic() ? "Public" : "Private");
@@ -62,8 +66,10 @@ public class EventDetails extends AppCompatActivity {
                         event.getAddress().getLongitude().toString()
 
         );
-        eventFormBinding.eventType.setText(event.getType().getTitle());
+        eventFormBinding.eventType.setText(event.getEventType().getTitle());
         eventFormBinding.maxParticipants.setText("Max Participants: " + String.valueOf(event.getMaxParticipants()));
+        eventFormBinding.organizerName.setText("Organizer:" + "\n" + event.getOrganizer().getName() + " " +
+                event.getOrganizer().getSurname() + " - " + event.getOrganizer().getEmail());
         eventFormBinding.organizerName.setText("Organizer:" + "\nDzon do - johndoe@gmail.com");
     }
 }

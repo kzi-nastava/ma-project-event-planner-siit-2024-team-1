@@ -8,9 +8,13 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.EventPlanner.DummyEventGenerator;
 import com.example.EventPlanner.clients.ClientUtils;
+import com.example.EventPlanner.clients.JwtService;
+import com.example.EventPlanner.clients.TokenManager;
 import com.example.EventPlanner.model.common.PageResponse;
+import com.example.EventPlanner.model.event.CreatedEventResponse;
 import com.example.EventPlanner.model.event.Event;
 import com.example.EventPlanner.model.event.EventOverview;
+import com.example.EventPlanner.model.event.EventTypeOverview;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,7 +26,7 @@ import retrofit2.Response;
 public class EventListViewModel extends ViewModel {
     public ArrayList<Event> events;
     private final MutableLiveData<ArrayList<EventOverview>> eventsLiveData=new MutableLiveData<>();
-
+    private final MutableLiveData<CreatedEventResponse> selectedEvent = new MutableLiveData<>();
     public EventListViewModel() {
         // Set products with dummy data for now
         setEvents(new ArrayList<>(DummyEventGenerator.createDummyEvents(5)));
@@ -76,14 +80,46 @@ public class EventListViewModel extends ViewModel {
         });
     }
 
-    // Finds a product by ID
-    public Event findEventById(int id) {
-        for (Event event : events) {
-            if (event.getId() != null && event.getId().equals(id)) {
-                return event;
+    public void getByEo() {
+        Call<PageResponse<EventOverview>> call = ClientUtils.eventService.getByEo(JwtService.getIdFromToken());
+        call.enqueue(new Callback<PageResponse<EventOverview>>() {
+            @Override
+            public void onResponse(Call<PageResponse<EventOverview>> call, Response<PageResponse<EventOverview>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    eventsLiveData.postValue(new ArrayList<>(response.body().getContent()));  // This gets just the list of events
+
+                } else {
+
+                }
             }
-        }
-        return null;
+
+            @Override
+            public void onFailure(Call<PageResponse<EventOverview>> call, Throwable t) {
+                Log.d("jaje",t.getMessage());
+            }
+        });
+    }
+    public LiveData<CreatedEventResponse> getSelectedEvent() {
+        return selectedEvent;
+    }
+    // Find an event type by ID
+    public void findEventById(int id) {
+        Call<CreatedEventResponse> call = ClientUtils.eventService.getById(id);
+        call.enqueue(new Callback<CreatedEventResponse>() {
+            @Override
+            public void onResponse(Call<CreatedEventResponse> call, Response<CreatedEventResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    selectedEvent.postValue(response.body());
+                } else {
+                    Log.e("EventViewModel", "Failed to fetch event by ID: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CreatedEventResponse> call, Throwable t) {
+                Log.e("EventViewModel", "Error fetching event by ID", t);
+            }
+        });
     }
 
     // Adds a new product
