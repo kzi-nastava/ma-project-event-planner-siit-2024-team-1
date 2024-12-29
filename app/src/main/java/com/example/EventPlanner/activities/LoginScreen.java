@@ -56,7 +56,7 @@ public class LoginScreen extends AppCompatActivity {
 
         loginButton.setOnClickListener(v -> {
 
-            LoginRequest dto = new LoginRequest();
+            LoginRequest dto = new LoginRequest("johndoe@gmail.com", "sifra");
             dto.setEmail(username.getText().toString());
             dto.setPassword(password.getText().toString());
 

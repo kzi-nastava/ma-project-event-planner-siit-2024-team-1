@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,12 @@ import android.widget.Toast;
 
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.activities.EventTypeForm;
+import com.example.EventPlanner.clients.ClientUtils;
+import com.example.EventPlanner.model.event.EventTypeOverview;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class EventTypeCard extends Fragment {
 
@@ -83,17 +90,28 @@ public class EventTypeCard extends Fragment {
         });
 
         deleteEventTypeButton.setOnClickListener(v -> {
-            // Handle the "Delete" button click
-            // You can show a confirmation dialog before deleting
-            new AlertDialog.Builder(getContext())
-                    .setTitle("Delete Event Type")
-                    .setMessage("Are you sure you want to delete this Event Type?")
-                    .setPositiveButton("Yes", (dialog, which) -> {
-                        // Perform delete operation here, e.g., remove product from database
-                        Toast.makeText(getContext(), "Event Type deleted", Toast.LENGTH_SHORT).show();
-                    })
-                    .setNegativeButton("No", null)
-                    .show();
+            Intent intent = new Intent(getActivity(), EventTypeForm.class);
+            intent.putExtra("FORM_TYPE", "EDIT_FORM");
+            intent.putExtra("EVENT_TYPE_ID", 1);
+            int eventTypeId = intent.getIntExtra("EVENT_TYPE_ID", -1);
+            Call<EventTypeOverview> call1 = ClientUtils.eventTypeService.deactivate(eventTypeId);
+            call1.enqueue(new Callback<EventTypeOverview>() {
+                @Override
+                public void onResponse(Call<EventTypeOverview> call, Response<EventTypeOverview> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+
+                    } else {
+                        // Handle error cases
+                        Log.e("Login Error", "Response not successful: " + response.code());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<EventTypeOverview> call, Throwable throwable) {
+                    // Handle network errors
+                    Log.e("Deactivating Failure", "Error: " + throwable.getMessage());
+                }
+            });
         });
 
     }
