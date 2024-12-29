@@ -9,17 +9,17 @@
         android:title="@string/sort_events_by_description" />
 
     <item
-        android:id="@+id/menu_city"
-        android:title="@string/sort_events_by_city" />
+        android:id="@+id/menu_max_participants"
+        android:title="@string/max_participants" />
 
     <item
-        android:id="@+id/menu_price"
-        android:title="@string/sort_merchandise_by_price" />
+        android:id="@+id/menu_is_public"
+        android:title="@string/public1" />
 
     <item
-        android:id="@+id/menu_discount"
-        android:title="@string/sort_merchandise_by_discount" />
+        android:id="@+id/menu_date"
+        android:title="@string/date" />
     <item
-        android:id="@+id/menu_rating"
-        android:title="@string/sort_merchandise_by_rating" />
+        android:id="@+id/menu_type"
+        android:title="@string/type" />
 </menu>

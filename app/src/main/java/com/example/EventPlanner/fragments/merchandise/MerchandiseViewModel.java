@@ -15,6 +15,7 @@ import com.example.EventPlanner.model.merchandise.MerchandiseOverview;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -70,7 +71,7 @@ public class MerchandiseViewModel extends ViewModel {
                        // Service-specific parameters
                        Double servicePriceMin, Double servicePriceMax,
                        Integer serviceDurationMin, Integer serviceDurationMax,
-                       String serviceCity, String serviceCategory) {
+                       String serviceCity, String serviceCategory,String sortBy,boolean ascending) {
 
         // Reset lists for new search
         productResults.clear();
@@ -100,7 +101,7 @@ public class MerchandiseViewModel extends ViewModel {
                                        Response<PageResponse<MerchandiseOverview>> response) {
                     if (response.isSuccessful() && response.body() != null) {
                         productResults.addAll(response.body().getContent());
-                        checkAndCombineResults();
+                        checkAndCombineResults(sortBy,ascending);
                     } else {
                         handleError();
                     }
@@ -126,7 +127,7 @@ public class MerchandiseViewModel extends ViewModel {
                                        Response<PageResponse<MerchandiseOverview>> response) {
                     if (response.isSuccessful() && response.body() != null) {
                         serviceResults.addAll(response.body().getContent());
-                        checkAndCombineResults();
+                        checkAndCombineResults(sortBy,ascending);
                     } else {
                         handleError();
                     }
@@ -141,11 +142,50 @@ public class MerchandiseViewModel extends ViewModel {
         }
     }
 
-    private void checkAndCombineResults() {
+    private void checkAndCombineResults(String sortBy, boolean ascending) {
         if (pendingResponses.decrementAndGet() == 0) {
             List<MerchandiseOverview> combinedResults = new ArrayList<>();
             combinedResults.addAll(productResults);
             combinedResults.addAll(serviceResults);
+
+            Comparator<MerchandiseOverview> comparator = new Comparator<MerchandiseOverview>() {
+                @Override
+                public int compare(MerchandiseOverview m1, MerchandiseOverview m2) {
+                    int result;
+                    switch (sortBy) {
+                        case "title":
+                            result = compareNullable(m1.getTitle(), m2.getTitle());
+                            break;
+                        case "description":
+                            result = compareNullable(m1.getDescription(), m2.getDescription());
+                            break;
+                        case "price":
+                            result = compareNullable(m1.getPrice(), m2.getPrice());
+                            break;
+                        case "rating":
+                            result = compareNullable(m1.getRating(), m2.getRating());
+                            break;
+                        case "category":
+                            result = compareNullable(m1.getCategory(), m2.getCategory());
+                            break;
+                        case "type":
+                            result = compareNullable(m1.getType(), m2.getType());
+                            break;
+                        default:
+                            result = compareNullable(m1.getTitle(), m2.getTitle());
+                    }
+                    return ascending ? result : -result;
+                }
+
+                private <T extends Comparable<T>> int compareNullable(T o1, T o2) {
+                    if (o1 == null && o2 == null) return 0;
+                    if (o1 == null) return 1;
+                    if (o2 == null) return -1;
+                    return o1.compareTo(o2);
+                }
+            };
+
+            Collections.sort(combinedResults, comparator);
             merchandiseLiveData.postValue(new ArrayList<>(combinedResults));
         }
     }

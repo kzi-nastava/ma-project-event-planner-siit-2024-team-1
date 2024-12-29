@@ -18,5 +18,6 @@ public interface EventService {
                                                    @Query("startDate")LocalDate startDate,
                                                    @Query("endDate") LocalDate endDate,
                                                    @Query("type") String type,
-                                                   @Query("city") String city);
+                                                   @Query("city") String city,
+                                                   @Query("sort") String sort);
 }
