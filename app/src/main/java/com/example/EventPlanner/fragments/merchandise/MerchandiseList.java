@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.EventPlanner.adapters.event.EventOverviewAdapter;
 import com.example.EventPlanner.adapters.merchandise.MerchandiseAdapter;
@@ -88,6 +89,7 @@ public class MerchandiseList extends Fragment {
         if (getArguments() != null) {
             extraValue = getArguments().getString("type", topString);
         }
+        TextView merchandiseHeader=merchandisesListBinding.merchandiseHeader;
         RecyclerView recyclerView = merchandisesListBinding.merchandisesListHorizontal;
         merchandiseViewModel.getMerchandise().observe(getViewLifecycleOwner(),merchandise->{
             MerchandiseOverviewAdapter merchandiseAdapter = new MerchandiseOverviewAdapter(requireContext(), merchandise);
@@ -104,10 +106,12 @@ public class MerchandiseList extends Fragment {
         switch (extraValue){
             case "top":
             case "Top":
+                merchandiseHeader.setText(R.string.top_merchandise);
                 merchandiseViewModel.getTop();
                 break;
             case "all":
             case "All":
+                merchandiseHeader.setText(R.string.all_merchandise);
                 merchandiseViewModel.search(Boolean.TRUE.equals(searchViewModel.getShowServices().getValue()),
                         Boolean.TRUE.equals(searchViewModel.getShowProducts().getValue()),
                         searchViewModel.getSearchText().getValue(),searchViewModel.getProductPriceMin().getValue(),
@@ -115,7 +119,8 @@ public class MerchandiseList extends Fragment {
                         searchViewModel.getProductDurationMax().getValue(),
                         searchViewModel.getProductCity().getValue(),searchViewModel.getProductCategory().getValue(),
                         searchViewModel.getServicePriceMin().getValue(),searchViewModel.getServicePriceMax().getValue(),searchViewModel.getServiceDurationMin().getValue(),
-                        searchViewModel.getServiceDurationMax().getValue(),searchViewModel.getServiceCity().getValue(),searchViewModel.getServiceCategory().getValue());
+                        searchViewModel.getServiceDurationMax().getValue(),searchViewModel.getServiceCity().getValue(),searchViewModel.getServiceCategory().getValue(),
+                        searchViewModel.getMerchandiseSortBy().getValue(), Boolean.TRUE.equals(searchViewModel.getMerchandiseSortByAscending().getValue()));
                 break;
 
         }

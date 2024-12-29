@@ -33,6 +33,10 @@ public class SearchViewModel extends ViewModel {
     private final MutableLiveData<Integer> productDurationMin = new MutableLiveData<>();
     private final MutableLiveData<Integer> productDurationMax = new MutableLiveData<>();
     private final MutableLiveData<String> productCity = new MutableLiveData<>();
+    private final MutableLiveData<String> eventSortBy=new MutableLiveData<>();
+    private final MutableLiveData<String> merchandiseSortBy=new MutableLiveData<>("title");
+    private final MutableLiveData<Boolean> merchandiseSortByAscending = new MutableLiveData<>(true);
+
 
 
     public void resetSearch(){
@@ -61,6 +65,7 @@ public class SearchViewModel extends ViewModel {
         setProductDurationMin(null);
         setProductDurationMax(null);
         setProductCity(null);
+
     }
     // Visibility toggle getters and setters
     public LiveData<Boolean> getShowEvents() {
@@ -224,5 +229,28 @@ public class SearchViewModel extends ViewModel {
 
     public void setProductCity(String city) {
         productCity.setValue(city);
+    }
+    public LiveData<String> getEventSortBy() {
+        return eventSortBy;
+    }
+
+    public void setEventSortBy(String newEventSortBy) {
+        eventSortBy.setValue(newEventSortBy);
+    }
+
+    public LiveData<String> getMerchandiseSortBy() {
+        return merchandiseSortBy;
+    }
+
+    public void setMerchandiseSortBy(String newMerchandiseSortBy) {
+        merchandiseSortBy.setValue(newMerchandiseSortBy);
+    }
+
+    public LiveData<Boolean> getMerchandiseSortByAscending() {
+        return merchandiseSortByAscending;
+    }
+
+    public void setMerchandiseSortByAscending(Boolean ascending) {
+        merchandiseSortByAscending.setValue(ascending);
     }
 }

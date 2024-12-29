@@ -1,14 +1,26 @@
 package com.example.EventPlanner.fragments.eventmerchandise;
 
+import static android.content.Context.SENSOR_SERVICE;
+import static android.view.Gravity.CENTER;
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+
+import static androidx.core.content.ContextCompat.getSystemService;
+import static androidx.databinding.DataBindingUtil.setContentView;
+
+import android.content.Context;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentResultListener;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,16 +30,19 @@ import com.example.EventPlanner.fragments.event.EventViewModel;
 import com.example.EventPlanner.fragments.event.EventsList;
 import com.example.EventPlanner.fragments.merchandise.MerchandiseList;
 import com.example.EventPlanner.fragments.merchandise.MerchandiseViewModel;
+import com.squareup.seismic.ShakeDetector;
 
 import android.widget.Button;
 import android.widget.PopupMenu;
+import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link EventsMerchindisesHorizontal#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EventsMerchindisesHorizontal extends Fragment {
+public class EventsMerchindisesHorizontal extends Fragment implements ShakeDetector.Listener{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -43,6 +58,8 @@ public class EventsMerchindisesHorizontal extends Fragment {
     private EventViewModel eventViewModel;
     private MerchandiseViewModel merchandiseViewModel;
 
+    private ShakeDetector shakeDetector;
+    private SensorManager sensorManager;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -77,9 +94,10 @@ public class EventsMerchindisesHorizontal extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        searchViewModel=new ViewModelProvider(requireActivity()).get(SearchViewModel.class);
-        eventViewModel=new ViewModelProvider(requireActivity()).get(EventViewModel.class);
-        merchandiseViewModel=new ViewModelProvider(requireActivity()).get(MerchandiseViewModel.class);
+
+        searchViewModel = new ViewModelProvider(requireActivity()).get(SearchViewModel.class);
+        eventViewModel = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+        merchandiseViewModel = new ViewModelProvider(requireActivity()).get(MerchandiseViewModel.class);
 
         getChildFragmentManager()
                 .setFragmentResultListener("applyFilters", this, new FragmentResultListener() {
@@ -87,18 +105,54 @@ public class EventsMerchindisesHorizontal extends Fragment {
                     public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
                         String result = bundle.getString("filter_result");
                         hideFilterFragment();
-                        eventViewModel.search(Boolean.TRUE.equals(searchViewModel.getShowEvents().getValue()),searchViewModel.getSearchText().getValue(),searchViewModel.getStartDate().getValue(),searchViewModel.getEndDate().getValue(),
-                                searchViewModel.getType().getValue(),searchViewModel.getCity().getValue());
-                        merchandiseViewModel.search(Boolean.TRUE.equals(searchViewModel.getShowServices().getValue()),
-                                Boolean.TRUE.equals(searchViewModel.getShowProducts().getValue())
-                                ,searchViewModel.getSearchText().getValue(),searchViewModel.getProductPriceMin().getValue(),
-                                searchViewModel.getProductPriceMax().getValue(),searchViewModel.getProductDurationMin().getValue(),
-                                searchViewModel.getProductDurationMax().getValue(),
-                                searchViewModel.getProductCity().getValue(),searchViewModel.getProductCategory().getValue(),
-                                searchViewModel.getServicePriceMin().getValue(),searchViewModel.getServicePriceMax().getValue(),searchViewModel.getServiceDurationMin().getValue(),
-                                searchViewModel.getServiceDurationMax().getValue(),searchViewModel.getServiceCity().getValue(),searchViewModel.getServiceCategory().getValue());
+                        searchEvents();
+                        searchMerchandise();
                     }
                 });
+
+        // Initialize shake detection
+        sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
+        shakeDetector = new ShakeDetector(this);
+    }
+
+    private void searchMerchandise(){
+        merchandiseViewModel.search(Boolean.TRUE.equals(searchViewModel.getShowServices().getValue()),
+                Boolean.TRUE.equals(searchViewModel.getShowProducts().getValue())
+                ,searchViewModel.getSearchText().getValue(),searchViewModel.getProductPriceMin().getValue(),
+                searchViewModel.getProductPriceMax().getValue(),searchViewModel.getProductDurationMin().getValue(),
+                searchViewModel.getProductDurationMax().getValue(),
+                searchViewModel.getProductCity().getValue(),searchViewModel.getProductCategory().getValue(),
+                searchViewModel.getServicePriceMin().getValue(),searchViewModel.getServicePriceMax().getValue(),searchViewModel.getServiceDurationMin().getValue(),
+                searchViewModel.getServiceDurationMax().getValue(),searchViewModel.getServiceCity().getValue(),searchViewModel.getServiceCategory().getValue(),
+                searchViewModel.getMerchandiseSortBy().getValue(), Boolean.TRUE.equals(searchViewModel.getMerchandiseSortByAscending().getValue()));
+    }
+
+    private void searchEvents(){
+        eventViewModel.search(Boolean.TRUE.equals(searchViewModel.getShowEvents().getValue()),searchViewModel.getSearchText().getValue(),searchViewModel.getStartDate().getValue(),searchViewModel.getEndDate().getValue(),
+                searchViewModel.getType().getValue(),searchViewModel.getCity().getValue(),searchViewModel.getEventSortBy().getValue());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Start shake detection when fragment is visible
+        shakeDetector.start(sensorManager, SensorManager.SENSOR_DELAY_GAME);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Stop shake detection when fragment is not visible
+        shakeDetector.stop();
+    }
+
+    @Override
+    public void hearShake() {
+        searchViewModel.setMerchandiseSortBy("price");
+        searchViewModel.setMerchandiseSortByAscending(!(Boolean.TRUE.equals(searchViewModel.getMerchandiseSortByAscending().getValue())));
+        searchMerchandise();
+        String sortDirection=Boolean.TRUE.equals(searchViewModel.getMerchandiseSortByAscending().getValue())?"ascending":"descending";
+        Toast.makeText(requireContext(), "Sort Services/Products by price "+sortDirection, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -172,12 +226,72 @@ public class EventsMerchindisesHorizontal extends Fragment {
     private void showSortByEventsMenu(View view) {
         PopupMenu popup = new PopupMenu(getContext(), view);
         popup.getMenuInflater().inflate(R.menu.sort_by_events_menu, popup.getMenu());
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                String searchParameter="";
+                if (id == R.id.menu_title) {
+                    searchParameter ="title";
+                } else if (id == R.id.menu_description) {
+                    searchParameter ="description";
+                } else if (id == R.id.menu_max_participants) {
+                    searchParameter ="maxParticipants";
+                } else if (id == R.id.menu_is_public) {
+                    searchParameter ="isPublic";
+                } else if (id == R.id.menu_date) {
+                    searchParameter ="date";
+                } else if (id == R.id.menu_type) {
+                    searchParameter ="type";
+                }
+                if(!searchParameter.isEmpty()){
+                    searchViewModel.setEventSortBy(searchParameter);
+                    searchEvents();
+                    return true;
+                }
+                return false;
+            }
+        });
+
         popup.show();
     }
 
     private void showSortByMerchandiseMenu(View view) {
         PopupMenu popup = new PopupMenu(getContext(), view);
         popup.getMenuInflater().inflate(R.menu.sort_by_merchandise_menu, popup.getMenu());
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                String searchParameter = "";
+
+                if (id == R.id.menu_title) {
+                    searchParameter = "title";
+                } else if (id == R.id.menu_description) {
+                    searchParameter = "description";
+                } else if (id == R.id.menu_specificity) {
+                    searchParameter = "specificity";
+                } else if (id == R.id.menu_price) {
+                    searchParameter = "price";
+                } else if (id == R.id.menu_discount) {
+                    searchParameter = "discount";
+                } else if (id == R.id.menu_type) {
+                    searchParameter = "type";
+                } else if (id == R.id.menu_category) {
+                    searchParameter = "category";
+                } else if (id == R.id.menu_rating) {
+                    searchParameter = "rating";
+                }
+
+                if (!searchParameter.isEmpty()) {
+                    searchViewModel.setMerchandiseSortBy(searchParameter);
+                    searchMerchandise();
+                    return true;
+                }
+                return false;
+            }
+        });
         popup.show();
     }
     private void showFiltersMenu(View view) {

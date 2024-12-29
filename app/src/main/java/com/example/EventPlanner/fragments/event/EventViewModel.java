@@ -53,12 +53,12 @@ public class EventViewModel extends ViewModel {
         });
     }
     // Returns all products
-    public void search(boolean areEventsVisible,String searchText, LocalDate startDate, LocalDate endDate, String type,String city) {
+    public void search(boolean areEventsVisible,String searchText, LocalDate startDate, LocalDate endDate, String type,String city,String sortBy) {
         if(!areEventsVisible){
             eventsLiveData.postValue(new ArrayList<>());
             return;
         }
-        Call<PageResponse<EventOverview>> call = ClientUtils.eventService.searchEvents(-1,searchText,startDate,endDate,type,city);
+        Call<PageResponse<EventOverview>> call = ClientUtils.eventService.searchEvents(-1,searchText,startDate,endDate,type,city,sortBy);
         call.enqueue(new Callback<PageResponse<EventOverview>>() {
             @Override
             public void onResponse(Call<PageResponse<EventOverview>> call, Response<PageResponse<EventOverview>> response) {

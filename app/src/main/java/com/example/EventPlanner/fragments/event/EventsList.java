@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.EventPlanner.adapters.event.EventOverviewAdapter;
 import com.example.EventPlanner.adapters.event.EventsAdapter;
@@ -85,6 +86,7 @@ public class EventsList extends Fragment {
         if (getArguments() != null) {
             extraValue = getArguments().getString("type", topString);
         }
+        TextView eventsHeader=eventsListBinding.eventsHeader;
         RecyclerView recyclerView = eventsListBinding.eventsRecyclerViewHorizontal;
         eventViewModel.getEvents().observe(getViewLifecycleOwner(),events->{
             EventOverviewAdapter eventsAdapter = new EventOverviewAdapter(requireActivity(), events);
@@ -101,12 +103,14 @@ public class EventsList extends Fragment {
         switch (extraValue){
             case "top":
             case "Top":
+                eventsHeader.setText(R.string.top_events);
                 eventViewModel.getTop();
                 break;
             case "all":
             case "All":
+                eventsHeader.setText(R.string.all_events);
                 eventViewModel.search(Boolean.TRUE.equals(searchViewModel.getShowEvents().getValue()),searchViewModel.getSearchText().getValue(),searchViewModel.getStartDate().getValue(),searchViewModel.getEndDate().getValue(),
-                        searchViewModel.getType().getValue(),searchViewModel.getCity().getValue());
+                        searchViewModel.getType().getValue(),searchViewModel.getCity().getValue(),searchViewModel.getEventSortBy().getValue());
                 break;
 
         }
