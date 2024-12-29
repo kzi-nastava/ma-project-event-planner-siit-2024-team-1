@@ -2,11 +2,13 @@ package com.example.EventPlanner.clients.services.event;
 
 import com.example.EventPlanner.model.common.PageResponse;
 import com.example.EventPlanner.model.event.EventOverview;
+import com.example.EventPlanner.model.event.InvitationResponse;
 
 import java.time.LocalDate;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface EventService {
@@ -20,4 +22,7 @@ public interface EventService {
                                                    @Query("type") String type,
                                                    @Query("city") String city,
                                                    @Query("sort") String sort);
+    @POST("events/invite")
+    Call<InvitationResponse> sendInvite(@Query("email") String email,
+                                        @Query("eventId") int eventId);
 }

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class EventList extends Fragment {
 
     private FragmentEventListBinding eventListBinding;
-    private EventViewModel eventViewModel;
+    private EventListViewModel eventListViewModel;
 
     public EventList() {
         // Required empty public constructor
@@ -27,9 +27,9 @@ public class EventList extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         eventListBinding = FragmentEventListBinding.inflate(getLayoutInflater());
-        eventViewModel = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+        eventListViewModel = new ViewModelProvider(requireActivity()).get(EventListViewModel.class);
 
-        ArrayList<Event> allEvents = eventViewModel.events;
+        ArrayList<Event> allEvents = eventListViewModel.events;
 
         EventsAdapter adapter = new EventsAdapter(requireContext(), allEvents);
         RecyclerView recyclerView = eventListBinding.eventsRecyclerViewHorizontal;

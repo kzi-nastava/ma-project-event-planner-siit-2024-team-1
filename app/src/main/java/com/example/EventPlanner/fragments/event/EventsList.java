@@ -8,21 +8,16 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.EventPlanner.adapters.event.EventOverviewAdapter;
-import com.example.EventPlanner.adapters.event.EventsAdapter;
 import com.example.EventPlanner.fragments.eventmerchandise.DotsIndicatorDecoration;
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.databinding.FragmentEventListBinding;
 import com.example.EventPlanner.fragments.eventmerchandise.SearchViewModel;
-import com.example.EventPlanner.model.event.Event;
-
-import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,7 +30,7 @@ public class EventsList extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private EventViewModel eventViewModel;
+    private EventListViewModel eventListViewModel;
     private SearchViewModel searchViewModel;
 
     private FragmentEventListBinding eventsListBinding;
@@ -79,7 +74,7 @@ public class EventsList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         eventsListBinding= FragmentEventListBinding.inflate(getLayoutInflater());
-        eventViewModel =new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+        eventListViewModel =new ViewModelProvider(requireActivity()).get(EventListViewModel.class);
         searchViewModel=new ViewModelProvider(requireActivity()).get(SearchViewModel.class);
         String topString=getString(R.string.top);
         String extraValue = topString; // Default value
@@ -88,7 +83,7 @@ public class EventsList extends Fragment {
         }
         TextView eventsHeader=eventsListBinding.eventsHeader;
         RecyclerView recyclerView = eventsListBinding.eventsRecyclerViewHorizontal;
-        eventViewModel.getEvents().observe(getViewLifecycleOwner(),events->{
+        eventListViewModel.getEvents().observe(getViewLifecycleOwner(), events->{
             EventOverviewAdapter eventsAdapter = new EventOverviewAdapter(requireActivity(), events);
             recyclerView.setAdapter(eventsAdapter);
             eventsAdapter.notifyDataSetChanged();
@@ -104,12 +99,12 @@ public class EventsList extends Fragment {
             case "top":
             case "Top":
                 eventsHeader.setText(R.string.top_events);
-                eventViewModel.getTop();
+                eventListViewModel.getTop();
                 break;
             case "all":
             case "All":
                 eventsHeader.setText(R.string.all_events);
-                eventViewModel.search(Boolean.TRUE.equals(searchViewModel.getShowEvents().getValue()),searchViewModel.getSearchText().getValue(),searchViewModel.getStartDate().getValue(),searchViewModel.getEndDate().getValue(),
+                eventListViewModel.search(Boolean.TRUE.equals(searchViewModel.getShowEvents().getValue()),searchViewModel.getSearchText().getValue(),searchViewModel.getStartDate().getValue(),searchViewModel.getEndDate().getValue(),
                         searchViewModel.getType().getValue(),searchViewModel.getCity().getValue(),searchViewModel.getEventSortBy().getValue());
                 break;
 

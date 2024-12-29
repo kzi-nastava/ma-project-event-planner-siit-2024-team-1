@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.activities.EventTypeForm;
+import com.example.EventPlanner.activities.SendInvitationScreen;
 import com.example.EventPlanner.model.event.Event;
 import com.example.EventPlanner.model.event.EventOverview;
 
@@ -94,6 +95,11 @@ public class EventOverviewAdapter extends RecyclerView.Adapter<EventOverviewAdap
         });
         holder.itemView.findViewById(R.id.delete_event).setOnClickListener(v -> {
 
+        });
+        holder.itemView.findViewById(R.id.btn_invite).setOnClickListener(v -> {
+            Intent intent = new Intent(context, SendInvitationScreen.class);
+            intent.putExtra("EVENT_ID", event.getId());
+            context.startActivity(intent);
         });
 
         holder.eventCard.setOnClickListener(v -> {

@@ -1,16 +1,7 @@
 package com.example.EventPlanner.activities;
 
-import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,21 +12,15 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.databinding.ActivityEventDetailsBinding;
-import com.example.EventPlanner.fragments.event.EventViewModel;
-import com.example.EventPlanner.model.common.Address;
-import com.example.EventPlanner.databinding.ActivityEventFormBinding;
-import com.example.EventPlanner.model.event.EventType;
+import com.example.EventPlanner.fragments.event.EventListViewModel;
 import com.example.EventPlanner.model.event.Event;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 public class EventDetails extends AppCompatActivity {
     private ActivityEventDetailsBinding eventFormBinding;
-    private EventViewModel eventViewModel;
+    private EventListViewModel eventListViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +28,13 @@ public class EventDetails extends AppCompatActivity {
         eventFormBinding = ActivityEventDetailsBinding.inflate(getLayoutInflater());
         setContentView(eventFormBinding.getRoot());
 
-        eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
+        eventListViewModel = new ViewModelProvider(this).get(EventListViewModel.class);
 
         EdgeToEdge.enable(this);
 
         Integer eventId = getIntent().getIntExtra("EVENT_ID", -1);
         if (eventId != -1) {
-            Event event = eventViewModel.findEventById(eventId);
+            Event event = eventListViewModel.findEventById(eventId);
             Log.d("Naziv proizvoda", event.getTitle());
             if (eventId != null) setFields(event);
         }
