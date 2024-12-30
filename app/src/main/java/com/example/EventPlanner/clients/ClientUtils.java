@@ -5,7 +5,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import com.example.EventPlanner.BuildConfig;
 import com.example.EventPlanner.clients.services.auth.AuthService;
-import com.example.EventPlanner.clients.services.auth.UserService;
+import com.example.EventPlanner.clients.services.user.UserService;
 import com.example.EventPlanner.clients.services.event.EventService;
 import com.example.EventPlanner.clients.services.eventType.EventTypeService;
 import com.example.EventPlanner.clients.services.merchandise.CategoryService;
@@ -20,7 +20,7 @@ public class ClientUtils {
             .addInterceptor(new AuthInterceptor())
             .build();
 
-    private static final Retrofit retrofit = new Retrofit.Builder()
+    public static final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(SERVICE_API_PATH)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)

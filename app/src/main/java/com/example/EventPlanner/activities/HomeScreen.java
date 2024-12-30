@@ -24,13 +24,23 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.EventPlanner.R;
+import com.example.EventPlanner.clients.ClientUtils;
 import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.databinding.ActivityHomeScreenBinding;
 import com.example.EventPlanner.fragments.eventmerchandise.SearchViewModel;
+import com.example.EventPlanner.model.event.FollowResponse;
+import com.example.EventPlanner.model.event.InvitationResponse;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeScreen extends AppCompatActivity {
 
@@ -156,6 +166,41 @@ public class HomeScreen extends AppCompatActivity {
             }
             return false; // Return false to let the event propagate
         });
+
+        if(JwtService.getEventToken()!=null && !JwtService.getEventToken().isEmpty()){
+            JSONObject eventToken=JwtService.decodeToken(JwtService.getEventToken());
+            String tokenEmail="";
+            String eventTitle="";
+            int eventId=-1;
+            try {
+                tokenEmail= eventToken.getString("userEmail");
+                eventId=eventToken.getInt("id");
+                eventTitle=eventToken.getString("title");
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            if(tokenEmail.equals(JwtService.getEmailFromToken())&&(!tokenEmail.isEmpty())&&(!JwtService.getEmailFromToken().isEmpty())){
+                Call<FollowResponse> call = ClientUtils.userService.followEvent(JwtService.getIdFromToken(),eventId);
+                String finalEventTitle = eventTitle;
+                call.enqueue(new Callback<FollowResponse>() {
+                    @Override
+                    public void onResponse(Call<FollowResponse> call, Response<FollowResponse> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            Toast.makeText(HomeScreen.this, "You now follow "+ finalEventTitle, Toast.LENGTH_LONG).show();
+
+                        } else {
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<FollowResponse> call, Throwable t) {
+                        Log.d("onfail",t.getMessage());
+                    }
+                });
+            }
+
+        }
     }
     @Override
     public boolean onSupportNavigateUp() {
