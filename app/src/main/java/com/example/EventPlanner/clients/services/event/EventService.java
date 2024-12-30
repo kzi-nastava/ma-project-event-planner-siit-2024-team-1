@@ -1,6 +1,8 @@
 package com.example.EventPlanner.clients.services.event;
 
 import com.example.EventPlanner.model.common.PageResponse;
+import com.example.EventPlanner.model.event.Activity;
+import com.example.EventPlanner.model.event.CreateActivityRequest;
 import com.example.EventPlanner.model.event.CreateEventRequest;
 import com.example.EventPlanner.model.event.CreatedEventResponse;
 import com.example.EventPlanner.model.event.EventOverview;
@@ -8,9 +10,11 @@ import com.example.EventPlanner.model.event.InvitationResponse;
 import com.example.EventPlanner.model.event.UpdateEventRequest;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -24,6 +28,12 @@ public interface EventService {
     Call<PageResponse<EventOverview>> getByEo(@Path("eoId") int eoId);
     @GET("events/{id}")
     Call<CreatedEventResponse> getById(@Path("id") int id);
+
+    @GET("events/{id}/agenda")
+    Call<List<Activity>> getAgenda(@Path("id") int id);
+
+    @GET("events/activities/{id}")
+    Call<Activity> getActivity(@Path("id") int id);
     @GET("events/search")
     Call<PageResponse<EventOverview>> searchEvents(@Query("userId") int userId,
                                                    @Query("search") String search,
@@ -41,4 +51,15 @@ public interface EventService {
 
     @PUT("events/{id}")
     Call<CreatedEventResponse> update(@Path("id") int id, @Body UpdateEventRequest dto);
+
+    @PUT("events/{id}/agenda")
+    Call<Activity> updateAgenda(@Path("id") int id, @Body CreateActivityRequest dto);
+
+    @PUT("events/agenda/{activityId}")
+    Call<Activity> updateActivity(@Path("activityId") int activityId, @Body CreateActivityRequest dto);
+    @DELETE("events/{eventId}/agenda/{activityId}")
+    Call<List<Activity>> deleteAgenda(@Path("eventId") int eventId, @Path("activityId") int activityId);
+
+    @POST("events/{eventId}/add-to-favorites/{userId}")
+    Call<Boolean> favorizeEvent(@Path("eventId") int eventId, @Path("userId") int userId);
 }

@@ -183,7 +183,11 @@ public class EventForm extends AppCompatActivity {
         eventFormBinding.eventTitle.setText(event.getTitle());
         eventFormBinding.eventDescription.setText(event.getDescription());
         eventFormBinding.maxParticipants.setText(String.valueOf(event.getMaxParticipants()));
-        eventFormBinding.eventDate.setText(String.valueOf(event.getDate()));
+
+        String legacyDateStr = event.getDate().toString();;
+        LocalDateTime date = LocalDateTime.parse(legacyDateStr);
+        eventFormBinding.eventDate.setText(date.toString().split("T")[0]);
+
         eventFormBinding.city.setText(event.getAddress().getCity());
         eventFormBinding.street.setText(event.getAddress().getStreet());
         eventFormBinding.number.setText(event.getAddress().getNumber());

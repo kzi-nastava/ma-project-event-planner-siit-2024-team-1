@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.EventPlanner.adapters.activity.ActivityAdapter;
+import com.example.EventPlanner.adapters.event.EventTypeAdapter;
 import com.example.EventPlanner.databinding.FragmentActivityListBinding;
 import com.example.EventPlanner.model.event.Activity;
 
@@ -20,8 +21,11 @@ public class ActivityList extends Fragment {
     private FragmentActivityListBinding activityListBinding;
     private ActivityViewModel activityViewModel;
 
-    public ActivityList() {
+    private int eventId;
+
+    public ActivityList(int eventId) {
         // Required empty public constructor
+        this.eventId = eventId;
     }
 
     @Override
@@ -29,12 +33,17 @@ public class ActivityList extends Fragment {
         activityListBinding = FragmentActivityListBinding.inflate(getLayoutInflater());
         activityViewModel = new ViewModelProvider(requireActivity()).get(ActivityViewModel.class);
 
-        ArrayList<Activity> activities = activityViewModel.getAll();
-
-        ActivityAdapter adapter = new ActivityAdapter(requireContext(), activities);
         RecyclerView recyclerView = activityListBinding.activitiesRecyclerViewHorizontal;
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        recyclerView.setAdapter(adapter);
+        activityViewModel.getActivities().observe(getViewLifecycleOwner(),activities->{
+            ActivityAdapter activityAdapter = new ActivityAdapter(requireActivity(), activities, eventId);
+            recyclerView.setAdapter(activityAdapter);
+            activityAdapter.notifyDataSetChanged();
+
+        });
+
+        LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        activityViewModel.getAll(eventId);
 
         return activityListBinding.getRoot();
     }

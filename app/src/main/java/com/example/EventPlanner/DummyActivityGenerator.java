@@ -43,8 +43,8 @@ public class DummyActivityGenerator {
                 id,
                 title,
                 description,
-                start,
-                end,
+                start.toString(),
+                end.toString(),
                 address
         );
 

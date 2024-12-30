@@ -64,6 +64,7 @@
     <string name="product_filters">Product Filters</string>
     <string name="apply_filters">Apply filters</string>
     <string name="edit">Edit</string>
+    <string name="follow">Follow</string>
     <string name="show_hide">Show/Hide</string>
     <string name="enable_disable">Enable/Disable</string>
     <string name="deactivate">Deactivate</string>

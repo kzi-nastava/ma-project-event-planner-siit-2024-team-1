@@ -22,8 +22,9 @@ public class ActivityCRUD extends AppCompatActivity {
         activityCrudBinding = FragmentActivityCrudBinding.inflate(getLayoutInflater());
         setContentView(activityCrudBinding.getRoot());
 
+        int eventId = getIntent().getIntExtra("EVENT_ID", -1);
         // Initialize Activity List Fragment
-        ActivityList activityList = new ActivityList();
+        ActivityList activityList = new ActivityList(eventId);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainerViewActivity, activityList).commit();
 
@@ -33,6 +34,7 @@ public class ActivityCRUD extends AppCompatActivity {
             addActivityButton.setOnClickListener((v) -> {
                 Intent intent = new Intent(ActivityCRUD.this, ActivityForm.class);
                 intent.putExtra("FORM_TYPE", "NEW_FORM");
+                intent.putExtra("EVENT_ID", eventId);
                 startActivity(intent);
             });
         } else {

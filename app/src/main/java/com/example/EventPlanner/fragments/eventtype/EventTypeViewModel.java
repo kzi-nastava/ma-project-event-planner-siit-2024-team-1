@@ -116,6 +116,9 @@ public class EventTypeViewModel extends ViewModel {
             public void onResponse(Call<EventTypeOverview> call, Response<EventTypeOverview> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     ArrayList<EventTypeOverview> currentList = eventTypes.getValue();
+                    if (currentList == null) {
+                        currentList = new ArrayList<>();
+                    }
                     currentList.add(response.body());
                     eventTypes.setValue(currentList);
                 } else {
