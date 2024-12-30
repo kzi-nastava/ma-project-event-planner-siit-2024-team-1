@@ -219,7 +219,20 @@ public class HomeScreen extends AppCompatActivity {
 
         if (itemId == R.id.edit_profile) {
             // Handle Notifications click
-            Toast.makeText(this, "Notifications clicked", Toast.LENGTH_SHORT).show();
+            switch (JwtService.getRoleFromToken()){
+                case "SP":
+                    Intent intent = new Intent(HomeScreen.this, RegisterSpScreen.class);
+                    intent.putExtra("FORM_TYPE", "EDIT_FORM");
+                    intent.putExtra("USER_ID", JwtService.getIdFromToken());
+                    startActivity(intent);
+                    break;
+                case "EO":
+                    Intent intent1 = new Intent(HomeScreen.this, RegisterEoScreen.class);
+                    intent1.putExtra("FORM_TYPE", "EDIT_FORM");
+                    intent1.putExtra("USER_ID", JwtService.getIdFromToken());
+                    startActivity(intent1);
+                    break;
+            }
             return true;
 
         } else if (itemId == R.id.settings) {
