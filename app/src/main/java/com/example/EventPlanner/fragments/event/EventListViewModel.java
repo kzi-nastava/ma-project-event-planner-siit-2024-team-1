@@ -22,6 +22,7 @@ import com.example.EventPlanner.model.event.UpdateEventTypeRequest;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -99,6 +100,26 @@ public class EventListViewModel extends ViewModel {
 
             @Override
             public void onFailure(Call<PageResponse<EventOverview>> call, Throwable t) {
+                Log.d("jaje",t.getMessage());
+            }
+        });
+    }
+
+    public void getFavorites() {
+        Call<List<EventOverview>> call = ClientUtils.eventService.getFavorites(JwtService.getIdFromToken());
+        call.enqueue(new Callback<List<EventOverview>>() {
+            @Override
+            public void onResponse(Call<List<EventOverview>> call, Response<List<EventOverview>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    eventsLiveData.postValue(new ArrayList<>(response.body()));  // This gets just the list of events
+
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<EventOverview>> call, Throwable t) {
                 Log.d("jaje",t.getMessage());
             }
         });

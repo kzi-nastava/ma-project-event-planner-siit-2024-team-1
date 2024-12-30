@@ -80,7 +80,6 @@ public class ProductCard extends Fragment {
 
         // Initialize UI elements
         photoSlider = view.findViewById(R.id.photo_slider);
-        eventTypesList = view.findViewById(R.id.event_types_list);
 
         // Initialize buttons
         Button editProductButton = view.findViewById(R.id.edit_product);

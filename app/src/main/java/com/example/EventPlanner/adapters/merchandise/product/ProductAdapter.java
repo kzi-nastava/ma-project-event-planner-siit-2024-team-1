@@ -2,6 +2,7 @@ package com.example.EventPlanner.adapters.merchandise.product;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.EventPlanner.R;
+import com.example.EventPlanner.activities.HomeScreen;
 import com.example.EventPlanner.adapters.merchandise.PhotoSliderAdapter;
 import com.example.EventPlanner.clients.ClientUtils;
 import com.example.EventPlanner.fragments.merchandise.product.ProductCRUD;
@@ -63,7 +65,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 @Override
                 public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        Intent intent = new Intent(context, ProductCRUD.class);
+                        Intent intent = new Intent(context, HomeScreen.class);
                         context.startActivity(intent);
                     } else {
                         // Handle error cases
@@ -84,7 +86,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 @Override
                 public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        Intent intent = new Intent(context, ProductCRUD.class);
+                        Intent intent = new Intent(context, HomeScreen.class);
                         context.startActivity(intent);
                     } else {
                         // Handle error cases
@@ -137,7 +139,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             availabiliy.setText(product.getAvailable() ? "Available" : "Unavailable");
 
             productPrice.setText(String.format("%.2f RSD", product.getPrice()));
-            productDiscountedPrice.setText(String.format("%.2f RSD", product.getPrice() - (product.getDiscount())/100 * product.getPrice()));
+            double discountedPrice = product.getPrice() - ((double)(product.getDiscount())/100) * product.getPrice();
+            productDiscountedPrice.setText(String.format("%.2f RSD", discountedPrice));
             productDescription.setText(product.getDescription());
             specificity.setText(product.getSpecificity());
 

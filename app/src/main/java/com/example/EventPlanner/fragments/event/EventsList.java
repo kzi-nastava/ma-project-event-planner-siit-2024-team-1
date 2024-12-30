@@ -112,6 +112,11 @@ public class EventsList extends Fragment {
                 eventsHeader.setText(R.string.my_events);
                 eventListViewModel.getByEo();
                 break;
+            case "fav":
+            case "Fav":
+                eventsHeader.setText(R.string.favorite_events);
+                eventListViewModel.getFavorites();
+                break;
 
         }
 

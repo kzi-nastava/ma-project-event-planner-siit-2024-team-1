@@ -37,6 +37,7 @@
     <string name="top_merchandise">Top Products/Services</string>
     <string name="top_events">Top Events</string>
     <string name="my_events">My Events</string>
+    <string name="favorite_events">Favorite Events</string>
     <string name="agenda">Agenda</string>
     <string name="see_details">See details</string>
     <string name="all_events">All Events</string>

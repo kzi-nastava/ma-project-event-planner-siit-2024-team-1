@@ -1,5 +1,5 @@
 
-package com.example.EventPlanner.model.merchandise.product; ;
+package com.example.EventPlanner.model.merchandise.product;
 
 import java.util.List;
 import javax.annotation.Generated;

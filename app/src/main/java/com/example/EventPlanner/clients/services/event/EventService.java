@@ -26,6 +26,8 @@ public interface EventService {
     Call<PageResponse<EventOverview>> getTop(@Query("userId") int userId);
     @GET("events/eo/{eoId}")
     Call<PageResponse<EventOverview>> getByEo(@Path("eoId") int eoId);
+    @GET("events/{userId}/favorite")
+    Call<List<EventOverview>> getFavorites(@Path("userId") int userId);
     @GET("events/{id}")
     Call<CreatedEventResponse> getById(@Path("id") int id);
 
