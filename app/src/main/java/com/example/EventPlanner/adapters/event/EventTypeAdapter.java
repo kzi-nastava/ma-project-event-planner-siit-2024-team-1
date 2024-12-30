@@ -16,6 +16,7 @@ import com.example.EventPlanner.activities.HomeScreen;
 import com.example.EventPlanner.activities.LoginScreen;
 import com.example.EventPlanner.clients.ClientUtils;
 import com.example.EventPlanner.clients.JwtService;
+import com.example.EventPlanner.fragments.merchandise.product.ProductCRUD;
 import com.example.EventPlanner.model.auth.LoginResponse;
 import com.example.EventPlanner.model.event.EventType;
 import com.example.EventPlanner.activities.EventTypeForm;

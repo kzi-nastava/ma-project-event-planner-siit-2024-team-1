@@ -7,6 +7,11 @@ public class CategoryOverview {
     private String description;
     private boolean pending;
 
+    @Override
+    public String toString() {
+        return this.title;
+    }
+
     // Default constructor
     public CategoryOverview() {
     }

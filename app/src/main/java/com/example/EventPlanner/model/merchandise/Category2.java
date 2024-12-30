@@ -1,5 +1,5 @@
 
-package com.example.EventPlanner.model.merchandise; ;
+package com.example.EventPlanner.model.merchandise;
 
 import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;

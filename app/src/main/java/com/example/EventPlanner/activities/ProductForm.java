@@ -27,21 +27,38 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.EventPlanner.R;
+import com.example.EventPlanner.clients.ClientUtils;
+import com.example.EventPlanner.clients.JwtService;
+import com.example.EventPlanner.fragments.eventtype.EventTypeViewModel;
 import com.example.EventPlanner.model.common.Address;
 import com.example.EventPlanner.databinding.ActivityProductFormBinding;
+import com.example.EventPlanner.model.event.CreateEventTypeRequest;
+import com.example.EventPlanner.model.event.EventTypeOverview;
+import com.example.EventPlanner.model.event.UpdateEventTypeRequest;
 import com.example.EventPlanner.model.merchandise.Category2;
 import com.example.EventPlanner.model.event.EventType;
+import com.example.EventPlanner.model.merchandise.CategoryOverview;
 import com.example.EventPlanner.model.merchandise.MerchandisePhoto;
+import com.example.EventPlanner.model.merchandise.product.CreateProductRequest;
 import com.example.EventPlanner.model.merchandise.product.Product;
 import com.example.EventPlanner.fragments.merchandise.product.ProductViewModel;
+import com.example.EventPlanner.model.merchandise.product.ProductOverview;
+import com.example.EventPlanner.model.merchandise.product.UpdateProductRequest;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ProductForm extends AppCompatActivity {
     private ActivityProductFormBinding productFormBinding;
     private ProductViewModel productViewModel;
-
+    private List<EventTypeOverview> eventTypesList = new ArrayList<>();
+    private boolean[] selectedItems;
+    private String[] eventTypeNames;
+    private Spinner categorySpinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,24 +72,59 @@ public class ProductForm extends AppCompatActivity {
         String formType = getIntent().getStringExtra("FORM_TYPE");
         TextView formTitle = productFormBinding.formTitle;
 
+        EventTypeViewModel eventTypeViewModel = new ViewModelProvider(this).get(EventTypeViewModel.class);
+
+
+        Spinner categorySpinner = productFormBinding.categorySpinner;
+
+        Call<List<CategoryOverview>> call1 = ClientUtils.categoryService.getApproved();
+        call1.enqueue(new Callback<List<CategoryOverview>>() {
+            @Override
+            public void onResponse(Call<List<CategoryOverview>> call, Response<List<CategoryOverview>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ArrayAdapter<CategoryOverview> adapter = new ArrayAdapter<>(
+                            ProductForm.this,
+                            android.R.layout.simple_spinner_item,
+                            response.body()
+                    );
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    categorySpinner.setAdapter(adapter);
+                } else {
+                    // Handle error cases
+                    Log.e("Category Getting Error", "Response not successful: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CategoryOverview>> call, Throwable throwable) {
+                // Handle network errors
+                Log.e("Category Getting Failure", "Error: " + throwable.getMessage());
+            }
+        });
+
+
+        // Multi-select spinner setup
+        multiSelectSpinner = findViewById(R.id.multiselect_spinner);
+        fetchEventTypesAndSetupSpinner();
+
         // Setup form title and visibility based on form type
         if ("NEW_FORM".equals(formType)) {
             formTitle.setText(R.string.add_product);
+            productFormBinding.categorySpinner.setEnabled(true);
         } else if ("EDIT_FORM".equals(formType)) {
             formTitle.setText(R.string.edit_product);
+            productFormBinding.categorySpinner.setEnabled(false);
             int productId = getIntent().getIntExtra("PRODUCT_ID", -1);
             if (productId != -1) {
-                Product product = productViewModel.findProductById(productId);
-                Log.d("Naziv proizvoda", product.getTitle());
-                if (product != null) setFields(product);
+                productViewModel.getSelectedProduct().observe(this, product -> {
+                    if (product != null) {
+                        setFields(product);
+                    }
+                });
+                productViewModel.findProductById(productId);
             }
         }
 
-        // Category Spinner Setup
-        String[] categoryOptions = {"Options", "Space", "Food", "Drinks", "Music", "Decorations", "Other"};
-        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, categoryOptions);
-        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // Automatic Reservation Radio Buttons
         RadioGroup reservationGroup = productFormBinding.radioGroupReservation;
@@ -81,12 +133,20 @@ public class ProductForm extends AppCompatActivity {
         Button addPhotosButton = findViewById(R.id.add_photos);
         addPhotosButton.setOnClickListener(v -> showPhotoOptionsDialog());
 
-        // Submit Button Logic
         productFormBinding.submitProductButton.setOnClickListener(v -> {
             if (isValidInput()) {
-                Product product = createProductFromInput();
+                CreateProductRequest product = createProductFromInput();
                 if (product != null) {
-                     productViewModel.saveProduct(product);
+                    if ("NEW_FORM".equals(formType)) {
+                        productViewModel.saveProduct(product);
+                    } else if ("EDIT_FORM".equals(formType)) {
+                        // If it's an edit form, you can update the event type
+                        int productId = getIntent().getIntExtra("PRODUCT_ID", -1);
+                        productViewModel.updateProduct(productId, new UpdateProductRequest(product.getTitle(), product.getDescription(),
+                                product.getSpecificity(), product.getPrice(), product.getDiscount(), product.getVisible(), product.getAvailable(),
+                                product.getMinDuration(), product.getMaxDuration(), product.getReservationDeadline(), product.getCancellationDeadline(),
+                                product.getAutomaticReservation(), product.getServiceProviderId(), product.getMerchandisePhotos(), product.getEventTypesIds(), product.getAddress()));
+                    }
 
                     Intent intent = new Intent(ProductForm.this, HomeScreen.class);
                     startActivity(intent);
@@ -101,45 +161,72 @@ public class ProductForm extends AppCompatActivity {
             return insets;
         });
 
-        // Get reference to the Spinner
-        Spinner categorySpinner = findViewById(R.id.category_spinner);
+    }
 
-// Create an ArrayAdapter for the Spinner
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.category_array, android.R.layout.simple_spinner_item);
-
-// Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-// Set the adapter to the Spinner
-        categorySpinner.setAdapter(adapter);
-
-// Handle the item selection (optional)
-        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    // Fetch categories and populate the multi-select spinner
+    private void fetchEventTypesAndSetupSpinner() {
+        Call<List<EventTypeOverview>> call = ClientUtils.eventTypeService.getAllWithoutPagination();
+        call.enqueue(new Callback<List<EventTypeOverview>>() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                String selectedCategory = parentView.getItemAtPosition(position).toString();
-                Toast.makeText(ProductForm.this, "Selected Category: " + selectedCategory, Toast.LENGTH_SHORT).show();
+            public void onResponse(Call<List<EventTypeOverview>> call, Response<List<EventTypeOverview>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    eventTypesList = response.body();
+                    eventTypeNames = eventTypesList.stream().map(EventTypeOverview::getTitle).toArray(String[]::new);
+                    selectedItems = new boolean[eventTypesList.size()];
+                    setupMultiSelectSpinner();
+                } else {
+                    Log.e("EventTypeForm", "Failed to fetch categories: " + response.message());
+                }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // Handle the case when no item is selected (optional)
+            public void onFailure(Call<List<EventTypeOverview>> call, Throwable t) {
+                Log.e("EventTypeForm", "Error fetching categories", t);
             }
         });
+    }
 
-        multiSelectSpinner = findViewById(R.id.multiselect_spinner);
-
-        // Set the adapter to the Spinner (empty or initial item)
-        ArrayAdapter<String> eventTypesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{"Select Event Types"});
-        eventTypesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        multiSelectSpinner.setAdapter(eventTypesAdapter);
-
-        // Set an item click listener for the Spinner
+    // Setup the multi-select spinner
+    private void setupMultiSelectSpinner() {
         multiSelectSpinner.setOnTouchListener((v, event) -> {
             showMultiSelectDialog();
             return true;
         });
+
+        // Initial adapter to display a placeholder
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{"Select Event Types"});
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        multiSelectSpinner.setAdapter(adapter);
+    }
+
+    // Show the multi-select dialog
+    private void showMultiSelectDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select Event Types");
+
+        builder.setMultiChoiceItems(eventTypeNames, selectedItems, (dialog, which, isChecked) -> {
+            selectedItems[which] = isChecked;
+        });
+
+        builder.setPositiveButton("OK", (dialog, id) -> {
+            StringBuilder selectedEventTypes = new StringBuilder();
+            for (int i = 0; i < selectedItems.length; i++) {
+                if (selectedItems[i]) {
+                    selectedEventTypes.append(eventTypeNames[i]).append(", ");
+                }
+            }
+            if (selectedEventTypes.length() > 0) {
+                selectedEventTypes.setLength(selectedEventTypes.length() - 2); // Remove trailing comma and space
+            }
+
+            // Update the spinner with the selected categories
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(ProductForm.this, android.R.layout.simple_spinner_item, new String[]{selectedEventTypes.toString()});
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            multiSelectSpinner.setAdapter(adapter);
+        });
+
+        builder.setNegativeButton("Cancel", null);
+        builder.create().show();
     }
 
     private void showPhotoOptionsDialog() {
@@ -167,7 +254,6 @@ public class ProductForm extends AppCompatActivity {
             startActivityForResult(intent, CAMERA_REQUEST_CODE);
         }
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -190,50 +276,8 @@ public class ProductForm extends AppCompatActivity {
         startActivityForResult(intent, GALLERY_REQUEST_CODE);
     }
     private Spinner multiSelectSpinner;
-    private String[] eventTypes = {"Concert", "Festival", "Sports", "Conference", "Workshop", "Meetup", "Exhibition"};
-    private boolean[] selectedItems = new boolean[eventTypes.length];
-
-    private void showMultiSelectDialog() {
-        // Create the dialog for multi-select
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Select Event Types");
-
-        // Create checkboxes dynamically for each event type
-        builder.setMultiChoiceItems(eventTypes, selectedItems, new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                selectedItems[which] = isChecked;
-            }
-        });
-
-        // Positive button (OK) to capture selected items
-        builder.setPositiveButton("OK", (dialog, id) -> {
-            StringBuilder selectedEventTypes = new StringBuilder();
-            for (int i = 0; i < selectedItems.length; i++) {
-                if (selectedItems[i]) {
-                    selectedEventTypes.append(eventTypes[i]).append(", ");
-                }
-            }
-            if (selectedEventTypes.length() > 0) {
-                selectedEventTypes.setLength(selectedEventTypes.length() - 2); // Remove trailing comma and space
-            }
-
-            // Update the Spinner with the selected event types
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(ProductForm.this, android.R.layout.simple_spinner_item, new String[]{selectedEventTypes.toString()});
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            multiSelectSpinner.setAdapter(adapter);
-            Toast.makeText(ProductForm.this, "Selected: " + selectedEventTypes.toString(), Toast.LENGTH_SHORT).show();
-        });
-
-        // Negative button (Cancel)
-        builder.setNegativeButton("Cancel", null);
-
-        // Show the dialog
-        builder.create().show();
-    }
-
     // Populate fields when editing a product
-    private void setFields(Product product) {
+    private void setFields(ProductOverview product) {
         productFormBinding.title.setText(product.getTitle());
         productFormBinding.productDescription.setText(product.getDescription());
         productFormBinding.specificity.setText(product.getSpecificity());
@@ -248,11 +292,37 @@ public class ProductForm extends AppCompatActivity {
         productFormBinding.max.setText(String.valueOf(product.getMaxDuration()));
         productFormBinding.reservationDeadline.setText(String.valueOf(product.getReservationDeadline()));
         productFormBinding.cancelationDeadline.setText(String.valueOf(product.getCancellationDeadline()));
+        productFormBinding.radioAutomatic.setChecked(product.getAutomaticReservation());
 
-        if (product.getAutomaticReservation()) {
-            productFormBinding.radioAutomatic.setChecked(true);
-        } else {
-            productFormBinding.radioManual.setChecked(true);
+        // Set category spinner to the correct value
+        categorySpinner = productFormBinding.categorySpinner;
+        ArrayAdapter<CategoryOverview> categoryAdapter = (ArrayAdapter<CategoryOverview>) categorySpinner.getAdapter();
+        if (categoryAdapter != null) {
+            for (int i = 0; i < categoryAdapter.getCount(); i++) {
+                if (categoryAdapter.getItem(i).getId() == product.getCategory().getId()) {
+                    categorySpinner.setSelection(i);
+                    break;
+                }
+            }
+        }
+
+        // Set event types multi-select spinner
+        if (eventTypesList != null && !eventTypesList.isEmpty()) {
+            StringBuilder selectedEventTypes = new StringBuilder();
+            for (EventTypeOverview eventType : product.getEventTypes()) {
+                for (int i = 0; i < eventTypesList.size(); i++) {
+                    if (eventTypesList.get(i).getId() == eventType.getId()) {
+                        selectedItems[i] = true;
+                        selectedEventTypes.append(eventTypesList.get(i).getTitle()).append(", ");
+                    }
+                }
+            }
+            if (selectedEventTypes.length() > 0) {
+                selectedEventTypes.setLength(selectedEventTypes.length() - 2); // Remove trailing comma and space
+            }
+            ArrayAdapter<String> eventTypesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{selectedEventTypes.toString()});
+            eventTypesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            multiSelectSpinner.setAdapter(eventTypesAdapter);
         }
     }
 
@@ -264,7 +334,7 @@ public class ProductForm extends AppCompatActivity {
     }
 
     // Create Product object from user input
-    private Product createProductFromInput() {
+    private CreateProductRequest createProductFromInput() {
         try {
             String title = productFormBinding.title.getText().toString();
             String specificity = productFormBinding.specificity.getText().toString();
@@ -276,22 +346,27 @@ public class ProductForm extends AppCompatActivity {
             String number = productFormBinding.number.getText().toString();
             double latitude = Double.parseDouble(productFormBinding.latitude.getText().toString());
             double longitude = Double.parseDouble(productFormBinding.longitude.getText().toString());
+            int minDuration = Integer.parseInt(productFormBinding.min.getText().toString());
+            int maxDuration = Integer.parseInt(productFormBinding.max.getText().toString());
             int reservationDeadline = Integer.parseInt(productFormBinding.reservationDeadline.getText().toString());
             int cancelationDeadline = Integer.parseInt(productFormBinding.cancelationDeadline.getText().toString());
 
             boolean automaticReservation = productFormBinding.radioAutomatic.isChecked();
 
-            List<EventType> eventTypes = new ArrayList<>();
-            eventTypes.add(new EventType(1, "Tip Eventa", "Opis", true, null));
+            CategoryOverview selectedCategory = (CategoryOverview) productFormBinding.categorySpinner.getSelectedItem();
 
-            List<MerchandisePhoto> photos = new ArrayList<>();
-            photos.add(new MerchandisePhoto(1, "Merc Slika"));
+            List<Integer> eventTypeIds = new ArrayList<>();
+            for (int i = 0; i < selectedItems.length; i++) {
+                if (selectedItems[i]) {
+                    eventTypeIds.add(eventTypesList.get(i).getId());
+                }
+            }
 
-            Category2 category = new Category2(1, "Funerality", "Opis", false);
+            List<Integer> photos = new ArrayList<>();
 
             Address address = new Address(city, street, number, latitude, longitude);
 
-            return new Product(1, title, description, specificity, price, discount, true, true, 1, 1, reservationDeadline, cancelationDeadline, automaticReservation, photos, eventTypes, address, category);
+            return new CreateProductRequest(title, description, specificity, price, discount, true, true, minDuration, maxDuration, reservationDeadline, cancelationDeadline, automaticReservation, JwtService.getIdFromToken(), photos, eventTypeIds, address, selectedCategory.getId());
         } catch (NumberFormatException e) {
             e.printStackTrace();
             return null;

@@ -2,8 +2,10 @@ package com.example.EventPlanner.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.JsonWriter;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,21 +15,29 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.EventPlanner.R;
+import com.example.EventPlanner.clients.ClientUtils;
+import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.databinding.ActivityEventDetailsBinding;
 import com.example.EventPlanner.fragments.activity.ActivityCRUD;
 import com.example.EventPlanner.fragments.event.EventListViewModel;
 import com.example.EventPlanner.model.event.CreatedEventResponse;
 import com.example.EventPlanner.model.event.Event;
+import com.example.EventPlanner.model.event.EventTypeOverview;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class EventDetails extends AppCompatActivity {
     private ActivityEventDetailsBinding eventFormBinding;
     private EventListViewModel eventListViewModel;
-
+    private boolean isFavorited = false; // Default state
+    private ImageButton starButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +57,18 @@ public class EventDetails extends AppCompatActivity {
             });
             eventListViewModel.findEventById(eventId);
         }
+
+        starButton = findViewById(R.id.star_button);
+
+        // Set initial state based on event details
+        updateStarIcon();
+
+        // Handle star button click
+        starButton.setOnClickListener(view -> {
+            isFavorited = !isFavorited; // Toggle the favorite state
+            updateStarIcon();
+            saveFavoriteState(); // Save state to backend or local storage
+        });
 
         // Handle insets for edge-to-edge design
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -72,6 +94,35 @@ public class EventDetails extends AppCompatActivity {
         // Set listeners for buttons
         followEventButton.setOnClickListener(v -> {
 
+        });
+    }
+
+    private void updateStarIcon() {
+        if (isFavorited) {
+            starButton.setImageResource(R.drawable.ic_star_filled); // Use filled star
+        } else {
+            starButton.setImageResource(R.drawable.ic_star_border); // Use empty star
+        }
+    }
+
+    private void saveFavoriteState() {
+        Call<Boolean> call1 = ClientUtils.eventService.favorizeEvent(getIntent().getIntExtra("EVENT_ID", -1), JwtService.getIdFromToken());
+        call1.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                if (response.isSuccessful() && response.body() != null) {
+
+                } else {
+                    // Handle error cases
+                    Log.e("Favorizing Event Error", "Response not successful: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable throwable) {
+                // Handle network errors
+                Log.e("Favorizing Event Failure", "Error: " + throwable.getMessage());
+            }
         });
     }
 

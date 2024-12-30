@@ -22,6 +22,18 @@
             android:textSize="24sp"
             android:text="Event Title"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/star_button"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/star_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="28dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:srcCompat="@drawable/ic_star_border"
+            app:layout_constraintStart_toEndOf="@id/event_title"
             app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Event Type -->

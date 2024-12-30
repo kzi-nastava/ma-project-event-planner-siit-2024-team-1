@@ -82,20 +82,14 @@
                     android:textAppearance="?attr/textAppearanceTitleMedium"
                     android:textStyle="bold" />
 
-                <!-- Event Types -->
+                <!-- Discounted Price -->
                 <TextView
-                    android:layout_width="match_parent"
+                    android:id="@+id/visibility"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Event Types"
+                    android:layout_marginTop="4dp"
                     android:textAppearance="?attr/textAppearanceTitleMedium"
                     android:textStyle="bold" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/event_types_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp" />
 
                 <!-- Specificity -->
                 <TextView

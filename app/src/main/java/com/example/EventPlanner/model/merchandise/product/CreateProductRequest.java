@@ -1,22 +1,15 @@
-
 package com.example.EventPlanner.model.merchandise.product;
 
 import java.util.List;
 import javax.annotation.Generated;
 
 import com.example.EventPlanner.model.common.Address;
-import com.example.EventPlanner.model.event.EventType;
-import com.example.EventPlanner.model.merchandise.Category2;
-import com.example.EventPlanner.model.merchandise.MerchandisePhoto;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 @Generated("jsonschema2pojo")
-public class Product {
+public class CreateProductRequest {
 
-    @SerializedName("id")
-    @Expose
-    private Integer id;
     @SerializedName("title")
     @Expose
     private String title;
@@ -53,29 +46,31 @@ public class Product {
     @SerializedName("automaticReservation")
     @Expose
     private Boolean automaticReservation;
+    @SerializedName("serviceProviderId")
+    @Expose
+    private Integer serviceProviderId;
     @SerializedName("merchandisePhotos")
     @Expose
-    private List<MerchandisePhoto> merchandisePhotos;
-    @SerializedName("eventTypes")
+    private List<Integer> merchandisePhotos;
+    @SerializedName("eventTypesIds")
     @Expose
-    private List<EventType> eventTypes;
+    private List<Integer> eventTypesIds;
     @SerializedName("address")
     @Expose
     private Address address;
-    @SerializedName("category")
+    @SerializedName("categoryId")
     @Expose
-    private Category2 category;
+    private Integer categoryId;
 
     /**
      * No args constructor for use in serialization
-     * 
+     *
      */
-    public Product() {
+    public CreateProductRequest() {
     }
 
-    public Product(Integer id, String title, String description, String specificity, Double price, Integer discount, Boolean visible, Boolean available, Integer minDuration, Integer maxDuration, Integer reservationDeadline, Integer cancellationDeadline, Boolean automaticReservation, List<MerchandisePhoto> merchandisePhotos, List<EventType> eventTypes, Address address, Category2 category) {
+    public CreateProductRequest(String title, String description, String specificity, Double price, Integer discount, Boolean visible, Boolean available, Integer minDuration, Integer maxDuration, Integer reservationDeadline, Integer cancellationDeadline, Boolean automaticReservation, Integer serviceProviderId, List<Integer> merchandisePhotos, List<Integer> eventTypesIds, Address address, Integer categoryId) {
         super();
-        this.id = id;
         this.title = title;
         this.description = description;
         this.specificity = specificity;
@@ -88,18 +83,11 @@ public class Product {
         this.reservationDeadline = reservationDeadline;
         this.cancellationDeadline = cancellationDeadline;
         this.automaticReservation = automaticReservation;
+        this.serviceProviderId = serviceProviderId;
         this.merchandisePhotos = merchandisePhotos;
-        this.eventTypes = eventTypes;
+        this.eventTypesIds = eventTypesIds;
         this.address = address;
-        this.category = category;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+        this.categoryId = categoryId;
     }
 
     public String getTitle() {
@@ -198,20 +186,28 @@ public class Product {
         this.automaticReservation = automaticReservation;
     }
 
-    public List<MerchandisePhoto> getMerchandisePhotos() {
+    public Integer getServiceProviderId() {
+        return serviceProviderId;
+    }
+
+    public void setServiceProviderId(Integer serviceProviderId) {
+        this.serviceProviderId = serviceProviderId;
+    }
+
+    public List<Integer> getMerchandisePhotos() {
         return merchandisePhotos;
     }
 
-    public void setMerchandisePhotos(List<MerchandisePhoto> merchandisePhotos) {
+    public void setMerchandisePhotos(List<Integer> merchandisePhotos) {
         this.merchandisePhotos = merchandisePhotos;
     }
 
-    public List<EventType> getEventTypes() {
-        return eventTypes;
+    public List<Integer> getEventTypesIds() {
+        return eventTypesIds;
     }
 
-    public void setEventTypes(List<EventType> eventTypes) {
-        this.eventTypes = eventTypes;
+    public void setEventTypesIds(List<Integer> eventTypesIds) {
+        this.eventTypesIds = eventTypesIds;
     }
 
     public Address getAddress() {
@@ -222,12 +218,11 @@ public class Product {
         this.address = address;
     }
 
-    public Category2 getCategory() {
-        return category;
+    public Integer getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(Category2 category) {
-        this.category = category;
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
     }
-
 }
