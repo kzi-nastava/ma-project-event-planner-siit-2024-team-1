@@ -100,9 +100,6 @@ public class EventOverviewAdapter extends RecyclerView.Adapter<EventOverviewAdap
             intent.putExtra("EVENT_ID", event.getId());
             context.startActivity(intent);
         });
-        holder.itemView.findViewById(R.id.delete_event).setOnClickListener(v -> {
-
-        });
         holder.itemView.findViewById(R.id.btn_invite).setOnClickListener(v -> {
             Intent intent = new Intent(context, SendInvitationScreen.class);
             intent.putExtra("EVENT_ID", event.getId());

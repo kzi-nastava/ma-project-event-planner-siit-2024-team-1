@@ -74,9 +74,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
             intent.putExtra("EVENT_TYPE_ID", event.getId());
             context.startActivity(intent);
         });
-        holder.itemView.findViewById(R.id.delete_event).setOnClickListener(v -> {
-
-        });
 
         holder.eventCard.setOnClickListener(v -> {
             Toast.makeText(context, event.getTitle(), Toast.LENGTH_SHORT).show();

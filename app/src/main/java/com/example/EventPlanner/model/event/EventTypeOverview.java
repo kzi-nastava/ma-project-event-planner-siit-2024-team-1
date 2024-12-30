@@ -65,4 +65,9 @@ public class EventTypeOverview {
     public void setRecommendedCategories(List<CategoryOverview> recommendedCategories) {
         this.recommendedCategories = recommendedCategories;
     }
+
+    @Override
+    public String toString() {
+        return title; // Use the title as the display text in the spinner
+    }
 }

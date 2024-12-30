@@ -20,20 +20,34 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.EventPlanner.R;
+import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.fragments.event.EventListViewModel;
 import com.example.EventPlanner.fragments.eventtype.EventTypeViewModel;
 import com.example.EventPlanner.model.common.Address;
 import com.example.EventPlanner.databinding.ActivityEventFormBinding;
+import com.example.EventPlanner.model.event.CreateEventRequest;
+import com.example.EventPlanner.model.event.CreateEventTypeRequest;
 import com.example.EventPlanner.model.event.CreatedEventResponse;
 import com.example.EventPlanner.model.event.EventOverview;
 import com.example.EventPlanner.model.event.EventType;
 import com.example.EventPlanner.model.event.Event;
 import com.example.EventPlanner.model.event.EventTypeOverview;
+import com.example.EventPlanner.model.event.UpdateEventRequest;
+import com.example.EventPlanner.model.event.UpdateEventTypeRequest;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
 
 public class EventForm extends AppCompatActivity {
     private ActivityEventFormBinding eventFormBinding;
@@ -54,12 +68,46 @@ public class EventForm extends AppCompatActivity {
 
 
         findViewById(R.id.event_date).setOnClickListener(view -> showDatePickerDialog());
+        EventTypeViewModel eventTypeViewModel = new ViewModelProvider(this).get(EventTypeViewModel.class);
+
+
+        // Spinner for event types
+        Spinner eventTypesSpinner = eventFormBinding.eventTypesSpinner;
+
+// Fetch event types and setup the spinner
+        eventTypeViewModel.getEventTypes().observe(this, eventTypes -> {
+            ArrayAdapter<EventTypeOverview> adapter = new ArrayAdapter<>(
+                    this,
+                    android.R.layout.simple_spinner_item,
+                    eventTypes
+            );
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            eventTypesSpinner.setAdapter(adapter);
+        });
+
+        eventTypeViewModel.getAllWp();
+
+// Handle spinner item selection
+        eventTypesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                EventTypeOverview selectedEventType = (EventTypeOverview) parentView.getItemAtPosition(position);
+                Log.d("EventForm", "Selected EventType: " + selectedEventType.getTitle());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // Handle case where nothing is selected
+            }
+        });
 
         // Setup form title and visibility based on form type
         if ("NEW_FORM".equals(formType)) {
             formTitle.setText(R.string.add_event);
+            eventFormBinding.eventTypesSpinner.setEnabled(true);
         } else if ("EDIT_FORM".equals(formType)) {
             formTitle.setText(R.string.edit_event);
+            eventFormBinding.eventTypesSpinner.setEnabled(false);
             Integer eventId = getIntent().getIntExtra("EVENT_ID", -1);
             if (eventId != -1) {
                 formTitle.setText(R.string.edit_event);
@@ -74,12 +122,17 @@ public class EventForm extends AppCompatActivity {
 
 
 
-        // Submit Button Logic
         eventFormBinding.submitEventButton.setOnClickListener(v -> {
             if (isValidInput()) {
-                Event event = createEventFromInput();
+                CreateEventRequest event = createEventFromInput();
                 if (event != null) {
-                    eventListViewModel.saveEvent(event);
+                    if ("NEW_FORM".equals(formType)) {
+                        eventListViewModel.saveEvent(event);
+                    } else if ("EDIT_FORM".equals(formType)) {
+                        // If it's an edit form, you can update the event type
+                        int eventId = getIntent().getIntExtra("EVENT_ID", -1);
+                        eventListViewModel.updateEvent(eventId, new UpdateEventRequest(event.getTitle(), event.getDescription(), event.getMaxParticipants(), event.getIsPublic(), event.getDate(), event.getAddress(), event.getEventTypeId(), event.getProductIds(), event.getServiceIds()));
+                    }
 
                     Intent intent = new Intent(EventForm.this, HomeScreen.class);
                     startActivity(intent);
@@ -95,36 +148,8 @@ public class EventForm extends AppCompatActivity {
         });
 
         eventListViewModel = new ViewModelProvider(this).get(EventListViewModel.class);
-        EventTypeViewModel eventTypeViewModel = new ViewModelProvider(this).get(EventTypeViewModel.class);
 
         EdgeToEdge.enable(this);
-
-        // Spinner for event types
-        Spinner eventTypesSpinner = eventFormBinding.eventTypesSpinner;
-
-        eventTypeViewModel.getEventTypes().observe(this, eventTypes -> {
-            // Create an ArrayAdapter with EventTypeOverview objects
-            ArrayAdapter<EventTypeOverview> adapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_spinner_item, eventTypes);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            eventFormBinding.eventTypesSpinner.setAdapter(adapter);
-        });
-
-        // Fetch event types
-        eventTypeViewModel.getAll();
-
-        // Handle the spinner item selection (optional)
-        eventTypesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                String selectedEventType = parentView.getItemAtPosition(position).toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // Handle the case when no item is selected
-            }
-        });
     }
 
     private void showDatePickerDialog() {
@@ -137,7 +162,15 @@ public class EventForm extends AppCompatActivity {
                 this,
                 (view, selectedYear, selectedMonth, selectedDay) -> {
                     // Update the EditText with the selected date
-                    String date = selectedYear + "-" + (selectedMonth + 1) + "-" + selectedDay;
+                    String zeroD = "";
+                    if(selectedDay < 9){
+                        zeroD = "0";
+                    }
+                    String zeroM = "";
+                    if(selectedMonth < 9){
+                        zeroM = "0";
+                    }
+                    String date = selectedYear + "-" + zeroM + (selectedMonth + 1) + "-" + zeroD + selectedDay;
                     eventFormBinding.eventDate.setText(date);
                 },
                 year, month, day
@@ -189,30 +222,34 @@ public class EventForm extends AppCompatActivity {
     }
 
     // Create Product object from user input
-    private Event createEventFromInput() {
+    private CreateEventRequest createEventFromInput() {
         try {
             String title = eventFormBinding.eventTitle.getText().toString();
             String description = eventFormBinding.eventDescription.getText().toString();
             Integer maxParticipants = Integer.parseInt(eventFormBinding.maxParticipants.getText().toString());
+
             String legacyDateStr = eventFormBinding.eventDate.getText().toString();;
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            Date date = sdf.parse(legacyDateStr);
+            LocalDateTime date = LocalDateTime.parse(legacyDateStr + "T10:00:00");
+
             String city = eventFormBinding.city.getText().toString();
             String street = eventFormBinding.street.getText().toString();
             String number = eventFormBinding.number.getText().toString();
             double latitude = Double.parseDouble(eventFormBinding.latitude.getText().toString());
             double longitude = Double.parseDouble(eventFormBinding.longitude.getText().toString());
 
-            EventType eventType = new EventType(1, "Funerality", "Opis", true, null);
+            EventTypeOverview selectedEventType = (EventTypeOverview) eventFormBinding.eventTypesSpinner.getSelectedItem();
 
-            Address address = new Address(city, street, number, latitude, longitude);
+            Address address = new Address(street, city, number, longitude, latitude);
 
-            return new Event(1, title, description, maxParticipants, true, address, date, eventType);
+            List<Integer> productIds = new ArrayList<>();
+            productIds.add(1);
+            List<Integer> serviceIds = new ArrayList<>();
+            serviceIds.add(4);
+
+            return new CreateEventRequest(title, description, maxParticipants, eventFormBinding.radioPublic.isChecked(), date.toString(), address, selectedEventType.getId(), productIds, serviceIds, JwtService.getIdFromToken());
             } catch (NumberFormatException e) {
             e.printStackTrace();
             return null;
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
         }
     }
 }

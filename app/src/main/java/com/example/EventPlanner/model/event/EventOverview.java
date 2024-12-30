@@ -24,6 +24,20 @@ public class EventOverview {
     @SerializedName("address")
     @Expose
     private Address address;
+
+    public EventOverview() {
+    }
+
+    public EventOverview(Integer id, String type, String title, String date, Address address, String description, Boolean isPublic) {
+        this.id = id;
+        this.type = type;
+        this.title = title;
+        this.date = date;
+        this.address = address;
+        this.description = description;
+        this.isPublic = isPublic;
+    }
+
     @SerializedName("description")
     @Expose
     private String description;

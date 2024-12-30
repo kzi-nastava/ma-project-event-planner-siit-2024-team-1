@@ -1,15 +1,19 @@
 package com.example.EventPlanner.clients.services.event;
 
 import com.example.EventPlanner.model.common.PageResponse;
+import com.example.EventPlanner.model.event.CreateEventRequest;
 import com.example.EventPlanner.model.event.CreatedEventResponse;
 import com.example.EventPlanner.model.event.EventOverview;
 import com.example.EventPlanner.model.event.InvitationResponse;
+import com.example.EventPlanner.model.event.UpdateEventRequest;
 
 import java.time.LocalDate;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -31,4 +35,10 @@ public interface EventService {
     @POST("events/invite")
     Call<InvitationResponse> sendInvite(@Query("email") String email,
                                         @Query("eventId") int eventId);
+
+    @POST("events")
+    Call<CreatedEventResponse> create(@Body CreateEventRequest dto);
+
+    @PUT("events/{id}")
+    Call<CreatedEventResponse> update(@Path("id") int id, @Body UpdateEventRequest dto);
 }
