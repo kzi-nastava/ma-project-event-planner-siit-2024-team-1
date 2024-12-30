@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,8 +42,20 @@ public class SendInvitationScreen extends AppCompatActivity {
         inviteBtn.setOnClickListener(v->sendInvitation());
     }
 
-    private void sendInvitation(){
-        TextView email=activitySendInvitationScreenBinding.editTextEmail;
-        eventViewModel.sendInvitation(email.getText().toString(),eventId);
+    private void sendInvitation() {
+        TextView email = activitySendInvitationScreenBinding.editTextEmail;
+        String emailStr = email.getText().toString().trim();
+
+        // Regular expression for email validation
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
+        if (emailStr.isEmpty()) {
+            Toast.makeText(SendInvitationScreen.this, "Please enter an email address", Toast.LENGTH_LONG).show();
+        } else if (!emailStr.matches(emailPattern)) {
+            Toast.makeText(SendInvitationScreen.this, "Please enter a valid email address", Toast.LENGTH_LONG).show();
+        } else {
+            eventViewModel.sendInvitation(emailStr, eventId);
+            Toast.makeText(SendInvitationScreen.this, "Invitation sent to " + emailStr, Toast.LENGTH_LONG).show();
+        }
     }
 }

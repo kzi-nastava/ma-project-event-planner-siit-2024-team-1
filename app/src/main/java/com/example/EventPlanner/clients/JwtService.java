@@ -85,6 +85,17 @@ public class JwtService {
         return "";
     }
 
+    public static String getEmailFromToken() {
+        String token = getAccessToken();
+        if (token != null) {
+            JSONObject tokenInfo = decodeToken(token);
+            if (tokenInfo != null && tokenInfo.has("sub")) {
+                return tokenInfo.optString("sub", "");
+            }
+        }
+        return "";
+    }
+
     // Get ID from token
     public static int getIdFromToken() {
         String token = getAccessToken();

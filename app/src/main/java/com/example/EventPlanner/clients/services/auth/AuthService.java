@@ -25,4 +25,7 @@ public interface AuthService {
     Call<RegisterSpResponse> registerSp(@Body RegisterSpRequest dto, @Query("promotion") boolean promotion);
     @GET("auth/activate")
     Call<String> activateUser(@Query("token") int activationToken);
+
+    @POST("auth/fast-register")
+    Call<LoginResponse> fastRegister(@Query("email")String email);
 }

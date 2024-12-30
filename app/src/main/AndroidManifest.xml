@@ -16,11 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EventPlanner"
         tools:targetApi="31"
-        android:usesCleartextTraffic="true"
-        >
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".activities.ServiceForm"
-            android:exported="false" />
+            android:exported="false">
+        </activity>
         <activity
             android:name=".activities.EventTypeForm"
             android:exported="false" />
@@ -55,8 +55,37 @@
             android:name=".activities.RegisterSpScreen"
             android:exported="false" />
         <activity
+            android:name=".activities.RegisterAuScreen"
+            android:exported="true">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data
+                    android:host="localhost"
+                    android:port="4200"
+                    android:path="/register-au" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".activities.LoginScreen"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data
+                    android:host="localhost"
+                    android:port="4200"
+                    android:path="/" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activities.SendInvitationScreen"
             android:exported="false" />
