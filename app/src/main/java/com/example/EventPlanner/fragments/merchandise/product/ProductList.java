@@ -9,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.EventPlanner.adapters.event.EventTypeAdapter;
 import com.example.EventPlanner.adapters.merchandise.product.ProductAdapter;
+import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.databinding.FragmentProductListBinding;
 import com.example.EventPlanner.model.merchandise.product.Product;
 
@@ -29,12 +31,17 @@ public class ProductList extends Fragment {
         productListBinding = FragmentProductListBinding.inflate(getLayoutInflater());
         productViewModel = new ViewModelProvider(requireActivity()).get(ProductViewModel.class);
 
-        ArrayList<Product> allProducts = productViewModel.getAll();
-
-        ProductAdapter adapter = new ProductAdapter(requireContext(), allProducts);
         RecyclerView recyclerView = productListBinding.productListRecyclerView;
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        recyclerView.setAdapter(adapter);
+        productViewModel.getProducts().observe(getViewLifecycleOwner(),products->{
+            ProductAdapter productAdapter = new ProductAdapter(requireActivity(), products);
+            recyclerView.setAdapter(productAdapter);
+            productAdapter.notifyDataSetChanged();
+
+        });
+
+        LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        productViewModel.getAllBySp(JwtService.getIdFromToken());
 
         return productListBinding.getRoot();
     }

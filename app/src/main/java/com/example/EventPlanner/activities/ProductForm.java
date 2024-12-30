@@ -62,9 +62,9 @@ public class ProductForm extends AppCompatActivity {
             formTitle.setText(R.string.edit_product);
             int productId = getIntent().getIntExtra("PRODUCT_ID", -1);
             if (productId != -1) {
-                Product product = productViewModel.findProductById(productId);
-                Log.d("Naziv proizvoda", product.getTitle());
-                if (product != null) setFields(product);
+//                Product product = productViewModel.findProductById(productId);
+//                Log.d("Naziv proizvoda", product.getTitle());
+//                if (product != null) setFields(product);
             }
         }
 
@@ -86,7 +86,7 @@ public class ProductForm extends AppCompatActivity {
             if (isValidInput()) {
                 Product product = createProductFromInput();
                 if (product != null) {
-                     productViewModel.saveProduct(product);
+                    //productViewModel.saveProduct(product);
 
                     Intent intent = new Intent(ProductForm.this, HomeScreen.class);
                     startActivity(intent);
