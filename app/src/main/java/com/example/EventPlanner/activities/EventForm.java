@@ -186,6 +186,11 @@ public class EventForm extends AppCompatActivity {
 
         String legacyDateStr = event.getDate().toString();;
         LocalDateTime date = LocalDateTime.parse(legacyDateStr);
+
+        // Minor change
+        if(date == null){
+            return;
+        }
         eventFormBinding.eventDate.setText(date.toString().split("T")[0]);
 
         eventFormBinding.city.setText(event.getAddress().getCity());
