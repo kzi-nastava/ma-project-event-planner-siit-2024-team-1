@@ -19,17 +19,30 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.EventPlanner.R;
+import com.example.EventPlanner.activities.HomeScreen;
+import com.example.EventPlanner.clients.ClientUtils;
 import com.example.EventPlanner.databinding.ActivityEventTypeFormBinding;
 import com.example.EventPlanner.fragments.eventtype.EventTypeViewModel;
-import com.example.EventPlanner.model.event.EventType;
-import com.example.EventPlanner.model.merchandise.Category2;
+import com.example.EventPlanner.model.event.CreateEventTypeRequest;
+import com.example.EventPlanner.model.event.EventTypeOverview;
+import com.example.EventPlanner.model.event.UpdateEventTypeRequest;
+import com.example.EventPlanner.model.merchandise.CategoryOverview;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class EventTypeForm extends AppCompatActivity {
     private ActivityEventTypeFormBinding eventTypeFormBinding;
     private EventTypeViewModel eventTypeViewModel;
+    private Spinner multiSelectSpinner;
+
+    private List<CategoryOverview> categoryList = new ArrayList<>();
+    private boolean[] selectedItems;
+    private String[] categoryNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,28 +60,36 @@ public class EventTypeForm extends AppCompatActivity {
         // Setup form title and visibility based on form type
         if ("NEW_FORM".equals(formType)) {
             formTitle.setText(R.string.add_event_type);
+            eventTypeFormBinding.eventTypeTitle.setEnabled(true);
         } else if ("EDIT_FORM".equals(formType)) {
             formTitle.setText(R.string.edit_event_type);
+            eventTypeFormBinding.eventTypeTitle.setEnabled(false);
             int eventTypeId = getIntent().getIntExtra("EVENT_TYPE_ID", -1);
             if (eventTypeId != -1) {
-                EventType eventType = eventTypeViewModel.findEventTypeById(eventTypeId);
-                if (eventType != null) setFields(eventType);
+                eventTypeViewModel.getSelectedEventType().observe(this, eventType -> {
+                    if (eventType != null) {
+                        setFields(eventType);
+                    }
+                });
+                eventTypeViewModel.findEventTypeById(eventTypeId);
             }
         }
 
-        // Category Spinner Setup
-        String[] categoryOptions = {"Options", "Space", "Food", "Drinks", "Music", "Decorations", "Other"};
-        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, categoryOptions);
-        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Multi-select spinner setup
+        multiSelectSpinner = findViewById(R.id.multiselect_category_spinner);
+        fetchCategoriesAndSetupSpinner();
 
-
-        // Submit Button Logic
         eventTypeFormBinding.submitEventTypeButton.setOnClickListener(v -> {
             if (isValidInput()) {
-                EventType eventType = createEventTypeFromInput();
+                CreateEventTypeRequest eventType = createEventTypeFromInput();
                 if (eventType != null) {
-                    eventTypeViewModel.saveEventType(eventType);
+                    if ("NEW_FORM".equals(formType)) {
+                        eventTypeViewModel.saveEventType(eventType);
+                    } else if ("EDIT_FORM".equals(formType)) {
+                        // If it's an edit form, you can update the event type
+                        int eventTypeId = getIntent().getIntExtra("EVENT_TYPE_ID", -1);
+                        eventTypeViewModel.updateEventType(eventTypeId, new UpdateEventTypeRequest(eventType.getDescription(), eventType.isActive(), eventType.getRecommendedCategoryIds()));
+                    }
 
                     Intent intent = new Intent(EventTypeForm.this, HomeScreen.class);
                     startActivity(intent);
@@ -82,66 +103,113 @@ public class EventTypeForm extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-
-        multiSelectSpinner = findViewById(R.id.multiselect_category_spinner);
-
-        // Set the adapter to the Spinner (empty or initial item)
-        ArrayAdapter<String> categoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{"Select Recommended Categories"});
-        categoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        multiSelectSpinner.setAdapter(categoriesAdapter);
-
-        // Set an item click listener for the Spinner
-        multiSelectSpinner.setOnTouchListener((v, event) -> {
-            showMultiSelectDialog();
-            return true;
-        });
     }
 
-    // Populate fields when editing a product
-    private void setFields(EventType eventType) {
+    // Populate fields when editing an event type
+    private void setFields(EventTypeOverview eventType) {
+        // Set title and description
         eventTypeFormBinding.eventTypeTitle.setText(eventType.getTitle());
         eventTypeFormBinding.eventTypeDescription.setText(eventType.getDescription());
-    }
-    private Spinner multiSelectSpinner;
-    private String[] categories = {"Suicidability", "Funerality", "Somethingality"};
-    private boolean[] selectedItems = new boolean[categories.length];
-    private void showMultiSelectDialog() {
-        // Create the dialog for multi-select
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Select Recommended Categories");
 
-        // Create checkboxes dynamically for each event type
-        builder.setMultiChoiceItems(categories, selectedItems, new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                selectedItems[which] = isChecked;
+        // Pre-select categories
+        if (categoryList != null && categoryNames != null) {
+            // Reset selectedItems array
+            selectedItems = new boolean[categoryList.size()];
+
+            // Get IDs of categories associated with the event type
+            List<Integer> eventCategoryIds = new ArrayList<>();
+            for (CategoryOverview cat: eventType.getRecommendedCategories()
+                 ) {
+                eventCategoryIds.add(cat.getId());
             }
-        });
 
-        // Positive button (OK) to capture selected items
-        builder.setPositiveButton("OK", (dialog, id) -> {
+            // Mark matching categories as selected
+            for (int i = 0; i < categoryList.size(); i++) {
+                if (eventCategoryIds.contains(categoryList.get(i).getId())) {
+                    selectedItems[i] = true;
+                }
+            }
+
+            // Update the spinner to display selected categories
             StringBuilder selectedCategories = new StringBuilder();
             for (int i = 0; i < selectedItems.length; i++) {
                 if (selectedItems[i]) {
-                    selectedCategories.append(categories[i]).append(", ");
+                    selectedCategories.append(categoryNames[i]).append(", ");
                 }
             }
             if (selectedCategories.length() > 0) {
                 selectedCategories.setLength(selectedCategories.length() - 2); // Remove trailing comma and space
             }
 
-            // Update the Spinner with the selected event types
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{selectedCategories.toString()});
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            multiSelectSpinner.setAdapter(adapter);
+        }
+    }
+
+    // Fetch categories and populate the multi-select spinner
+    private void fetchCategoriesAndSetupSpinner() {
+        Call<List<CategoryOverview>> call = ClientUtils.categoryService.getApproved();
+        call.enqueue(new Callback<List<CategoryOverview>>() {
+            @Override
+            public void onResponse(Call<List<CategoryOverview>> call, Response<List<CategoryOverview>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    categoryList = response.body();
+                    categoryNames = categoryList.stream().map(CategoryOverview::getTitle).toArray(String[]::new);
+                    selectedItems = new boolean[categoryList.size()];
+                    setupMultiSelectSpinner();
+                } else {
+                    Log.e("EventTypeForm", "Failed to fetch categories: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CategoryOverview>> call, Throwable t) {
+                Log.e("EventTypeForm", "Error fetching categories", t);
+            }
+        });
+    }
+
+    // Setup the multi-select spinner
+    private void setupMultiSelectSpinner() {
+        multiSelectSpinner.setOnTouchListener((v, event) -> {
+            showMultiSelectDialog();
+            return true;
+        });
+
+        // Initial adapter to display a placeholder
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{"Select Categories"});
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        multiSelectSpinner.setAdapter(adapter);
+    }
+
+    // Show the multi-select dialog
+    private void showMultiSelectDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select Recommended Categories");
+
+        builder.setMultiChoiceItems(categoryNames, selectedItems, (dialog, which, isChecked) -> {
+            selectedItems[which] = isChecked;
+        });
+
+        builder.setPositiveButton("OK", (dialog, id) -> {
+            StringBuilder selectedCategories = new StringBuilder();
+            for (int i = 0; i < selectedItems.length; i++) {
+                if (selectedItems[i]) {
+                    selectedCategories.append(categoryNames[i]).append(", ");
+                }
+            }
+            if (selectedCategories.length() > 0) {
+                selectedCategories.setLength(selectedCategories.length() - 2); // Remove trailing comma and space
+            }
+
+            // Update the spinner with the selected categories
             ArrayAdapter<String> adapter = new ArrayAdapter<>(EventTypeForm.this, android.R.layout.simple_spinner_item, new String[]{selectedCategories.toString()});
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             multiSelectSpinner.setAdapter(adapter);
-            Toast.makeText(EventTypeForm.this, "Selected: " + selectedCategories.toString(), Toast.LENGTH_SHORT).show();
         });
 
-        // Negative button (Cancel)
         builder.setNegativeButton("Cancel", null);
-
-        // Show the dialog
         builder.create().show();
     }
 
@@ -152,16 +220,19 @@ public class EventTypeForm extends AppCompatActivity {
     }
 
     // Create Product object from user input
-    private EventType createEventTypeFromInput() {
+    private CreateEventTypeRequest createEventTypeFromInput() {
         try {
             String title = eventTypeFormBinding.eventTypeTitle.getText().toString();
             String description = eventTypeFormBinding.eventTypeDescription.getText().toString();
 
-            List<Category2> categories = new ArrayList<Category2>();
-            categories.add(new Category2(1, "Funerality", "Opis", false));
-            categories.add(new Category2(1, "Suicidability", "Opis", false));
+            List<Integer> categoryIds = new ArrayList<>();
+            for (int i = 0; i < selectedItems.length; i++) {
+                if (selectedItems[i]) {
+                    categoryIds.add(categoryList.get(i).getId());
+                }
+            }
 
-            return new EventType(1, title, description, true, categories);
+            return new CreateEventTypeRequest(title, description, true, categoryIds);
         } catch (NumberFormatException e) {
             e.printStackTrace();
             return null;

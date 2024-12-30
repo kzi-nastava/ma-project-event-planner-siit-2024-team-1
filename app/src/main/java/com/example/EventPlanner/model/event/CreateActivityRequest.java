@@ -1,5 +1,6 @@
 package com.example.EventPlanner.model.event;
 
+
 import com.example.EventPlanner.model.common.Address;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -9,11 +10,7 @@ import java.time.LocalTime;
 import javax.annotation.processing.Generated;
 
 @Generated("jsonschema2pojo")
-public class Activity {
-
-    @SerializedName("id")
-    @Expose
-    private Integer id;
+public class CreateActivityRequest {
     @SerializedName("title")
     @Expose
     private String title;
@@ -34,12 +31,11 @@ public class Activity {
      * No args constructor for use in serialization
      *
      */
-    public Activity() {
+    public CreateActivityRequest() {
     }
 
-    public Activity(Integer id, String title, String description, String startTime, String endTime, Address address) {
+    public CreateActivityRequest(String title, String description, String startTime, String endTime, Address address) {
         super();
-        this.id = id;
         this.title = title;
         this.description = description;
         this.startTime = startTime;
@@ -47,13 +43,6 @@ public class Activity {
         this.address = address;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;

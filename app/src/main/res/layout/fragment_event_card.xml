@@ -150,14 +150,6 @@
                     android:text="@string/edit" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/delete_event"
-                    style="@style/Secondary.Button.Primary.Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="@string/delete" />
-
-                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_invite"
                     style="@style/Secondary.Button.Primary.Text"
                     android:layout_width="wrap_content"

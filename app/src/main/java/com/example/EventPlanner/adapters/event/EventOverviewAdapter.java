@@ -16,8 +16,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.EventPlanner.R;
+import com.example.EventPlanner.activities.EventDetails;
+import com.example.EventPlanner.activities.EventForm;
 import com.example.EventPlanner.activities.EventTypeForm;
 import com.example.EventPlanner.activities.SendInvitationScreen;
+import com.example.EventPlanner.fragments.activity.ActivityCRUD;
 import com.example.EventPlanner.model.event.Event;
 import com.example.EventPlanner.model.event.EventOverview;
 
@@ -82,19 +85,20 @@ public class EventOverviewAdapter extends RecyclerView.Adapter<EventOverviewAdap
             holder.eventDate.setText(formattedDate);
         }
         holder.itemView.findViewById(R.id.see_agenda).setOnClickListener(v -> {
-            //
-        });
-        holder.itemView.findViewById(R.id.see_details_button).setOnClickListener(v -> {
-            //
-        });
-        holder.itemView.findViewById(R.id.edit_event).setOnClickListener(v -> {
-            Intent intent = new Intent(context, EventTypeForm.class);
-            intent.putExtra("FORM_TYPE", "EDIT_FORM");
-            intent.putExtra("EVENT_TYPE_ID", event.getId());
+            Intent intent = new Intent(context, ActivityCRUD.class);
+            intent.putExtra("EVENT_ID", event.getId());
             context.startActivity(intent);
         });
-        holder.itemView.findViewById(R.id.delete_event).setOnClickListener(v -> {
-
+        holder.itemView.findViewById(R.id.see_details_button).setOnClickListener(v -> {
+            Intent intent = new Intent(context, EventDetails.class);
+            intent.putExtra("EVENT_ID", event.getId());
+            context.startActivity(intent);
+        });
+        holder.itemView.findViewById(R.id.edit_event).setOnClickListener(v -> {
+            Intent intent = new Intent(context, EventForm.class);
+            intent.putExtra("FORM_TYPE", "EDIT_FORM");
+            intent.putExtra("EVENT_ID", event.getId());
+            context.startActivity(intent);
         });
         holder.itemView.findViewById(R.id.btn_invite).setOnClickListener(v -> {
             Intent intent = new Intent(context, SendInvitationScreen.class);

@@ -27,6 +27,9 @@ import com.example.EventPlanner.fragments.activity.ActivityViewModel;
 import com.example.EventPlanner.model.common.Address;
 import com.example.EventPlanner.databinding.ActivityActivityFormBinding;
 import com.example.EventPlanner.model.event.Activity;
+import com.example.EventPlanner.model.event.CreateActivityRequest;
+import com.example.EventPlanner.model.event.CreateEventTypeRequest;
+import com.example.EventPlanner.model.event.UpdateEventTypeRequest;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -55,16 +58,20 @@ public class ActivityForm extends AppCompatActivity {
         String formType = getIntent().getStringExtra("FORM_TYPE");
         TextView formTitle = activityFormBinding.formTitle;
 
+
         // Setup form title and visibility based on form type
         if ("NEW_FORM".equals(formType)) {
             formTitle.setText(R.string.add_activity);
         } else if ("EDIT_FORM".equals(formType)) {
             formTitle.setText(R.string.edit_activity);
-            Integer activityId = getIntent().getIntExtra("ACTIVITY_ID", -1);
+            int activityId = getIntent().getIntExtra("ACTIVITY_ID", -1);
             if (activityId != -1) {
-                com.example.EventPlanner.model.event.Activity activity = activityViewModel.findActivityById(activityId);
-                Log.d("Naziv proizvoda", activity.getTitle());
-                if (activityId != null) setFields(activity);
+                activityViewModel.getSelectedActivity().observe(this, eventType -> {
+                    if (eventType != null) {
+                        setFields(eventType);
+                    }
+                });
+                activityViewModel.findActivityById(activityId);
             }
         }
 
@@ -77,9 +84,16 @@ public class ActivityForm extends AppCompatActivity {
         // Submit Button Logic
         activityFormBinding.submitActivityButton.setOnClickListener(v -> {
             if (isValidInput()) {
-                com.example.EventPlanner.model.event.Activity activity = createActivityFromInput();
+                CreateActivityRequest activity = createActivityFromInput();
                 if (activity != null) {
-                    activityViewModel.saveActivity(activity);
+                    if ("NEW_FORM".equals(formType)) {
+                        int eventId = getIntent().getIntExtra("EVENT_ID", -1);
+                        activityViewModel.saveActivity(eventId, activity);
+                    } else if ("EDIT_FORM".equals(formType)) {
+                        // If it's an edit form, you can update the event type
+                        int activityId = getIntent().getIntExtra("ACTIVITY_ID", -1);
+                        activityViewModel.updateActivity(activityId, new CreateActivityRequest(activity.getTitle(), activity.getDescription(), activity.getStartTime().toString(), activity.getEndTime().toString(), activity.getAddress()));
+                    }
 
                     Intent intent = new Intent(ActivityForm.this, HomeScreen.class);
                     startActivity(intent);
@@ -120,8 +134,8 @@ public class ActivityForm extends AppCompatActivity {
         activityFormBinding.number.setText(activity.getAddress().getNumber());
         activityFormBinding.latitude.setText(String.valueOf(activity.getAddress().getLatitude()));
         activityFormBinding.longitude.setText(String.valueOf(activity.getAddress().getLongitude()));
-        String start = String.format(Locale.getDefault(), "%02d:%02d", activity.getStartTime().getHour(), activity.getStartTime().getMinute());
-        String end = String.format(Locale.getDefault(), "%02d:%02d", activity.getEndTime().getHour(), activity.getEndTime().getMinute());
+        String start = activity.getStartTime().substring(0, activity.getStartTime().length() - 3);
+        String end = activity.getEndTime().substring(0, activity.getEndTime().length() - 3);
         activityFormBinding.activityStart.setText(start);
         activityFormBinding.activityEnd.setText(end);
     }
@@ -140,7 +154,7 @@ public class ActivityForm extends AppCompatActivity {
     }
 
     // Create Product object from user input
-    private com.example.EventPlanner.model.event.Activity createActivityFromInput() {
+    private CreateActivityRequest createActivityFromInput() {
         try {
             String title = activityFormBinding.activityTitle.getText().toString();
             String description = activityFormBinding.activityDescription.getText().toString();
@@ -150,18 +164,13 @@ public class ActivityForm extends AppCompatActivity {
             double latitude = Double.parseDouble(activityFormBinding.latitude.getText().toString());
             double longitude = Double.parseDouble(activityFormBinding.longitude.getText().toString());
 
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
-            // Parse the start and end times into LocalTime
             String start = activityFormBinding.activityStart.getText().toString();
             String end = activityFormBinding.activityEnd.getText().toString();
 
-            LocalTime startTime = LocalTime.parse(start, timeFormatter);
-            LocalTime endTime = LocalTime.parse(end, timeFormatter);
-
             Address address = new Address(city, street, number, latitude, longitude);
 
-            return new com.example.EventPlanner.model.event.Activity(1, title, description, startTime, endTime, address);
+            return new CreateActivityRequest(title, description, start, end, address);
         } catch (NumberFormatException e) {
             e.printStackTrace();
             return null;

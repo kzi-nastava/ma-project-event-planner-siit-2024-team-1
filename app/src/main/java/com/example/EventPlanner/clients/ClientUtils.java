@@ -1,7 +1,5 @@
 package com.example.EventPlanner.clients;
 
-import android.content.Context;
-
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -10,7 +8,7 @@ import com.example.EventPlanner.clients.services.auth.AuthService;
 import com.example.EventPlanner.clients.services.auth.UserService;
 import com.example.EventPlanner.clients.services.event.EventService;
 import com.example.EventPlanner.clients.services.eventType.EventTypeService;
-import com.example.EventPlanner.clients.services.merchandise.Category1Service;
+import com.example.EventPlanner.clients.services.merchandise.CategoryService;
 import com.example.EventPlanner.clients.services.merchandise.MerchandiseService;
 import com.example.EventPlanner.clients.services.merchandise.product.ProductService;
 import com.example.EventPlanner.clients.services.merchandise.service.ServiceService;
@@ -28,7 +26,7 @@ public class ClientUtils {
             .client(client)
             .build();
 
-    public static Category1Service category1Service = retrofit.create(Category1Service.class);
+    public static CategoryService categoryService = retrofit.create(CategoryService.class);
 
     public static EventService eventService = retrofit.create(EventService.class);
 

@@ -79,7 +79,6 @@ public class EventCard extends Fragment {
 
         // Initialize buttons
         Button editEventButton = view.findViewById(R.id.edit_event);
-        Button deleteEventButton = view.findViewById(R.id.delete_event);
 
         Button agendaButton = view.findViewById(R.id.see_agenda);
         Button seeDetailsButton = view.findViewById(R.id.see_details_button);
@@ -93,19 +92,6 @@ public class EventCard extends Fragment {
             startActivity(intent);
         });
 
-        deleteEventButton.setOnClickListener(v -> {
-            // Handle the "Delete" button click
-            // You can show a confirmation dialog before deleting
-            new AlertDialog.Builder(getContext())
-                    .setTitle("Delete Event")
-                    .setMessage("Are you sure you want to delete this Event Type?")
-                    .setPositiveButton("Yes", (dialog, which) -> {
-                        // Perform delete operation here, e.g., remove product from database
-                        Toast.makeText(getContext(), "Event deleted", Toast.LENGTH_SHORT).show();
-                    })
-                    .setNegativeButton("No", null)
-                    .show();
-        });
 
         // Set listeners for buttons
         agendaButton.setOnClickListener(v -> {
