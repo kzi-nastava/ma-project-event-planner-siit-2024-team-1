@@ -42,6 +42,7 @@ import com.example.EventPlanner.model.user.UpdateSpRequest;
 import com.example.EventPlanner.model.user.UpdateSpResponse;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -78,6 +79,8 @@ public class RegisterSpScreen extends AppCompatActivity {
     private RecyclerView recyclerViewSelectedPhotos;
     private BusinessPhotoAdapter photosAdapter;
 
+    private String selectedProfilePhoto = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +111,9 @@ public class RegisterSpScreen extends AppCompatActivity {
 
         Button addPhotosButton = findViewById(R.id.choosePhotosButton);
         addPhotosButton.setOnClickListener(v -> openPhotoSelectionDialog());
+
+        Button profilePhotoButton = findViewById(R.id.choosePhottoButton);
+        profilePhotoButton.setOnClickListener(v -> openGallery(false));
 
         String formType = getIntent().getStringExtra("FORM_TYPE");
 // Setup form title and visibility based on form type
@@ -184,7 +190,7 @@ public class RegisterSpScreen extends AppCompatActivity {
                 dto.setPhoneNumber(phone.getText().toString());
                 dto.setEmail(email.getText().toString());
                 dto.setPassword(password1.getText().toString());
-                dto.setPhoto(photo);
+                dto.setPhoto(selectedProfilePhoto);
                 dto.setRole(Role.SP);
 
                 dto.setCompany(company.getText().toString());
@@ -221,7 +227,7 @@ public class RegisterSpScreen extends AppCompatActivity {
                 dto.setAddress(new Address(street.getText().toString(), city.getText().toString(), number.getText().toString(), Double.parseDouble(longitude.getText().toString()), Double.parseDouble(latitude.getText().toString())));
                 dto.setPhoneNumber(phone.getText().toString());
                 dto.setPassword(password1.getText().toString());
-                dto.setPhoto(photo);
+                dto.setPhoto(selectedProfilePhoto);
                 dto.setRole(Role.EO);
 
                 dto.setDescription(description.getText().toString());
@@ -320,18 +326,18 @@ public class RegisterSpScreen extends AppCompatActivity {
 
         // Set up Add and Remove buttons
         Button buttonAddPhoto = dialogView.findViewById(R.id.buttonAddPhoto);
-        buttonAddPhoto.setOnClickListener(v -> openGallery());
+        buttonAddPhoto.setOnClickListener(v -> openGallery(true));
 
         // Create and show the dialog
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
-    private void openGallery() {
+    private void openGallery(boolean multiple) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        startActivityForResult(intent, 1);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, multiple);
+        startActivityForResult(intent, multiple ? 1 : 2);
     }
 
 
@@ -383,6 +389,32 @@ public class RegisterSpScreen extends AppCompatActivity {
                 addPhoto(imageUri); // Upload the single photo
             }
         }
+        else if (requestCode == 2 && resultCode == RESULT_OK) {
+            if (data.getClipData() != null) {
+                // Multiple images selected
+                int count = data.getClipData().getItemCount();
+                for (int i = 0; i < count; i++) {
+                    Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(imageUri);
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                    File file = new File(getCacheDir(), getFileName(imageUri));
+                    selectedProfilePhoto = file.getName(); // Upload each photo
+                }
+            } else if (data.getData() != null) {
+                // Single image selected
+                Uri imageUri = data.getData();
+                try {
+                    InputStream inputStream = getContentResolver().openInputStream(imageUri);
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+                File file = new File(getCacheDir(), getFileName(imageUri));
+                selectedProfilePhoto = file.getName(); // Upload the single photo
+            }
+        }
 //        if (requestCode == 1 && resultCode == RESULT_OK) {
 //            if (data != null) {
 //                if (data.getClipData() != null) {
@@ -403,7 +435,6 @@ public class RegisterSpScreen extends AppCompatActivity {
 //            }
 //        }
     }
-
 
     private String getFileName(Uri uri) {
         String fileName = null;
@@ -427,6 +458,7 @@ public class RegisterSpScreen extends AppCompatActivity {
         longitude.setText(user.getAddress().getLongitude().toString());
         phone.setText(user.getPhoneNumber());
         email.setText(user.getEmail());
+        selectedProfilePhoto = user.getPhoto();
 
         company.setText(user.getCompany());
         description.setText(user.getDescription());
