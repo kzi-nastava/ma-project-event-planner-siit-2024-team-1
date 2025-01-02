@@ -34,4 +34,9 @@
         android:name="com.example.EventPlanner.fragments.event.EventCRUD"
         android:label="@string/events"
         tools:layout="@layout/fragment_event_crud"/>
+    <fragment
+        android:id="@+id/nav_reviews"
+        android:name="com.example.EventPlanner.fragments.common.ReviewsList"
+        android:label="@string/reviews"
+        tools:layout="@layout/fragment_reviews_list"/>
 </navigation>
