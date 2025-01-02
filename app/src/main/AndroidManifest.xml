@@ -15,12 +15,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EventPlanner"
-        tools:targetApi="31"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31">
+        <activity
+            android:name=".activities.BookReservationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ServiceDetailsActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.ServiceForm"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".activities.EventTypeForm"
             android:exported="false" />
@@ -69,8 +74,8 @@
                 <data android:scheme="http" />
                 <data
                     android:host="localhost"
-                    android:port="4200"
-                    android:path="/register-au" />
+                    android:path="/register-au"
+                    android:port="4200" />
             </intent-filter>
         </activity>
         <activity
@@ -85,8 +90,8 @@
                 <data android:scheme="http" />
                 <data
                     android:host="localhost"
-                    android:port="4200"
-                    android:path="/" />
+                    android:path="/"
+                    android:port="4200" />
             </intent-filter>
         </activity>
         <activity

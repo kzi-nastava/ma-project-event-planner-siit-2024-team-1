@@ -176,4 +176,12 @@
     <string name="end_date">End Date</string>
     <string name="reset_filter_values">Reset filters</string>
     <string name="rating">Rating</string>
+    <string name="book_reservation">Book Reservation</string>
+    <string name="taken_timeslots">Taken timeslots:</string>
+    <string name="reserve_service">Reserve Service</string>
+    <string name="start_time">Start Time</string>
+    <string name="end_time_optional">End Time (Optional)</string>
+    <string name="approve">Approve</string>
+    <string name="deny">Deny</string>
+    <string name="reviews">Reviews</string>
 </resources>
