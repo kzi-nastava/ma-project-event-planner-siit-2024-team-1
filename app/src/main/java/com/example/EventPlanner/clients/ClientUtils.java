@@ -5,6 +5,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import com.example.EventPlanner.BuildConfig;
 import com.example.EventPlanner.clients.services.auth.AuthService;
+import com.example.EventPlanner.clients.services.photo.PhotoService;
 import com.example.EventPlanner.clients.services.user.UserService;
 import com.example.EventPlanner.clients.services.event.EventService;
 import com.example.EventPlanner.clients.services.eventType.EventTypeService;
@@ -41,4 +42,6 @@ public class ClientUtils {
     public static AuthService authService = retrofit.create(AuthService.class);
 
     public static UserService userService = retrofit.create(UserService.class);
+
+    public static PhotoService photoService = retrofit.create(PhotoService.class);
 }

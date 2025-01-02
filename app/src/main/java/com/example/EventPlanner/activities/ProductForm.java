@@ -2,10 +2,12 @@ package com.example.EventPlanner.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -19,14 +21,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.EventPlanner.R;
+import com.example.EventPlanner.adapters.merchandise.MerchandisePhotoAdapter;
 import com.example.EventPlanner.clients.ClientUtils;
 import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.fragments.eventtype.EventTypeViewModel;
@@ -45,9 +51,15 @@ import com.example.EventPlanner.fragments.merchandise.product.ProductViewModel;
 import com.example.EventPlanner.model.merchandise.product.ProductOverview;
 import com.example.EventPlanner.model.merchandise.product.UpdateProductRequest;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -59,6 +71,10 @@ public class ProductForm extends AppCompatActivity {
     private boolean[] selectedItems;
     private String[] eventTypeNames;
     private Spinner categorySpinner;
+
+    private static final int REQUEST_CODE_SELECT_PHOTOS = 1;
+    private List<Integer> selectedPhotos = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,7 +147,7 @@ public class ProductForm extends AppCompatActivity {
         RadioButton autoReservation = productFormBinding.radioAutomatic;
 
         Button addPhotosButton = findViewById(R.id.add_photos);
-        addPhotosButton.setOnClickListener(v -> showPhotoOptionsDialog());
+        addPhotosButton.setOnClickListener(v -> showManagePhotosDialog());
 
         productFormBinding.submitProductButton.setOnClickListener(v -> {
             if (isValidInput()) {
@@ -229,43 +245,138 @@ public class ProductForm extends AppCompatActivity {
         builder.create().show();
     }
 
-    private void showPhotoOptionsDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Choose photo source")
-                .setItems(new String[]{"Take a Photo", "Choose from Gallery"}, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == 0) {
-                            // Take a photo
-                            openCamera();
-                        } else {
-                            // Choose from gallery
-                            openGallery();
-                        }
-                    }
-                });
-        builder.create().show();
+    private void openPhotoSelector() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        startActivityForResult(Intent.createChooser(intent, "Select Photos"), REQUEST_CODE_SELECT_PHOTOS);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_SELECT_PHOTOS && resultCode == RESULT_OK) {
+            if (data != null) {
+                if (data.getClipData() != null) { // Multiple images selected
+                    int count = data.getClipData().getItemCount();
+                    for (int i = 0; i < count; i++) {
+                        Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                        uploadPhoto(imageUri);
+                    }
+                } else if (data.getData() != null) { // Single image selected
+                    Uri imageUri = data.getData();
+                    uploadPhoto(imageUri);
+                }
+            }
+        }
+    }
+
+    private void uploadPhoto(Uri imageUri) {
+        try {
+            // Prepare file
+            String fileName = getFileName(imageUri);
+            File file = saveFileFromUri(imageUri);
+
+            // Prepare request body
+            RequestBody requestFile = RequestBody.create(MediaType.parse(getContentResolver().getType(imageUri)), file);
+            MultipartBody.Part body = MultipartBody.Part.createFormData("file", fileName, requestFile);
+
+            // Call the API
+            Call<Integer> call = ClientUtils.photoService.uploadMerchandisePhoto(body);
+            call.enqueue(new Callback<Integer>() {
+                @Override
+                public void onResponse(Call<Integer> call, Response<Integer> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        int photoId = response.body();
+                        selectedPhotos.add(photoId); // Collect photo ID
+                        Toast.makeText(ProductForm.this, "Photo uploaded: " + photoId, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(ProductForm.this, "Photo upload failed: " + response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Integer> call, Throwable t) {
+                    Log.e("PhotoUpload", "Error uploading photo", t);
+                    Toast.makeText(ProductForm.this, "Photo upload failed", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } catch (Exception e) {
+            Log.e("PhotoUpload", "Error preparing photo for upload", e);
+            Toast.makeText(this, "Failed to upload photo", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private File saveFileFromUri(Uri uri) throws Exception {
+        InputStream inputStream = getContentResolver().openInputStream(uri);
+        File tempFile = new File(getCacheDir(), getFileName(uri));
+        FileOutputStream outputStream = new FileOutputStream(tempFile);
+
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = inputStream.read(buffer)) > 0) {
+            outputStream.write(buffer, 0, length);
+        }
+
+        outputStream.close();
+        inputStream.close();
+
+        return tempFile;
+    }
+
+    private String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            try (Cursor cursor = getContentResolver().query(uri, null, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    if (index != -1) {
+                        result = cursor.getString(index);
+                    }
+                }
+            }
+        }
+        if (result == null) {
+            result = uri.getLastPathSegment();
+        }
+        return result;
+    }
+
+    private void showManagePhotosDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_manage_photos, null);
+        builder.setView(dialogView);
+
+        RecyclerView recyclerView = dialogView.findViewById(R.id.recycler_photos);
+        Button addPhotosButton = dialogView.findViewById(R.id.btn_add_photos);
+        Button removeSelectedButton = dialogView.findViewById(R.id.btn_remove_selected);
+
+        // Set up RecyclerView
+        MerchandisePhotoAdapter adapter = new MerchandisePhotoAdapter(selectedPhotos, this::onPhotoSelected);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+
+        // Add Photos
+        addPhotosButton.setOnClickListener(v -> openPhotoSelector());
+
+        // Remove Selected Photos
+        removeSelectedButton.setOnClickListener(v -> {
+            List<Integer> toRemove = adapter.getSelectedPhotoIds();
+            selectedPhotos.removeAll(toRemove);
+            adapter.updatePhotos(selectedPhotos);
+        });
+
+        builder.setPositiveButton("Done", (dialog, which) -> dialog.dismiss());
+        builder.show();
+    }
+
     private static final int CAMERA_REQUEST_CODE = 100;
 
     private void openCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, CAMERA_REQUEST_CODE);
-        }
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
-            // Handle the captured photo here
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            // You can add the photo to your photo list or display it in an ImageView
-            // Example: imageView.setImageBitmap(photo);
-        } else if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Uri selectedImageUri = data.getData();
-            // Handle the selected image here
-            // Example: imageView.setImageURI(selectedImageUri);
         }
     }
     private static final int GALLERY_REQUEST_CODE = 200;
