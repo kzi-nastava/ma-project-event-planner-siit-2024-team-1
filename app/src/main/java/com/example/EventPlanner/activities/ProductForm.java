@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.EventPlanner.R;
+import com.example.EventPlanner.adapters.merchandise.MerchandisePhotoAdapter;
 import com.example.EventPlanner.clients.ClientUtils;
 import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.fragments.eventtype.EventTypeViewModel;
@@ -62,8 +63,10 @@ public class ProductForm extends AppCompatActivity {
     private String[] eventTypeNames;
     private Spinner categorySpinner;
 
-    private static final int REQUEST_CODE_SELECT_PHOTOS = 1;
-    private List<Integer> selectedPhotos = new ArrayList<>();
+    private List<String> selectedPhotos = new ArrayList<>();
+    private List<Integer> selectedPhotoIds = new ArrayList<>();
+    private RecyclerView recyclerViewSelectedPhotos;
+    private MerchandisePhotoAdapter photosAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +140,7 @@ public class ProductForm extends AppCompatActivity {
         RadioButton autoReservation = productFormBinding.radioAutomatic;
 
         Button addPhotosButton = findViewById(R.id.add_photos);
-
+        addPhotosButton.setOnClickListener(v -> openPhotoSelectionDialog());
 
         productFormBinding.submitProductButton.setOnClickListener(v -> {
             if (isValidInput()) {
@@ -167,6 +170,82 @@ public class ProductForm extends AppCompatActivity {
             return insets;
         });
 
+    }
+    private void addPhoto(Uri photoUri) {
+        // Get the content resolver and create a RequestBody for the photo
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(photoUri);
+            File file = new File(getCacheDir(), getFileName(photoUri));
+
+            FileOutputStream outputStream = new FileOutputStream(file);
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, len);
+            }
+
+            inputStream.close();
+            outputStream.close();
+
+            // Create a RequestBody to send to the server
+            RequestBody requestBody = RequestBody.create(MediaType.parse(getContentResolver().getType(photoUri)), file);
+            MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
+
+            // Create the Retrofit instance and make the call
+            Call<Integer> call = ClientUtils.photoService.uploadMerchandisePhoto(body);
+
+            call.enqueue(new Callback<Integer>() {
+                @Override
+                public void onResponse(Call<Integer> call, Response<Integer> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        Integer photoId = response.body();
+                        Log.d("Upload", "Photo uploaded successfully with ID: " + photoId);
+
+                        // Add the photo ID to the list of selected photos
+                        selectedPhotos.add(photoId.toString());
+                        selectedPhotoIds.add(photoId);
+                        photosAdapter.notifyDataSetChanged();
+                    } else {
+                        Log.e("Upload", "Failed to upload photo");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Integer> call, Throwable t) {
+                    Log.e("Upload", "Error uploading photo", t);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private void openPhotoSelectionDialog() {
+        // Create the dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(ProductForm.this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_merc_photos, null);
+        builder.setView(dialogView);
+
+        // Initialize the RecyclerView and Adapter
+        recyclerViewSelectedPhotos = dialogView.findViewById(R.id.recyclerViewSelectedPhotos);
+        photosAdapter = new MerchandisePhotoAdapter(selectedPhotos, this::removeSelectedPhoto);
+        recyclerViewSelectedPhotos.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewSelectedPhotos.setAdapter(photosAdapter);
+
+        // Set up Add and Remove buttons
+        Button buttonAddPhoto = dialogView.findViewById(R.id.buttonAddPhoto);
+        buttonAddPhoto.setOnClickListener(v -> openGallery());
+
+        // Create and show the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        startActivityForResult(intent, 1);
     }
 
     // Fetch categories and populate the multi-select spinner
@@ -238,6 +317,52 @@ public class ProductForm extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            if (data.getClipData() != null) {
+                // Multiple images selected
+                int count = data.getClipData().getItemCount();
+                for (int i = 0; i < count; i++) {
+                    Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                    addPhoto(imageUri); // Upload each photo
+                }
+            } else if (data.getData() != null) {
+                // Single image selected
+                Uri imageUri = data.getData();
+                addPhoto(imageUri); // Upload the single photo
+            }
+        }
+//        if (requestCode == 1 && resultCode == RESULT_OK) {
+//            if (data != null) {
+//                if (data.getClipData() != null) {
+//                    // Multiple images selected
+//                    int count = data.getClipData().getItemCount();
+//                    for (int i = 0; i < count; i++) {
+//                        Uri imageUri = data.getClipData().getItemAt(i).getUri();
+//                        String fileName = getFileName(imageUri);
+//                        selectedPhotos.add(fileName);
+//                    }
+//                } else if (data.getData() != null) {
+//                    // Single image selected
+//                    Uri imageUri = data.getData();
+//                    String fileName = getFileName(imageUri);
+//                    selectedPhotos.add(fileName);
+//                }
+//                photosAdapter.notifyDataSetChanged();
+//            }
+//        }
+    }
+
+    private String getFileName(Uri uri) {
+        String fileName = null;
+        String[] projection = { MediaStore.Images.Media.DISPLAY_NAME };
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME);
+            fileName = cursor.getString(columnIndex);
+            cursor.close();
+        }
+        return fileName;
     }
 
     private Spinner multiSelectSpinner;
@@ -291,6 +416,37 @@ public class ProductForm extends AppCompatActivity {
         }
     }
 
+    private void removeSelectedPhoto(int position) {
+        if (position >= 0 && position < selectedPhotos.size()) {
+            // Get the photo ID from the list
+            int photoId = selectedPhotoIds.get(position);
+
+            int mercId = getIntent().getIntExtra("PRODUCT_ID", -1);
+            // Call the delete API to remove the photo from the server
+            Call<Void> deleteCall = ClientUtils.photoService.deleteMerchandisePhoto(photoId, mercId, true); // assuming 'true' for edit flag
+
+            deleteCall.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        // Successfully deleted, now remove it from the list
+                        selectedPhotos.remove(position);
+                        selectedPhotoIds.remove(position);
+                        photosAdapter.notifyItemRemoved(position);
+                        Log.d("Delete", "Photo deleted successfully from server");
+                    } else {
+                        Log.e("Delete", "Failed to delete photo from server");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Log.e("Delete", "Error deleting photo", t);
+                }
+            });
+        }
+    }
+
     // Validate user input
     private boolean isValidInput() {
         return !TextUtils.isEmpty(productFormBinding.title.getText()) &&
@@ -327,11 +483,9 @@ public class ProductForm extends AppCompatActivity {
                 }
             }
 
-            List<Integer> photos = new ArrayList<>();
-
             Address address = new Address(city, street, number, latitude, longitude);
 
-            return new CreateProductRequest(title, description, specificity, price, discount, true, true, minDuration, maxDuration, reservationDeadline, cancelationDeadline, automaticReservation, JwtService.getIdFromToken(), photos, eventTypeIds, address, selectedCategory.getId());
+            return new CreateProductRequest(title, description, specificity, price, discount, true, true, minDuration, maxDuration, reservationDeadline, cancelationDeadline, automaticReservation, JwtService.getIdFromToken(), selectedPhotoIds, eventTypeIds, address, selectedCategory.getId());
         } catch (NumberFormatException e) {
             e.printStackTrace();
             return null;
