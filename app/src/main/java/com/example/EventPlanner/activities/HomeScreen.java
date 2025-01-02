@@ -2,6 +2,7 @@ package com.example.EventPlanner.activities;
 
 import static androidx.navigation.Navigation.findNavController;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,6 +70,7 @@ public class HomeScreen extends AppCompatActivity {
         drawerLayout = activityHomeScreenBinding.drawerLayout;
         navigationView = activityHomeScreenBinding.navigationDrawer;
         MaterialToolbar toolbar = activityHomeScreenBinding.topAppBar;
+
         NavHostFragment navHostFragment =
                 (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         NavController navController = navHostFragment.getNavController();
@@ -210,6 +213,23 @@ public class HomeScreen extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
         searchMenuItem = menu.findItem(R.id.search_icon);
+
+        switch (JwtService.getRoleFromToken()){
+            case "AU":
+                menu.findItem(R.id.edit_profile).setVisible(false);
+                break;
+            case "EO":
+            case "SP":
+                menu.findItem(R.id.promote_eo).setVisible(false);
+                menu.findItem(R.id.promote_sp).setVisible(false);
+                break;
+            case "A":
+                menu.findItem(R.id.edit_profile).setVisible(false);
+                menu.findItem(R.id.promote_eo).setVisible(false);
+                menu.findItem(R.id.promote_sp).setVisible(false);
+                break;
+        }
+
         return true;
     }
 
@@ -219,10 +239,43 @@ public class HomeScreen extends AppCompatActivity {
 
         if (itemId == R.id.edit_profile) {
             // Handle Notifications click
-            Toast.makeText(this, "Notifications clicked", Toast.LENGTH_SHORT).show();
+            String token = JwtService.getAccessToken();
+            switch (JwtService.getRoleFromToken()){
+                case "SP":
+                    Intent intent2 = new Intent(HomeScreen.this, RegisterSpScreen.class);
+                    intent2.putExtra("FORM_TYPE", "EDIT_FORM");
+                    intent2.putExtra("USER_ID", JwtService.getIdFromToken());
+                    startActivity(intent2);
+                    break;
+                case "EO":
+                    Intent intent3 = new Intent(HomeScreen.this, RegisterEoScreen.class);
+                    intent3.putExtra("FORM_TYPE", "EDIT_FORM");
+                    intent3.putExtra("USER_ID", JwtService.getIdFromToken());
+                    startActivity(intent3);
+                    break;
+            }
             return true;
 
-        } else if (itemId == R.id.settings) {
+        }
+        else if (itemId == R.id.promote_eo) {
+            // Handle Option 1 click
+            Intent intent2 = new Intent(HomeScreen.this, RegisterEoScreen.class);
+            intent2.putExtra("FORM_TYPE", "NEW_FORM");
+            intent2.putExtra("USER_ID", JwtService.getIdFromToken());
+            startActivity(intent2);
+            return true;
+
+        }
+        else if (itemId == R.id.promote_sp) {
+            // Handle Option 1 click
+            Intent intent2 = new Intent(HomeScreen.this, RegisterSpScreen.class);
+            intent2.putExtra("FORM_TYPE", "NEW_FORM");
+            intent2.putExtra("USER_ID", JwtService.getIdFromToken());
+            startActivity(intent2);
+            return true;
+
+        }
+        else if (itemId == R.id.settings) {
             // Handle Option 1 click
             Toast.makeText(this, "Option 1 clicked", Toast.LENGTH_SHORT).show();
             return true;
