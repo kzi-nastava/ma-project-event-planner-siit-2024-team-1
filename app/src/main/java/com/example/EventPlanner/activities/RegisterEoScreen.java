@@ -1,16 +1,21 @@
 package com.example.EventPlanner.activities;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.opengl.Visibility;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -29,6 +34,9 @@ import com.example.EventPlanner.model.user.GetEoById;
 import com.example.EventPlanner.model.user.UpdateEoRequest;
 import com.example.EventPlanner.model.user.UpdateEoResponse;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,8 +57,11 @@ public class RegisterEoScreen extends AppCompatActivity {
     EditText email;
     EditText password1;
     EditText password2;
-
     Button changePassword;
+
+    TextView photoName;
+
+    private String selectedProfilePhoto = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +86,12 @@ public class RegisterEoScreen extends AppCompatActivity {
         password1 = findViewById(R.id.editTextPassword);
         password2 = findViewById(R.id.editTextConfirmPassword);
         changePassword = (Button) findViewById(R.id.change_password);
+        photoName = findViewById(R.id.photoName);
 
         String photo = "";
+
+        Button profilePhotoButton = findViewById(R.id.choosePhottoButton);
+        profilePhotoButton.setOnClickListener(v -> openGallery(false));
 
         String formType = getIntent().getStringExtra("FORM_TYPE");
 // Setup form title and visibility based on form type
@@ -151,7 +166,7 @@ public class RegisterEoScreen extends AppCompatActivity {
                 dto.setPhoneNumber(phone.getText().toString());
                 dto.setEmail(email.getText().toString());
                 dto.setPassword(password1.getText().toString());
-                dto.setPhoto(photo);
+                dto.setPhoto(selectedProfilePhoto);
                 dto.setRole(Role.EO);
 
                 boolean promotion = JwtService.getRoleFromToken().equals("AU") ? true : false;
@@ -184,7 +199,7 @@ public class RegisterEoScreen extends AppCompatActivity {
                 dto.setAddress(new Address(street.getText().toString(), city.getText().toString(), number.getText().toString(), Double.parseDouble(longitude.getText().toString()), Double.parseDouble(latitude.getText().toString())));
                 dto.setPhoneNumber(phone.getText().toString());
                 dto.setPassword(password1.getText().toString());
-                dto.setPhoto(photo);
+                dto.setPhoto(selectedProfilePhoto);
                 dto.setRole(Role.EO);
 
                 Call<UpdateEoResponse> call1 = ClientUtils.userService.updateEo(getIntent().getIntExtra("USER_ID", -1), dto);
@@ -217,6 +232,78 @@ public class RegisterEoScreen extends AppCompatActivity {
         });
     }
 
+    private void openGallery(boolean multiple) {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, multiple);
+        startActivityForResult(intent, multiple ? 1 : 2);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 2 && resultCode == RESULT_OK) {
+            if (data.getClipData() != null) {
+                // Multiple images selected
+                int count = data.getClipData().getItemCount();
+                for (int i = 0; i < count; i++) {
+                    Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(imageUri);
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                    File file = new File(getCacheDir(), getFileName(imageUri));
+                    selectedProfilePhoto = file.getName(); // Upload each photo
+                    photoName.setText(selectedProfilePhoto.toString());
+                }
+            } else if (data.getData() != null) {
+                // Single image selected
+                Uri imageUri = data.getData();
+                try {
+                    InputStream inputStream = getContentResolver().openInputStream(imageUri);
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+                File file = new File(getCacheDir(), getFileName(imageUri));
+                selectedProfilePhoto = file.getName(); // Upload the single photo
+                photoName.setText(selectedProfilePhoto.toString());
+            }
+        }
+//        if (requestCode == 1 && resultCode == RESULT_OK) {
+//            if (data != null) {
+//                if (data.getClipData() != null) {
+//                    // Multiple images selected
+//                    int count = data.getClipData().getItemCount();
+//                    for (int i = 0; i < count; i++) {
+//                        Uri imageUri = data.getClipData().getItemAt(i).getUri();
+//                        String fileName = getFileName(imageUri);
+//                        selectedPhotos.add(fileName);
+//                    }
+//                } else if (data.getData() != null) {
+//                    // Single image selected
+//                    Uri imageUri = data.getData();
+//                    String fileName = getFileName(imageUri);
+//                    selectedPhotos.add(fileName);
+//                }
+//                photosAdapter.notifyDataSetChanged();
+//            }
+//        }
+    }
+
+
+    private String getFileName(Uri uri) {
+        String fileName = null;
+        String[] projection = { MediaStore.Images.Media.DISPLAY_NAME };
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME);
+            fileName = cursor.getString(columnIndex);
+            cursor.close();
+        }
+        return fileName;
+    }
     // Populate fields when editing an event type
     private void setFields(GetEoById user) {
         name.setText(user.getName());
@@ -228,5 +315,9 @@ public class RegisterEoScreen extends AppCompatActivity {
         longitude.setText(user.getAddress().getLongitude().toString());
         phone.setText(user.getPhoneNumber());
         email.setText(user.getEmail());
+
+        photoName.setText(user.getPhoto());
+
+        selectedProfilePhoto = user.getPhoto();
     }
 }
