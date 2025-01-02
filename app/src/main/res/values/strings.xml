@@ -109,6 +109,7 @@
     <string name="reservation_type">Choose reservation type</string>
     <string name="automatic">Automatic</string>
     <string name="manual">Manual</string>
+    <string name="change_password">Change Password</string>
     <string name="submit">Submit</string>
     <string name="old_password">Current Password</string>
     <string name="new_password">New Password</string>

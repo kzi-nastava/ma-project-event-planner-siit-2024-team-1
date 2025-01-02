@@ -60,6 +60,9 @@
             android:name=".activities.RegisterSpScreen"
             android:exported="false" />
         <activity
+            android:name=".activities.ChangePasswordScreen"
+            android:exported="false" />
+        <activity
             android:name=".activities.RegisterAuScreen"
             android:exported="true">
             <intent-filter android:autoVerify="true">

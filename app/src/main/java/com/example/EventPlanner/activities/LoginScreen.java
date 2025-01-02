@@ -183,14 +183,14 @@ public class LoginScreen extends AppCompatActivity {
     private void navigateToRegisterAsSP() {
         // Navigate to SP registration activity
          Intent intent = new Intent(this, RegisterSpScreen.class);
-         intent.putExtra("FORM_TYPE", "EDIT_FORM");
+         intent.putExtra("FORM_TYPE", "NEW_FORM");
          startActivity(intent);
     }
 
     private void navigateToRegisterAsEO() {
         // Navigate to EO registration activity
          Intent intent = new Intent(this, RegisterEoScreen.class);
-         intent.putExtra("FORM_TYPE", "EDIT_FORM");
+         intent.putExtra("FORM_TYPE", "NEW_FORM");
          startActivity(intent);
     }
 
