@@ -427,15 +427,17 @@ public class ProductForm extends AppCompatActivity {
             // Get the photo ID from the list
             int photoId = selectedPhotoIds.get(position);
 
+            // Assuming you pass the merchandise ID via Intent
             int mercId = getIntent().getIntExtra("PRODUCT_ID", -1);
-            // Call the delete API to remove the photo from the server
-            Call<Void> deleteCall = ClientUtils.photoService.deleteMerchandisePhoto(photoId, mercId, mercId != -1); // assuming 'true' for edit flag
+
+            // Call the delete API
+            Call<Void> deleteCall = ClientUtils.photoService.deleteMerchandisePhoto(photoId, mercId, mercId != -1);
 
             deleteCall.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     if (response.isSuccessful()) {
-                        // Successfully deleted, now remove it from the list
+                        // Successfully deleted, remove from list
                         selectedPhotos.remove(position);
                         selectedPhotoIds.remove(position);
                         photosAdapter.notifyItemRemoved(position);

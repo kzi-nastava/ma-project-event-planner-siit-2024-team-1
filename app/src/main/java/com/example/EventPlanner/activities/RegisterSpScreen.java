@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -73,6 +74,8 @@ public class RegisterSpScreen extends AppCompatActivity {
     EditText description;
 
     Button changePassword;
+    TextView photoName;
+
 
     private List<String> selectedPhotos = new ArrayList<>();
     private List<Integer> selectedPhotoIds = new ArrayList<>();
@@ -106,6 +109,8 @@ public class RegisterSpScreen extends AppCompatActivity {
         company = findViewById(R.id.editTextCompany);
         description = findViewById(R.id.editTextDescription);
         changePassword = (Button) findViewById(R.id.change_password);
+        photoName = findViewById(R.id.photoName);
+
 
         String photo = "";
 
@@ -402,6 +407,8 @@ public class RegisterSpScreen extends AppCompatActivity {
                     }
                     File file = new File(getCacheDir(), getFileName(imageUri));
                     selectedProfilePhoto = file.getName(); // Upload each photo
+                    photoName.setText(selectedProfilePhoto.toString());
+
                 }
             } else if (data.getData() != null) {
                 // Single image selected
@@ -413,6 +420,8 @@ public class RegisterSpScreen extends AppCompatActivity {
                 }
                 File file = new File(getCacheDir(), getFileName(imageUri));
                 selectedProfilePhoto = file.getName(); // Upload the single photo
+                photoName.setText(selectedProfilePhoto.toString());
+
             }
         }
 //        if (requestCode == 1 && resultCode == RESULT_OK) {
@@ -458,6 +467,8 @@ public class RegisterSpScreen extends AppCompatActivity {
         longitude.setText(user.getAddress().getLongitude().toString());
         phone.setText(user.getPhoneNumber());
         email.setText(user.getEmail());
+
+        photoName.setText(user.getPhoto());
         selectedProfilePhoto = user.getPhoto();
 
         company.setText(user.getCompany());
