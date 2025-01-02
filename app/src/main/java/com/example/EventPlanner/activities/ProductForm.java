@@ -37,6 +37,7 @@ import com.example.EventPlanner.model.common.Address;
 import com.example.EventPlanner.databinding.ActivityProductFormBinding;
 import com.example.EventPlanner.model.event.EventTypeOverview;
 import com.example.EventPlanner.model.merchandise.CategoryOverview;
+import com.example.EventPlanner.model.merchandise.MerchandisePhoto;
 import com.example.EventPlanner.model.merchandise.product.CreateProductRequest;
 import com.example.EventPlanner.fragments.merchandise.product.ProductViewModel;
 import com.example.EventPlanner.model.merchandise.product.ProductOverview;
@@ -202,7 +203,7 @@ public class ProductForm extends AppCompatActivity {
                         Log.d("Upload", "Photo uploaded successfully with ID: " + photoId);
 
                         // Add the photo ID to the list of selected photos
-                        selectedPhotos.add(photoId.toString());
+                        selectedPhotos.add(file.getName());
                         selectedPhotoIds.add(photoId);
                         photosAdapter.notifyDataSetChanged();
                     } else {
@@ -396,6 +397,11 @@ public class ProductForm extends AppCompatActivity {
             }
         }
 
+        for (MerchandisePhoto photo: product.getMerchandisePhotos()) {
+            selectedPhotoIds.add(photo.getId());
+            selectedPhotos.add(photo.getPhoto());
+        }
+
         // Set event types multi-select spinner
         if (eventTypesList != null && !eventTypesList.isEmpty()) {
             StringBuilder selectedEventTypes = new StringBuilder();
@@ -423,7 +429,7 @@ public class ProductForm extends AppCompatActivity {
 
             int mercId = getIntent().getIntExtra("PRODUCT_ID", -1);
             // Call the delete API to remove the photo from the server
-            Call<Void> deleteCall = ClientUtils.photoService.deleteMerchandisePhoto(photoId, mercId, true); // assuming 'true' for edit flag
+            Call<Void> deleteCall = ClientUtils.photoService.deleteMerchandisePhoto(photoId, mercId, mercId != -1); // assuming 'true' for edit flag
 
             deleteCall.enqueue(new Callback<Void>() {
                 @Override
