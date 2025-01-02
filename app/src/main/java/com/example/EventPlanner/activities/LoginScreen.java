@@ -92,9 +92,9 @@ public class LoginScreen extends AppCompatActivity {
 
         loginButton.setOnClickListener(v -> {
 
-            LoginRequest dto = new LoginRequest("johndoe@gmail.com", "sifra");
-            dto.setEmail(username.getText().toString());
-            dto.setPassword(password.getText().toString());
+            LoginRequest dto = new LoginRequest("janedoe@gmail.com", "sifra");
+            dto.setEmail("janedoe@gmail.com");
+            dto.setPassword("sifra".toString());
 
             Call<LoginResponse> call1 = ClientUtils.authService.login(dto);
             call1.enqueue(new Callback<LoginResponse>() {

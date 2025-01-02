@@ -1,15 +1,14 @@
 package com.example.EventPlanner.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -19,35 +18,40 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.EventPlanner.R;
+import com.example.EventPlanner.adapters.merchandise.MerchandisePhotoAdapter;
 import com.example.EventPlanner.clients.ClientUtils;
 import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.fragments.eventtype.EventTypeViewModel;
 import com.example.EventPlanner.model.common.Address;
 import com.example.EventPlanner.databinding.ActivityProductFormBinding;
-import com.example.EventPlanner.model.event.CreateEventTypeRequest;
 import com.example.EventPlanner.model.event.EventTypeOverview;
-import com.example.EventPlanner.model.event.UpdateEventTypeRequest;
-import com.example.EventPlanner.model.merchandise.Category2;
-import com.example.EventPlanner.model.event.EventType;
 import com.example.EventPlanner.model.merchandise.CategoryOverview;
 import com.example.EventPlanner.model.merchandise.MerchandisePhoto;
 import com.example.EventPlanner.model.merchandise.product.CreateProductRequest;
-import com.example.EventPlanner.model.merchandise.product.Product;
 import com.example.EventPlanner.fragments.merchandise.product.ProductViewModel;
 import com.example.EventPlanner.model.merchandise.product.ProductOverview;
 import com.example.EventPlanner.model.merchandise.product.UpdateProductRequest;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -59,6 +63,12 @@ public class ProductForm extends AppCompatActivity {
     private boolean[] selectedItems;
     private String[] eventTypeNames;
     private Spinner categorySpinner;
+
+    private List<String> selectedPhotos = new ArrayList<>();
+    private List<Integer> selectedPhotoIds = new ArrayList<>();
+    private RecyclerView recyclerViewSelectedPhotos;
+    private MerchandisePhotoAdapter photosAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,7 +141,7 @@ public class ProductForm extends AppCompatActivity {
         RadioButton autoReservation = productFormBinding.radioAutomatic;
 
         Button addPhotosButton = findViewById(R.id.add_photos);
-        addPhotosButton.setOnClickListener(v -> showPhotoOptionsDialog());
+        addPhotosButton.setOnClickListener(v -> openPhotoSelectionDialog());
 
         productFormBinding.submitProductButton.setOnClickListener(v -> {
             if (isValidInput()) {
@@ -161,6 +171,82 @@ public class ProductForm extends AppCompatActivity {
             return insets;
         });
 
+    }
+    private void addPhoto(Uri photoUri) {
+        // Get the content resolver and create a RequestBody for the photo
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(photoUri);
+            File file = new File(getCacheDir(), getFileName(photoUri));
+
+            FileOutputStream outputStream = new FileOutputStream(file);
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, len);
+            }
+
+            inputStream.close();
+            outputStream.close();
+
+            // Create a RequestBody to send to the server
+            RequestBody requestBody = RequestBody.create(MediaType.parse(getContentResolver().getType(photoUri)), file);
+            MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
+
+            // Create the Retrofit instance and make the call
+            Call<Integer> call = ClientUtils.photoService.uploadMerchandisePhoto(body);
+
+            call.enqueue(new Callback<Integer>() {
+                @Override
+                public void onResponse(Call<Integer> call, Response<Integer> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        Integer photoId = response.body();
+                        Log.d("Upload", "Photo uploaded successfully with ID: " + photoId);
+
+                        // Add the photo ID to the list of selected photos
+                        selectedPhotos.add(file.getName());
+                        selectedPhotoIds.add(photoId);
+                        photosAdapter.notifyDataSetChanged();
+                    } else {
+                        Log.e("Upload", "Failed to upload photo");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Integer> call, Throwable t) {
+                    Log.e("Upload", "Error uploading photo", t);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private void openPhotoSelectionDialog() {
+        // Create the dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(ProductForm.this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_merc_photos, null);
+        builder.setView(dialogView);
+
+        // Initialize the RecyclerView and Adapter
+        recyclerViewSelectedPhotos = dialogView.findViewById(R.id.recyclerViewSelectedPhotos);
+        photosAdapter = new MerchandisePhotoAdapter(selectedPhotos, this::removeSelectedPhoto);
+        recyclerViewSelectedPhotos.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewSelectedPhotos.setAdapter(photosAdapter);
+
+        // Set up Add and Remove buttons
+        Button buttonAddPhoto = dialogView.findViewById(R.id.buttonAddPhoto);
+        buttonAddPhoto.setOnClickListener(v -> openGallery());
+
+        // Create and show the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        startActivityForResult(intent, 1);
     }
 
     // Fetch categories and populate the multi-select spinner
@@ -229,52 +315,57 @@ public class ProductForm extends AppCompatActivity {
         builder.create().show();
     }
 
-    private void showPhotoOptionsDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Choose photo source")
-                .setItems(new String[]{"Take a Photo", "Choose from Gallery"}, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == 0) {
-                            // Take a photo
-                            openCamera();
-                        } else {
-                            // Choose from gallery
-                            openGallery();
-                        }
-                    }
-                });
-        builder.create().show();
-    }
-    private static final int CAMERA_REQUEST_CODE = 100;
-
-    private void openCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, CAMERA_REQUEST_CODE);
-        }
-    }
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
-            // Handle the captured photo here
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            // You can add the photo to your photo list or display it in an ImageView
-            // Example: imageView.setImageBitmap(photo);
-        } else if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Uri selectedImageUri = data.getData();
-            // Handle the selected image here
-            // Example: imageView.setImageURI(selectedImageUri);
-        }
-    }
-    private static final int GALLERY_REQUEST_CODE = 200;
 
-    private void openGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("image/*");
-        startActivityForResult(intent, GALLERY_REQUEST_CODE);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            if (data.getClipData() != null) {
+                // Multiple images selected
+                int count = data.getClipData().getItemCount();
+                for (int i = 0; i < count; i++) {
+                    Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                    addPhoto(imageUri); // Upload each photo
+                }
+            } else if (data.getData() != null) {
+                // Single image selected
+                Uri imageUri = data.getData();
+                addPhoto(imageUri); // Upload the single photo
+            }
+        }
+//        if (requestCode == 1 && resultCode == RESULT_OK) {
+//            if (data != null) {
+//                if (data.getClipData() != null) {
+//                    // Multiple images selected
+//                    int count = data.getClipData().getItemCount();
+//                    for (int i = 0; i < count; i++) {
+//                        Uri imageUri = data.getClipData().getItemAt(i).getUri();
+//                        String fileName = getFileName(imageUri);
+//                        selectedPhotos.add(fileName);
+//                    }
+//                } else if (data.getData() != null) {
+//                    // Single image selected
+//                    Uri imageUri = data.getData();
+//                    String fileName = getFileName(imageUri);
+//                    selectedPhotos.add(fileName);
+//                }
+//                photosAdapter.notifyDataSetChanged();
+//            }
+//        }
     }
+
+    private String getFileName(Uri uri) {
+        String fileName = null;
+        String[] projection = { MediaStore.Images.Media.DISPLAY_NAME };
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME);
+            fileName = cursor.getString(columnIndex);
+            cursor.close();
+        }
+        return fileName;
+    }
+
     private Spinner multiSelectSpinner;
     // Populate fields when editing a product
     private void setFields(ProductOverview product) {
@@ -306,6 +397,11 @@ public class ProductForm extends AppCompatActivity {
             }
         }
 
+        for (MerchandisePhoto photo: product.getMerchandisePhotos()) {
+            selectedPhotoIds.add(photo.getId());
+            selectedPhotos.add(photo.getPhoto());
+        }
+
         // Set event types multi-select spinner
         if (eventTypesList != null && !eventTypesList.isEmpty()) {
             StringBuilder selectedEventTypes = new StringBuilder();
@@ -323,6 +419,39 @@ public class ProductForm extends AppCompatActivity {
             ArrayAdapter<String> eventTypesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{selectedEventTypes.toString()});
             eventTypesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             multiSelectSpinner.setAdapter(eventTypesAdapter);
+        }
+    }
+
+    private void removeSelectedPhoto(int position) {
+        if (position >= 0 && position < selectedPhotos.size()) {
+            // Get the photo ID from the list
+            int photoId = selectedPhotoIds.get(position);
+
+            // Assuming you pass the merchandise ID via Intent
+            int mercId = getIntent().getIntExtra("PRODUCT_ID", -1);
+
+            // Call the delete API
+            Call<Void> deleteCall = ClientUtils.photoService.deleteMerchandisePhoto(photoId, mercId, mercId != -1);
+
+            deleteCall.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        // Successfully deleted, remove from list
+                        selectedPhotos.remove(position);
+                        selectedPhotoIds.remove(position);
+                        photosAdapter.notifyItemRemoved(position);
+                        Log.d("Delete", "Photo deleted successfully from server");
+                    } else {
+                        Log.e("Delete", "Failed to delete photo from server");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Log.e("Delete", "Error deleting photo", t);
+                }
+            });
         }
     }
 
@@ -362,11 +491,9 @@ public class ProductForm extends AppCompatActivity {
                 }
             }
 
-            List<Integer> photos = new ArrayList<>();
-
             Address address = new Address(city, street, number, latitude, longitude);
 
-            return new CreateProductRequest(title, description, specificity, price, discount, true, true, minDuration, maxDuration, reservationDeadline, cancelationDeadline, automaticReservation, JwtService.getIdFromToken(), photos, eventTypeIds, address, selectedCategory.getId());
+            return new CreateProductRequest(title, description, specificity, price, discount, true, true, minDuration, maxDuration, reservationDeadline, cancelationDeadline, automaticReservation, JwtService.getIdFromToken(), selectedPhotoIds, eventTypeIds, address, selectedCategory.getId());
         } catch (NumberFormatException e) {
             e.printStackTrace();
             return null;
