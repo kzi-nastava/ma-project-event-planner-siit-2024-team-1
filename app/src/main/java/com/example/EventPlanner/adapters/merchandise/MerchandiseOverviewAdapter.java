@@ -1,6 +1,7 @@
 package com.example.EventPlanner.adapters.merchandise;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.EventPlanner.R;
+import com.example.EventPlanner.activities.ServiceDetailsActivity;
+import com.example.EventPlanner.fragments.activity.ActivityCRUD;
 import com.example.EventPlanner.model.merchandise.Merchandise;
 import com.example.EventPlanner.model.merchandise.MerchandiseOverview;
 
@@ -65,6 +68,13 @@ public class MerchandiseOverviewAdapter extends RecyclerView.Adapter<Merchandise
         holder.merchandiseCategory.setText(String.format(Locale.getDefault(), "%s/%s",
                 merchandise.getCategory(),
                 merchandise.getType()));
+        holder.itemView.findViewById(R.id.see_details_button).setOnClickListener(v -> {
+            if(merchandise.getType().equals("Service")) {
+                Intent intent = new Intent(context, ServiceDetailsActivity.class);
+                intent.putExtra("MERCHANDISE_ID", merchandise.getId());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
