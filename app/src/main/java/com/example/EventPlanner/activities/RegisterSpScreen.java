@@ -94,7 +94,7 @@ public class RegisterSpScreen extends AppCompatActivity {
             company.setEnabled(true);
 
             int userId = getIntent().getIntExtra("USER_ID", -1);
-            if(JwtService.getRoleFromToken() == "AU" && userId != -1){
+            if(JwtService.getRoleFromToken().equals("AU") && userId != -1){
                 Call<GetEoById> call1 = ClientUtils.userService.getAuById(userId);
                 call1.enqueue(new Callback<GetEoById>() {
                     @Override
@@ -160,13 +160,14 @@ public class RegisterSpScreen extends AppCompatActivity {
                 dto.setEmail(email.getText().toString());
                 dto.setPassword(password1.getText().toString());
                 dto.setPhoto(photo);
-                dto.setRole(Role.EO);
+                dto.setRole(Role.SP);
 
                 dto.setCompany(company.getText().toString());
                 dto.setDescription(company.getText().toString());
                 dto.setPhotos(new ArrayList<Integer>());
 
-                Call<RegisterSpResponse> call1 = ClientUtils.authService.registerSp(dto, false);
+                boolean promotion = JwtService.getRoleFromToken().equals("AU") ? true : false;
+                Call<RegisterSpResponse> call1 = ClientUtils.authService.registerSp(dto, promotion);
                 call1.enqueue(new Callback<RegisterSpResponse>() {
                     @Override
                     public void onResponse(Call<RegisterSpResponse> call, Response<RegisterSpResponse> response) {
@@ -222,6 +223,12 @@ public class RegisterSpScreen extends AppCompatActivity {
                     }
                 });
             }
+        });
+
+        Button passwordBtn = (Button) findViewById(R.id.change_password);
+        passwordBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(RegisterSpScreen.this, ChangePasswordScreen.class);
+            startActivity(intent);
         });
     }
     @Override

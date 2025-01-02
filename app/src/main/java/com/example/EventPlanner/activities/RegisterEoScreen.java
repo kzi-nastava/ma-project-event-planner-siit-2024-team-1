@@ -87,7 +87,7 @@ public class RegisterEoScreen extends AppCompatActivity {
             changePassword.setVisibility(View.GONE);
 
             int userId = getIntent().getIntExtra("USER_ID", -1);
-            if(JwtService.getRoleFromToken() == "AU" && userId != -1){
+            if(JwtService.getRoleFromToken().equals("AU") && userId != -1){
                 Call<GetEoById> call1 = ClientUtils.userService.getAuById(userId);
                 call1.enqueue(new Callback<GetEoById>() {
                     @Override
@@ -97,14 +97,14 @@ public class RegisterEoScreen extends AppCompatActivity {
                             email.setEnabled(false);
                         } else {
                             // Handle error cases
-                            Log.e("GetEoById Error", "Response not successful: " + response.code());
+                            Log.e("GetAuById Error", "Response not successful: " + response.code());
                         }
                     }
 
                     @Override
                     public void onFailure(Call<GetEoById> call, Throwable throwable) {
                         // Handle network errors
-                        Log.e("GetEoById Failure", "Error: " + throwable.getMessage());
+                        Log.e("GetAuById GetAuById", "Error: " + throwable.getMessage());
                     }
                 });
             }
@@ -154,7 +154,8 @@ public class RegisterEoScreen extends AppCompatActivity {
                 dto.setPhoto(photo);
                 dto.setRole(Role.EO);
 
-                Call<RegisterEoResponse> call1 = ClientUtils.authService.registerEo(dto, false);
+                boolean promotion = JwtService.getRoleFromToken().equals("AU") ? true : false;
+                Call<RegisterEoResponse> call1 = ClientUtils.authService.registerEo(dto, promotion);
                 call1.enqueue(new Callback<RegisterEoResponse>() {
                     @Override
                     public void onResponse(Call<RegisterEoResponse> call, Response<RegisterEoResponse> response) {
@@ -207,6 +208,12 @@ public class RegisterEoScreen extends AppCompatActivity {
                     }
                 });
             }
+        });
+
+        Button passwordBtn = (Button) findViewById(R.id.change_password);
+        passwordBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(RegisterEoScreen.this, ChangePasswordScreen.class);
+            startActivity(intent);
         });
     }
 

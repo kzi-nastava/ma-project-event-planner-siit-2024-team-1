@@ -25,6 +25,16 @@
                 android:icon="@drawable/account_icon"
                 />
             <item
+                android:id="@+id/promote_eo"
+                android:title="Promote to Event Organizer"
+                android:icon="@drawable/account_icon"
+                />
+            <item
+                android:id="@+id/promote_sp"
+                android:title="Promote to Service Provider"
+                android:icon="@drawable/account_icon"
+                />
+            <item
                 android:id="@+id/settings"
                 android:title="Settings"
                 android:icon="@drawable/settings_icon"/>

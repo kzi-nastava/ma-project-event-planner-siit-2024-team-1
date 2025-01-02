@@ -1,6 +1,7 @@
 package com.example.EventPlanner.clients.services.user;
 
 import com.example.EventPlanner.model.event.FollowResponse;
+import com.example.EventPlanner.model.user.ChangePasswordRequest;
 import com.example.EventPlanner.model.user.ChangePasswordResponse;
 import com.example.EventPlanner.model.user.GetEoById;
 import com.example.EventPlanner.model.user.GetSpById;
@@ -31,7 +32,7 @@ public interface UserService {
     @PUT("users/update-sp/{id}")
     Call<UpdateSpResponse> updateSp(@Path("id") int id, @Body UpdateSpRequest dto);
     @PUT("users/change-password/{id}")
-    Call<ChangePasswordResponse> changePassword(@Path("id") int id);
+    Call<ChangePasswordResponse> changePassword(@Path("id") int id, @Body ChangePasswordRequest dto);
 
     @POST("users/follow-event")
     Call<FollowResponse> followEvent(@Query("userId") int userId,
