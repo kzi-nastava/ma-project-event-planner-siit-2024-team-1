@@ -7,6 +7,7 @@ import com.example.EventPlanner.BuildConfig;
 import com.example.EventPlanner.clients.services.auth.AuthService;
 import com.example.EventPlanner.clients.services.photo.PhotoService;
 import com.example.EventPlanner.clients.services.common.ReviewService;
+import com.example.EventPlanner.clients.services.user.UserReportService;
 import com.example.EventPlanner.clients.services.user.UserService;
 import com.example.EventPlanner.clients.services.event.EventService;
 import com.example.EventPlanner.clients.services.eventType.EventTypeService;
@@ -47,4 +48,7 @@ public class ClientUtils {
     public static PhotoService photoService = retrofit.create(PhotoService.class);
   
     public static ReviewService reviewService=retrofit.create(ReviewService.class);
+
+    public static UserReportService userReportService=retrofit.create(UserReportService.class);
+
 }
