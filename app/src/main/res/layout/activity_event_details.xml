@@ -120,7 +120,8 @@
             android:layout_marginBottom="54dp"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/organizer_name">
+            app:layout_constraintTop_toBottomOf="@id/organizer_name"
+            android:id="@+id/btn_layout1">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/see_agenda"
@@ -138,6 +139,33 @@
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:text="@string/follow" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="25dp"
+            android:layout_marginBottom="54dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_layout1">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/stats"
+                style="@style/Secondary.Button.Primary.Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/stats" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/generate_pdf_button"
+                style="@style/Secondary.Button.Primary.Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="@string/generate_pdf" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

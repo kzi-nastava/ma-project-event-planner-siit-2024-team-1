@@ -70,6 +70,8 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:3.12.1")
     implementation("com.github.bumptech.glide:glide:4.15.1")
     implementation ("com.fasterxml.jackson.core:jackson-databind:2.15.2")
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation ("com.itextpdf:itext7-core:7.2.3")
     // StompProtocolAndroid for WebSocket
     implementation ("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
 
