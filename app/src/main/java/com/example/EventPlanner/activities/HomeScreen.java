@@ -125,6 +125,9 @@ public class HomeScreen extends AppCompatActivity {
             else if(id==R.id.sidebar_user_reports) {
                 navController.navigate(R.id.nav_user_reports);
             }
+            else if(id==R.id.sidebar_messenger) {
+                navController.navigate(R.id.nav_messenger);
+            }
             return true;
         });
 
