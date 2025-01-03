@@ -28,6 +28,7 @@ import com.example.EventPlanner.model.auth.LoginResponse;
 import com.example.EventPlanner.model.common.ErrorResponseDto;
 import com.example.EventPlanner.model.merchandise.Category1;
 import com.example.EventPlanner.clients.ClientUtils;
+import com.example.EventPlanner.services.WebSocketService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -104,7 +105,9 @@ public class LoginScreen extends AppCompatActivity {
                 public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                     if (response.isSuccessful() && response.body() != null) {
                         JwtService.setTokens(response.body().getAccessToken(), response.body().getRefreshToken());
-
+                        Intent serviceIntent = new Intent(LoginScreen.this, WebSocketService.class);
+                        serviceIntent.putExtra("USER_ID", JwtService.getIdFromToken());
+                        startService(serviceIntent);
                         // Navigate to the home screen
                         Intent intent = new Intent(LoginScreen.this, HomeScreen.class);
                         startActivity(intent);

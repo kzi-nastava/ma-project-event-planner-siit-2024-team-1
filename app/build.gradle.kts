@@ -72,4 +72,13 @@ dependencies {
     implementation ("com.fasterxml.jackson.core:jackson-databind:2.15.2")
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation ("com.itextpdf:itext7-core:7.2.3")
+    // StompProtocolAndroid for WebSocket
+    implementation ("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
+
+    // RxJava dependencies
+    implementation ("io.reactivex.rxjava2:rxjava:2.2.21")
+    implementation ("io.reactivex.rxjava2:rxandroid:2.1.1")
+
+    // OkHttp for network connections
+    implementation ("com.squareup.okhttp3:okhttp:4.9.3")
 }
