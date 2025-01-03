@@ -27,12 +27,11 @@ public class EventCRUD extends Fragment {
         View view = eventCrudBinding.getRoot();
 
 
-
-
-
         // Initialize Product List Fragment
         EventsList eventsList = new EventsList();
-
+        Bundle args = new Bundle();
+        args.putString("type", getArguments().get("type").toString());
+        eventsList.setArguments(args);
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainerViewEvent, eventsList).commit();
 

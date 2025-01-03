@@ -8,11 +8,13 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.EventPlanner.DummyEventGenerator;
 import com.example.EventPlanner.clients.ClientUtils;
+import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.model.common.PageResponse;
 import com.example.EventPlanner.model.event.CreateEventTypeRequest;
 import com.example.EventPlanner.model.event.CreatedEventResponse;
 import com.example.EventPlanner.model.event.EventTypeOverview;
 import com.example.EventPlanner.model.event.UpdateEventTypeRequest;
+import com.example.EventPlanner.model.merchandise.MerchandiseOverview;
 import com.example.EventPlanner.model.merchandise.product.CreateProductRequest;
 import com.example.EventPlanner.model.merchandise.product.CreateProductResponse;
 import com.example.EventPlanner.model.merchandise.product.Product;
@@ -30,6 +32,8 @@ public class ProductViewModel extends ViewModel {
     private ArrayList<Product> products;
     private final MutableLiveData<ArrayList<ProductOverview>> productsLiveData = new MutableLiveData<>();
     private final MutableLiveData<ProductOverview> selectedProduct = new MutableLiveData<>();
+
+    private final MutableLiveData<ArrayList<MerchandiseOverview>> mercLiveData = new MutableLiveData<>();
     public ProductViewModel() {
         // Set products with dummy data for now
         setProducts(new ArrayList<>(DummyEventGenerator.DummyProductGenerator.createDummyProduct(5)));
@@ -37,6 +41,10 @@ public class ProductViewModel extends ViewModel {
 
     public LiveData<ArrayList<ProductOverview>> getProducts(){
         return productsLiveData;
+    }
+
+    public LiveData<ArrayList<MerchandiseOverview>> getMerc(){
+        return mercLiveData;
     }
 
     public LiveData<ProductOverview> getSelectedProduct() {
@@ -59,6 +67,25 @@ public class ProductViewModel extends ViewModel {
             @Override
             public void onFailure(Call<List<ProductOverview>> call, Throwable t) {
                 Log.e("ProductViewModel", "Error fetching Products", t);
+            }
+        });
+    }
+
+    public void getFavorites() {
+        Call<List<MerchandiseOverview>> call = ClientUtils.merchandiseService.getFavorites(JwtService.getIdFromToken());
+        call.enqueue(new Callback<List<MerchandiseOverview>>() {
+            @Override
+            public void onResponse(Call<List<MerchandiseOverview>> call, Response<List<MerchandiseOverview>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    mercLiveData.postValue(new ArrayList<>(response.body()));
+                } else {
+                    Log.e("ProductViewModel", "Failed to fetch Merchandise: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<MerchandiseOverview>> call, Throwable t) {
+                Log.e("ProductViewModel", "Error fetching Merchandise", t);
             }
         });
     }
