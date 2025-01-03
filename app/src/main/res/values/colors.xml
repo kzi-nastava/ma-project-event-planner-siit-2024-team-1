@@ -9,4 +9,6 @@
     <color name="surface_card">#1e1e1e</color>
     <color name="surface_50">#2A2A2A</color>
     <color name="surface_0">#121212</color>
+    <color name="warn">#FFF59D</color>
+    <color name="danger">#EF9A9A</color>
 </resources>
