@@ -30,6 +30,8 @@ import com.example.EventPlanner.clients.ClientUtils;
 import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.databinding.ActivityHomeScreenBinding;
 import com.example.EventPlanner.fragments.eventmerchandise.SearchViewModel;
+import com.example.EventPlanner.model.auth.LoginResponse;
+import com.example.EventPlanner.model.common.ErrorResponseDto;
 import com.example.EventPlanner.model.event.FollowResponse;
 import com.example.EventPlanner.model.event.InvitationResponse;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -40,8 +42,13 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Converter;
 import retrofit2.Response;
 
 public class HomeScreen extends AppCompatActivity {
@@ -127,6 +134,12 @@ public class HomeScreen extends AppCompatActivity {
             }
             else if(id==R.id.sidebar_messenger) {
                 navController.navigate(R.id.nav_messenger);
+            }
+            else if(id==R.id.sidebar_favorite_events) {
+                navController.navigate(R.id.nav_favorite_events);
+            }
+            else if(id==R.id.sidebar_favorite_merc) {
+                navController.navigate(R.id.nav_favorite_merc);
             }
             return true;
         });
@@ -226,14 +239,17 @@ public class HomeScreen extends AppCompatActivity {
         switch (JwtService.getRoleFromToken()){
             case "AU":
                 menu.findItem(R.id.edit_profile).setVisible(false);
+                menu.findItem(R.id.deactivate_account).setVisible(false);
                 break;
             case "EO":
             case "SP":
                 menu.findItem(R.id.promote_eo).setVisible(false);
+                menu.findItem(R.id.deactivate_account).setVisible(true);
                 menu.findItem(R.id.promote_sp).setVisible(false);
                 break;
             case "A":
                 menu.findItem(R.id.edit_profile).setVisible(false);
+                menu.findItem(R.id.deactivate_account).setVisible(false);
                 menu.findItem(R.id.promote_eo).setVisible(false);
                 menu.findItem(R.id.promote_sp).setVisible(false);
                 break;
@@ -263,6 +279,41 @@ public class HomeScreen extends AppCompatActivity {
                     startActivity(intent3);
                     break;
             }
+            return true;
+
+        }
+        else if (itemId == R.id.deactivate_account) {
+            // Handle Option 1 click
+            Call<Boolean> call1 = ClientUtils.authService.deactivate(JwtService.getIdFromToken());
+            call1.enqueue(new Callback<Boolean>() {
+                @Override
+                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+
+                    } else {
+                        // Parse error response
+                        try {
+                            Converter<ResponseBody, ErrorResponseDto> converter = ClientUtils.retrofit.responseBodyConverter(
+                                    ErrorResponseDto.class, new Annotation[0]);
+                            ErrorResponseDto errorResponse = converter.convert(response.errorBody());
+
+                            if (errorResponse != null) {
+                                Toast.makeText(HomeScreen.this, errorResponse.getMessage(), Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(HomeScreen.this, "Unknown error occurred", Toast.LENGTH_LONG).show();
+                            }
+                        } catch (IOException e) {
+                            Toast.makeText(HomeScreen.this, "Error parsing server response", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Boolean> call, Throwable throwable) {
+                    // Handle network errors
+                    Toast.makeText(HomeScreen.this, "Network error: " + throwable.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
             return true;
 
         }

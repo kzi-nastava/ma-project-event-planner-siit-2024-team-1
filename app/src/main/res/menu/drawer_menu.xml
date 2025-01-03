@@ -59,6 +59,18 @@
                 android:icon="@drawable/dashboard_icon"
                 android:checkable="true"
                 app:showAsAction="ifRoom"/>
+            <item
+                android:id="@+id/sidebar_favorite_events"
+                android:title="@string/favorite_events"
+                android:icon="@drawable/dashboard_icon"
+                android:checkable="true"
+                app:showAsAction="ifRoom"/>
+            <item
+                android:id="@+id/sidebar_favorite_merc"
+                android:title="@string/favorite_merc"
+                android:icon="@drawable/dashboard_icon"
+                android:checkable="true"
+                app:showAsAction="ifRoom"/>
         </menu>
     </item>
 
