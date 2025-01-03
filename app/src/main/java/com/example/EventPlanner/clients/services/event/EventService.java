@@ -6,6 +6,7 @@ import com.example.EventPlanner.model.event.CreateActivityRequest;
 import com.example.EventPlanner.model.event.CreateEventRequest;
 import com.example.EventPlanner.model.event.CreatedEventResponse;
 import com.example.EventPlanner.model.event.EventOverview;
+import com.example.EventPlanner.model.event.EventReport;
 import com.example.EventPlanner.model.event.InvitationResponse;
 import com.example.EventPlanner.model.event.UpdateEventRequest;
 
@@ -36,6 +37,8 @@ public interface EventService {
 
     @GET("events/activities/{id}")
     Call<Activity> getActivity(@Path("id") int id);
+    @GET("events/report/{id}")
+    Call<EventReport> getEventReport(@Path("id") int id);
     @GET("events/search")
     Call<PageResponse<EventOverview>> searchEvents(@Query("userId") int userId,
                                                    @Query("search") String search,
