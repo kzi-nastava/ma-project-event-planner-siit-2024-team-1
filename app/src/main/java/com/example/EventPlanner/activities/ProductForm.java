@@ -8,9 +8,11 @@ import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -37,6 +39,7 @@ import com.example.EventPlanner.model.common.Address;
 import com.example.EventPlanner.databinding.ActivityProductFormBinding;
 import com.example.EventPlanner.model.event.EventTypeOverview;
 import com.example.EventPlanner.model.merchandise.CategoryOverview;
+import com.example.EventPlanner.model.merchandise.CreateCategoryRequest;
 import com.example.EventPlanner.model.merchandise.MerchandisePhoto;
 import com.example.EventPlanner.model.merchandise.product.CreateProductRequest;
 import com.example.EventPlanner.fragments.merchandise.product.ProductViewModel;
@@ -84,6 +87,9 @@ public class ProductForm extends AppCompatActivity {
 
         EventTypeViewModel eventTypeViewModel = new ViewModelProvider(this).get(EventTypeViewModel.class);
 
+        Button recommendCategoryButton = findViewById(R.id.recommend_category);
+        recommendCategoryButton.setOnClickListener(v -> showCreateCategoryDialog());
+
 
         Spinner categorySpinner = productFormBinding.categorySpinner;
 
@@ -121,9 +127,12 @@ public class ProductForm extends AppCompatActivity {
         if ("NEW_FORM".equals(formType)) {
             formTitle.setText(R.string.add_product);
             productFormBinding.categorySpinner.setEnabled(true);
+            recommendCategoryButton.setVisibility(View.VISIBLE);
+            categorySpinner.setEnabled(true);
         } else if ("EDIT_FORM".equals(formType)) {
             formTitle.setText(R.string.edit_product);
             productFormBinding.categorySpinner.setEnabled(false);
+            recommendCategoryButton.setVisibility(View.GONE);
             int productId = getIntent().getIntExtra("PRODUCT_ID", -1);
             if (productId != -1) {
                 productViewModel.getSelectedProduct().observe(this, product -> {
@@ -172,6 +181,62 @@ public class ProductForm extends AppCompatActivity {
         });
 
     }
+
+    private void showCreateCategoryDialog() {
+        // Inflate the dialog layout
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.recommend_category_dialog, null);
+
+        // Initialize dialog components
+        EditText categoryTitle = dialogView.findViewById(R.id.category_title);
+        EditText categoryDescription = dialogView.findViewById(R.id.category_description);
+        Button submitCategoryButton = dialogView.findViewById(R.id.submit_category);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .setTitle("Create New Category")
+                .setCancelable(true)
+                .create();
+
+        submitCategoryButton.setOnClickListener(v -> {
+            String title = categoryTitle.getText().toString().trim();
+            String description = categoryDescription.getText().toString().trim();
+            boolean pending = true;
+
+            if (title.isEmpty() || description.isEmpty()) {
+                Toast.makeText(this, "Title and description are required!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            CreateCategoryRequest dto = new CreateCategoryRequest(title, description, pending);
+
+            Call<List<CategoryOverview>> call = ClientUtils.categoryService.create(dto);
+
+            call.enqueue(new Callback<List<CategoryOverview>>() {
+                @Override
+                public void onResponse(Call<List<CategoryOverview>> call, Response<List<CategoryOverview>> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        for(CategoryOverview cat: response.body()){
+                            if(cat.getTitle().equals(dto.getTitle())){
+                                selectedCategory = cat;
+                            }
+                        }
+                    } else {
+                        Log.e("Upload", "Failed to create category");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<CategoryOverview>> call, Throwable t) {
+                    Log.e("Upload", "Error creating category", t);
+                }
+            });
+
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+    private CategoryOverview selectedCategory = null;
     private void addPhoto(Uri photoUri) {
         // Get the content resolver and create a RequestBody for the photo
         try {
@@ -251,7 +316,7 @@ public class ProductForm extends AppCompatActivity {
 
     // Fetch categories and populate the multi-select spinner
     private void fetchEventTypesAndSetupSpinner() {
-        Call<List<EventTypeOverview>> call = ClientUtils.eventTypeService.getAllWithoutPagination();
+        Call<List<EventTypeOverview>> call = ClientUtils.eventTypeService.getAllActiveWithoutPagination();
         call.enqueue(new Callback<List<EventTypeOverview>>() {
             @Override
             public void onResponse(Call<List<EventTypeOverview>> call, Response<List<EventTypeOverview>> response) {
@@ -482,7 +547,7 @@ public class ProductForm extends AppCompatActivity {
 
             boolean automaticReservation = productFormBinding.radioAutomatic.isChecked();
 
-            CategoryOverview selectedCategory = (CategoryOverview) productFormBinding.categorySpinner.getSelectedItem();
+            CategoryOverview category = selectedCategory != null ? selectedCategory : (CategoryOverview) productFormBinding.categorySpinner.getSelectedItem();
 
             List<Integer> eventTypeIds = new ArrayList<>();
             for (int i = 0; i < selectedItems.length; i++) {
@@ -493,7 +558,7 @@ public class ProductForm extends AppCompatActivity {
 
             Address address = new Address(city, street, number, latitude, longitude);
 
-            return new CreateProductRequest(title, description, specificity, price, discount, true, true, minDuration, maxDuration, reservationDeadline, cancelationDeadline, automaticReservation, JwtService.getIdFromToken(), selectedPhotoIds, eventTypeIds, address, selectedCategory.getId());
+            return new CreateProductRequest(title, description, specificity, price, discount, true, true, minDuration, maxDuration, reservationDeadline, cancelationDeadline, automaticReservation, JwtService.getIdFromToken(), selectedPhotoIds, eventTypeIds, address, category.getId());
         } catch (NumberFormatException e) {
             e.printStackTrace();
             return null;

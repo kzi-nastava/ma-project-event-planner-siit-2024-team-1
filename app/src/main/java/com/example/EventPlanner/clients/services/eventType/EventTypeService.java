@@ -27,6 +27,9 @@ public interface EventTypeService {
     Call<PageResponse<EventTypeOverview>> getAll();
     @GET("event-types/all-wp")
     Call<List<EventTypeOverview>> getAllWithoutPagination();
+
+    @GET("event-types/all-active-wp")
+    Call<List<EventTypeOverview>> getAllActiveWithoutPagination();
     @GET("event-types/{id}")
     Call<EventTypeOverview> getById(@Path("id") int id);
     @POST("event-types")
