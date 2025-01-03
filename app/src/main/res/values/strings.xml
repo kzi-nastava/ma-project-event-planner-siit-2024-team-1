@@ -186,4 +186,7 @@
     <string name="deny">Deny</string>
     <string name="reviews">Reviews</string>
     <string name="user_reports">User reports</string>
+    <string name="report">Report</string>
+    <string name="block">Block</string>
+    <string name="messenger">Messenger</string>
 </resources>

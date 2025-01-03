@@ -1,5 +1,6 @@
 package com.example.EventPlanner.clients.services.user;
 
+import com.example.EventPlanner.model.user.UserReport;
 import com.example.EventPlanner.model.user.UserReportOverview;
 import com.example.EventPlanner.model.user.UserReportResponse;
 import com.example.EventPlanner.model.user.UserSuspension;
@@ -7,6 +8,7 @@ import com.example.EventPlanner.model.user.UserSuspension;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -21,4 +23,7 @@ public interface UserReportService {
 
     @POST("user-reports/{reportId}/deny")
     Call<UserReportResponse> denyReport(@Path("reportId") int reportId);
+
+    @POST("user-reports")
+    Call<UserReportResponse> reportUser(@Body UserReport userReport);
 }

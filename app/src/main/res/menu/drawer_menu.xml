@@ -54,6 +54,12 @@
                 android:checkable="true"
                 app:showAsAction="ifRoom"/>
             <item
+                android:id="@+id/sidebar_messenger"
+                android:title="@string/messenger"
+                android:icon="@drawable/dashboard_icon"
+                android:checkable="true"
+                app:showAsAction="ifRoom"/>
+            <item
                 android:id="@+id/sidebar_favorite_events"
                 android:title="@string/favorite_events"
                 android:icon="@drawable/dashboard_icon"
