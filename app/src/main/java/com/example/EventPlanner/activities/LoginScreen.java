@@ -83,6 +83,13 @@ public class LoginScreen extends AppCompatActivity {
                 }
             }
         }
+        Intent intent5=getIntent();
+        String suspension=intent5.getStringExtra("suspension");
+        if(suspension!=null){
+            Intent intent3 = new Intent(this, WebSocketService.class);
+            stopService(intent3);
+            Toast.makeText(LoginScreen.this, suspension, Toast.LENGTH_LONG).show();
+        }
 
         EditText username = findViewById(R.id.editTextText);
         EditText password = findViewById(R.id.editTextTextPassword);
