@@ -61,7 +61,7 @@
                 app:showAsAction="ifRoom"/>
             <item
                 android:id="@+id/sidebar_favorite_merc"
-                android:title="@string/favorite_merc"
+                android:title="@string/favorite_merchandise"
                 android:icon="@drawable/dashboard_icon"
                 android:checkable="true"
                 app:showAsAction="ifRoom"/>

@@ -28,7 +28,7 @@
         android:id="@+id/nav_event_types_crud"
         android:name="com.example.EventPlanner.fragments.eventtype.EventTypeCRUD"
         android:label="@string/event_types"
-        tools:layout="@layout/fragment_product_crud"/>
+        tools:layout="@layout/fragment_event_type_list"/>
     <fragment
         android:id="@+id/nav_events_crud"
         android:name="com.example.EventPlanner.fragments.event.EventCRUD"
@@ -46,12 +46,12 @@
         tools:layout="@layout/fragment_user_report_list"/>
     <fragment
         android:id="@+id/nav_favorite_events"
-        android:name="com.example.EventPlanner.fragments.event.EventCRUD"
+        android:name="com.example.EventPlanner.fragments.event.EventsList"
         android:label="@string/favorite_events"
-        tools:layout="@layout/fragment_event_crud"/>
+        tools:layout="@layout/fragment_events_merchandise_list"/>
     <fragment
         android:id="@+id/nav_favorite_merc"
-        android:name="com.example.EventPlanner.fragments.event.EventCRUD"
-        android:label="@string/favorite_merc"
-        tools:layout="@layout/fragment_event_crud"/>
+        android:name="com.example.EventPlanner.fragments.merchandise.product.ProductList"
+        android:label="@string/favorite_products"
+        tools:layout="@layout/fragment_merchandises_list"/>
 </navigation>
