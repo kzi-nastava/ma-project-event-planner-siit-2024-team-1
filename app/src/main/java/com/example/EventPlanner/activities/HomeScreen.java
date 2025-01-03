@@ -34,6 +34,7 @@ import com.example.EventPlanner.model.auth.LoginResponse;
 import com.example.EventPlanner.model.common.ErrorResponseDto;
 import com.example.EventPlanner.model.event.FollowResponse;
 import com.example.EventPlanner.model.event.InvitationResponse;
+import com.example.EventPlanner.services.WebSocketService;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
@@ -357,10 +358,12 @@ public class HomeScreen extends AppCompatActivity {
 
         } else if (itemId == R.id.logout) {
             // Handle Option 2 click
+            Intent intent = new Intent(this, WebSocketService.class);
+            stopService(intent);
             JwtService.logout();
             // Navigate to the home screen
-            Intent intent = new Intent(HomeScreen.this, LoginScreen.class);
-            startActivity(intent);
+            Intent intent2 = new Intent(HomeScreen.this, LoginScreen.class);
+            startActivity(intent2);
             return true;
         }else if (itemId == R.id.search_icon)
         {
