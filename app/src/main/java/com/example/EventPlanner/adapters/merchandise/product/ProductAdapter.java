@@ -101,6 +101,28 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 }
             });
         });
+
+        holder.itemView.findViewById(R.id.delete_product).setOnClickListener(v -> {
+            Call<Boolean> call1 = ClientUtils.productService.delete(product.getId());
+            call1.enqueue(new Callback<Boolean>() {
+                @Override
+                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        Intent intent = new Intent(context, HomeScreen.class);
+                        context.startActivity(intent);
+                    } else {
+                        // Handle error cases
+                        Log.e("Availabling Error", "Response not successful: " + response.code());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Boolean> call, Throwable throwable) {
+                    // Handle network errors
+                    Log.e("Availabling Failure", "Error: " + throwable.getMessage());
+                }
+            });
+        });
     }
 
     @Override

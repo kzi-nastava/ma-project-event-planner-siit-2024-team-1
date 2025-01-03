@@ -16,6 +16,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -50,4 +51,7 @@ public interface ProductService {
 
     @PUT("products/show/{id}")
     Call<Boolean> show(@Path("id") int id);
+
+    @DELETE("products/{id}")
+    Call<Boolean> delete(@Path("id") int id);
 }
