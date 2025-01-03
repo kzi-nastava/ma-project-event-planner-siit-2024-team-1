@@ -1,5 +1,6 @@
 package com.example.EventPlanner.clients.services.auth;
 
+import com.example.EventPlanner.model.auth.AuthenticationResponse;
 import com.example.EventPlanner.model.auth.LoginRequest;
 import com.example.EventPlanner.model.auth.LoginResponse;
 import com.example.EventPlanner.model.auth.RegisterEoRequest;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -33,4 +35,7 @@ public interface AuthService {
 
     @PUT("auth/deactivate/{id}")
     Call<Boolean> deactivate(@Path("id") int id);
+
+    @POST("auth/refresh_token")
+    Call<AuthenticationResponse> refreshToken(@Header("Authorization") String authorization, @Body String refreshToken);
 }
