@@ -36,7 +36,6 @@ public interface ProductService {
 
     @GET("products/sp/{spId}")
     Call<List<ProductOverview>> getBySp(@Path("spId") int spId);
-
     @GET("products/{id}")
     Call<ProductOverview> getById(@Path("id") int id);
 

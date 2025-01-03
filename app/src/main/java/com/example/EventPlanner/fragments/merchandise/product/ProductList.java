@@ -8,8 +8,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.EventPlanner.R;
 import com.example.EventPlanner.adapters.event.EventTypeAdapter;
+import com.example.EventPlanner.adapters.merchandise.MerchandiseOverviewAdapter;
 import com.example.EventPlanner.adapters.merchandise.product.ProductAdapter;
 import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.databinding.FragmentProductListBinding;
@@ -30,18 +33,43 @@ public class ProductList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         productListBinding = FragmentProductListBinding.inflate(getLayoutInflater());
         productViewModel = new ViewModelProvider(requireActivity()).get(ProductViewModel.class);
-
+        String topString=getString(R.string.top);
+        String extraValue = topString; // Default value
+        if (getArguments() != null) {
+            extraValue = getArguments().getString("type", topString);
+        }
+        TextView eventsHeader=productListBinding.productsHeader;
         RecyclerView recyclerView = productListBinding.productListRecyclerView;
-        productViewModel.getProducts().observe(getViewLifecycleOwner(),products->{
-            ProductAdapter productAdapter = new ProductAdapter(requireActivity(), products);
-            recyclerView.setAdapter(productAdapter);
-            productAdapter.notifyDataSetChanged();
 
-        });
 
         LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        productViewModel.getAllBySp(JwtService.getIdFromToken());
+        switch (extraValue){
+            case "my":
+            case "My":
+                productViewModel.getProducts().observe(getViewLifecycleOwner(),products->{
+                    ProductAdapter productAdapter = new ProductAdapter(requireActivity(), products);
+                    recyclerView.setAdapter(productAdapter);
+                    productAdapter.notifyDataSetChanged();
+
+                });
+                eventsHeader.setText(R.string.my_products);
+                productViewModel.getAllBySp(JwtService.getIdFromToken());
+                break;
+            case "fav":
+            case "Fav":
+                productViewModel.getMerc().observe(getViewLifecycleOwner(),merc->{
+                    MerchandiseOverviewAdapter merchandiseOverviewAdapter = new MerchandiseOverviewAdapter(requireActivity(), merc);
+                    recyclerView.setAdapter(merchandiseOverviewAdapter);
+                    merchandiseOverviewAdapter.notifyDataSetChanged();
+
+                });
+                eventsHeader.setText(R.string.favorite_merchandise);
+                productViewModel.getFavorites();
+                break;
+
+        }
+
 
         return productListBinding.getRoot();
     }

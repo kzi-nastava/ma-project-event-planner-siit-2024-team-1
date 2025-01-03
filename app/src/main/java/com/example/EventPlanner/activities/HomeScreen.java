@@ -108,6 +108,9 @@ public class HomeScreen extends AppCompatActivity {
             int id = item.getItemId();
             drawerLayout.closeDrawer(GravityCompat.START);
             if(id==R.id.sidebar_top) {
+                Bundle args = new Bundle();
+                args.putString("type", "top");
+                args.putString("title", getString(R.string.top));
                 navController.navigate(R.id.nav_events_merchandise_list_horizontal);
             }
             else if(id==R.id.sidebar_all) {
@@ -119,13 +122,19 @@ public class HomeScreen extends AppCompatActivity {
                 navController.navigate(R.id.nav_services_list_vertical);
             }
             else if(id==R.id.sidebar_products) {
-                navController.navigate(R.id.nav_products_list_vertical);
+                Bundle args = new Bundle();
+                args.putString("type", "my");
+                args.putString("title", getString(R.string.my_products));
+                navController.navigate(R.id.nav_products_list_vertical, args);
             }
             else if(id==R.id.sidebar_event_types) {
                 navController.navigate(R.id.nav_event_types_crud);
             }
             else if(id==R.id.sidebar_events) {
-                navController.navigate(R.id.nav_events_crud);
+                Bundle args = new Bundle();
+                args.putString("type", "my");
+                args.putString("title", getString(R.string.my_events));
+                navController.navigate(R.id.nav_events_crud, args);
             }
             else if(id==R.id.sidebar_reviews) {
                 navController.navigate(R.id.nav_reviews);
@@ -137,10 +146,16 @@ public class HomeScreen extends AppCompatActivity {
                 navController.navigate(R.id.nav_messenger);
             }
             else if(id==R.id.sidebar_favorite_events) {
-                navController.navigate(R.id.nav_favorite_events);
+                Bundle args = new Bundle();
+                args.putString("type", "fav");
+                args.putString("title", getString(R.string.fav));
+                navController.navigate(R.id.nav_favorite_events, args);
             }
             else if(id==R.id.sidebar_favorite_merc) {
-                navController.navigate(R.id.nav_favorite_merc);
+                Bundle args = new Bundle();
+                args.putString("type", "fav");
+                args.putString("title", getString(R.string.fav));
+                navController.navigate(R.id.nav_favorite_merc, args);
             }
             return true;
         });

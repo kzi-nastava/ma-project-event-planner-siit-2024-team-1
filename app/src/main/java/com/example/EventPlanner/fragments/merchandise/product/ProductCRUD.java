@@ -28,6 +28,9 @@ public class ProductCRUD extends Fragment {
 
         // Initialize Product List Fragment
         ProductList productList = new ProductList();
+        Bundle args = new Bundle();
+        args.putString("type", getArguments().get("type").toString());
+        productList.setArguments(args);
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainerViewProduct, productList).commit();
 
