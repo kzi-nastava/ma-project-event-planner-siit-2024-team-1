@@ -26,8 +26,13 @@ public class EventCRUD extends Fragment {
         eventCrudBinding = FragmentEventCrudBinding.inflate(getLayoutInflater());
         View view = eventCrudBinding.getRoot();
 
+
+
+
+
         // Initialize Product List Fragment
         EventsList eventsList = new EventsList();
+
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainerViewEvent, eventsList).commit();
 

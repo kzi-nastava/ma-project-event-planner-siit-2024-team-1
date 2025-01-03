@@ -39,6 +39,10 @@
                 android:title="Settings"
                 android:icon="@drawable/settings_icon"/>
             <item
+                android:id="@+id/deactivate_account"
+                android:title="Deactivate account"
+                android:icon="@drawable/settings_icon"/>
+            <item
                 android:id="@+id/logout"
                 android:title="Logout"
                 android:icon="@drawable/logout_icon"/>

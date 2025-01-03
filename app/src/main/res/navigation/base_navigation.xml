@@ -44,4 +44,14 @@
         android:name="com.example.EventPlanner.fragments.userreport.UserReportList"
         android:label="@string/user_reports"
         tools:layout="@layout/fragment_user_report_list"/>
+    <fragment
+        android:id="@+id/nav_favorite_events"
+        android:name="com.example.EventPlanner.fragments.event.EventCRUD"
+        android:label="@string/favorite_events"
+        tools:layout="@layout/fragment_event_crud"/>
+    <fragment
+        android:id="@+id/nav_favorite_merc"
+        android:name="com.example.EventPlanner.fragments.event.EventCRUD"
+        android:label="@string/favorite_merc"
+        tools:layout="@layout/fragment_event_crud"/>
 </navigation>
