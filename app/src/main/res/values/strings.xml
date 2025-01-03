@@ -84,7 +84,8 @@
     <string name="add_event_type">Add Event Type</string>
     <string name="edit_event_type">Edit Event Type</string>
     <string name="specificity">Specificity</string>
-    <string name="discount">Discount</string>
+    <string name="discount">Discount</string>recommend_category
+    <string name="recommend_category">Recommend new category</string>
     <string name="date">Date</string>
     <string name="city">City</string>
     <string name="street">Street</string>

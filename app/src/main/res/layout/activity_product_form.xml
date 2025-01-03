@@ -96,18 +96,33 @@
             app:layout_constraintStart_toEndOf="@+id/product_price"
             app:layout_constraintTop_toBottomOf="@+id/specificity" />
 
+        <Button
+            android:id="@+id/recommend_category"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:text="@string/recommend_category"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/multiselect_spinner"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/product_price"
+            app:layout_constraintBottom_toTopOf="@+id/category_spinner"
+            />
+
         <!-- Product Category (Single Select ComboBox) -->
         <Spinner
             android:id="@+id/category_spinner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="24dp"
             android:hint="Category"
             app:layout_constraintEnd_toStartOf="@+id/multiselect_spinner"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/product_discount"
+            app:layout_constraintTop_toBottomOf="@+id/recommend_category"
             app:layout_constraintBottom_toTopOf="@+id/city"/>
 
         <Spinner
