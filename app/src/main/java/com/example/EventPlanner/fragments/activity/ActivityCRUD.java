@@ -40,5 +40,15 @@ public class ActivityCRUD extends AppCompatActivity {
         } else {
             Log.e("ActivityCRUD", "addActivityButton is null");
         }
+
+        Button generatePdfButton = activityCrudBinding.agendaPdf;
+        if (generatePdfButton != null) {
+            generatePdfButton.setOnClickListener((v) -> {
+                ActivityList activityListFragment = (ActivityList) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerViewActivity);
+                if (activityListFragment != null) {
+                    activityListFragment.generatePdf(eventId); // Pass event title dynamically
+                }
+            });
+        }
     }
 }

@@ -69,6 +69,8 @@
     <string name="apply_filters">Apply filters</string>
     <string name="edit">Edit</string>
     <string name="follow">Follow</string>
+    <string name="generate_pdf">Generate PDF</string>
+    <string name="stats">Stats</string>
     <string name="show_hide">Show/Hide</string>
     <string name="enable_disable">Enable/Disable</string>
     <string name="deactivate">Deactivate</string>
