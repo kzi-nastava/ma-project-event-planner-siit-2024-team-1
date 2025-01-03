@@ -70,7 +70,7 @@ public class EventTypeViewModel extends ViewModel {
 
     // Fetch all event types from the server
     public void getAllWp() {
-        Call<List<EventTypeOverview>> call = ClientUtils.eventTypeService.getAllWithoutPagination();
+        Call<List<EventTypeOverview>> call = ClientUtils.eventTypeService.getAllActiveWithoutPagination();
         call.enqueue(new Callback<List<EventTypeOverview>>() {
             @Override
             public void onResponse(Call<List<EventTypeOverview>> call, Response<List<EventTypeOverview>> response) {

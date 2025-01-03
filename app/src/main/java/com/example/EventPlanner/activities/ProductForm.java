@@ -251,7 +251,7 @@ public class ProductForm extends AppCompatActivity {
 
     // Fetch categories and populate the multi-select spinner
     private void fetchEventTypesAndSetupSpinner() {
-        Call<List<EventTypeOverview>> call = ClientUtils.eventTypeService.getAllWithoutPagination();
+        Call<List<EventTypeOverview>> call = ClientUtils.eventTypeService.getAllActiveWithoutPagination();
         call.enqueue(new Callback<List<EventTypeOverview>>() {
             @Override
             public void onResponse(Call<List<EventTypeOverview>> call, Response<List<EventTypeOverview>> response) {
