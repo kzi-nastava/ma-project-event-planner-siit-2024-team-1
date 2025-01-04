@@ -24,6 +24,8 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.clients.ClientUtils;
 import com.example.EventPlanner.clients.JwtService;
+import com.example.EventPlanner.databinding.ActivityRegisterEoScreenBinding;
+import com.example.EventPlanner.fragments.common.map.MapFragment;
 import com.example.EventPlanner.model.auth.RegisterEoRequest;
 import com.example.EventPlanner.model.auth.RegisterEoResponse;
 import com.example.EventPlanner.model.auth.Role;
@@ -60,6 +62,7 @@ public class RegisterEoScreen extends AppCompatActivity {
     Button changePassword;
 
     TextView photoName;
+    private ActivityRegisterEoScreenBinding registerEoScreenBinding;
 
     private String selectedProfilePhoto = "";
 
@@ -67,7 +70,8 @@ public class RegisterEoScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_register_eo_screen);
+        registerEoScreenBinding=ActivityRegisterEoScreenBinding.inflate(getLayoutInflater());
+        setContentView(registerEoScreenBinding.getRoot());
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.register_eo_screen), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -230,6 +234,21 @@ public class RegisterEoScreen extends AppCompatActivity {
             Intent intent = new Intent(RegisterEoScreen.this, ChangePasswordScreen.class);
             startActivity(intent);
         });
+        MapFragment mapFragment = MapFragment.newInstance(false, false,true);
+        mapFragment.setOnMapAddressSelectedListener(new MapFragment.OnMapAddressSelectedListener() {
+            @Override
+            public void onAddressSelected(Address address) {
+                // Handle the selected address
+                registerEoScreenBinding.city.setText(address.getCity());
+                registerEoScreenBinding.street.setText(address.getStreet());
+                registerEoScreenBinding.number.setText(address.getNumber());
+                registerEoScreenBinding.latitude.setText(address.getLatitude().toString());
+                registerEoScreenBinding.longitude.setText(address.getLongitude().toString());
+            }
+        });
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.eventFormMapViewFragmentView,mapFragment)
+                .commit();
     }
 
     private void openGallery(boolean multiple) {

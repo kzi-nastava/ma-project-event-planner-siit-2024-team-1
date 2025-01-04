@@ -23,7 +23,10 @@ import com.example.EventPlanner.clients.ClientUtils;
 import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.databinding.ActivityEventDetailsBinding;
 import com.example.EventPlanner.fragments.activity.ActivityCRUD;
+import com.example.EventPlanner.fragments.common.map.MapFragment;
+import com.example.EventPlanner.fragments.common.map.MapViewModel;
 import com.example.EventPlanner.fragments.event.EventListViewModel;
+import com.example.EventPlanner.model.common.Address;
 import com.example.EventPlanner.model.common.Review;
 import com.example.EventPlanner.model.event.CreatedEventResponse;
 import com.example.EventPlanner.model.event.Event;
@@ -57,6 +60,7 @@ public class EventDetails extends AppCompatActivity {
     private EventListViewModel eventListViewModel;
     private boolean isFavorited = false; // Default state
     private ImageButton starButton;
+    private MapViewModel mapViewModel;
 
     private List<UserOverview> participants;
     private List<ReviewDTO> reviews;
@@ -69,13 +73,21 @@ public class EventDetails extends AppCompatActivity {
         eventListViewModel = new ViewModelProvider(this).get(EventListViewModel.class);
 
         EdgeToEdge.enable(this);
+        mapViewModel=new ViewModelProvider(EventDetails.this).get(MapViewModel.class);
+
+        MapFragment mapFragment = MapFragment.newInstance(true, false,false);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.eventFormMapViewFragmentView,mapFragment)
+                .commit();
 
         Integer eventId = getIntent().getIntExtra("EVENT_ID", -1);
         if (eventId != -1) {
             eventListViewModel.getSelectedEvent().observe(this, event -> {
                 if (event != null) {
                     setFields(event);
+                    mapViewModel.setEvents(event);
                 }
+
             });
             eventListViewModel.findEventById(eventId);
         }
@@ -148,6 +160,9 @@ public class EventDetails extends AppCompatActivity {
                 });
             }
         });
+
+
+
     }
 
 

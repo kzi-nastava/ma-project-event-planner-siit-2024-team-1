@@ -34,6 +34,7 @@ import com.example.EventPlanner.R;
 import com.example.EventPlanner.adapters.merchandise.MerchandisePhotoAdapter;
 import com.example.EventPlanner.clients.ClientUtils;
 import com.example.EventPlanner.clients.JwtService;
+import com.example.EventPlanner.fragments.common.map.MapFragment;
 import com.example.EventPlanner.fragments.eventtype.EventTypeViewModel;
 import com.example.EventPlanner.model.common.Address;
 import com.example.EventPlanner.databinding.ActivityProductFormBinding;
@@ -179,6 +180,21 @@ public class ProductForm extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        MapFragment mapFragment = MapFragment.newInstance(false, false,true);
+        mapFragment.setOnMapAddressSelectedListener(new MapFragment.OnMapAddressSelectedListener() {
+            @Override
+            public void onAddressSelected(Address address) {
+                // Handle the selected address
+                productFormBinding.city.setText(address.getCity());
+                productFormBinding.street.setText(address.getStreet());
+                productFormBinding.number.setText(address.getNumber());
+                productFormBinding.latitude.setText(address.getLatitude().toString());
+                productFormBinding.longitude.setText(address.getLongitude().toString());
+            }
+        });
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.eventFormMapViewFragmentView,mapFragment)
+                .commit();
 
     }
 

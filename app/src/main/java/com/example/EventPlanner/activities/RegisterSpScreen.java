@@ -27,6 +27,8 @@ import com.example.EventPlanner.adapters.merchandise.BusinessPhotoAdapter;
 import com.example.EventPlanner.adapters.merchandise.MerchandisePhotoAdapter;
 import com.example.EventPlanner.clients.ClientUtils;
 import com.example.EventPlanner.clients.JwtService;
+import com.example.EventPlanner.databinding.ActivityRegisterSpScreenBinding;
+import com.example.EventPlanner.fragments.common.map.MapFragment;
 import com.example.EventPlanner.model.auth.RegisterEoRequest;
 import com.example.EventPlanner.model.auth.RegisterEoResponse;
 import com.example.EventPlanner.model.auth.RegisterSpRequest;
@@ -75,6 +77,7 @@ public class RegisterSpScreen extends AppCompatActivity {
 
     Button changePassword;
     TextView photoName;
+    private ActivityRegisterSpScreenBinding activityRegisterSpScreenBinding;
 
 
     private List<String> selectedPhotos = new ArrayList<>();
@@ -88,7 +91,8 @@ public class RegisterSpScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_register_sp_screen);
+        activityRegisterSpScreenBinding=ActivityRegisterSpScreenBinding.inflate(getLayoutInflater());
+        setContentView(activityRegisterSpScreenBinding.getRoot());
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.register_sp_screen), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -266,6 +270,21 @@ public class RegisterSpScreen extends AppCompatActivity {
             Intent intent = new Intent(RegisterSpScreen.this, ChangePasswordScreen.class);
             startActivity(intent);
         });
+        MapFragment mapFragment = MapFragment.newInstance(false, false,true);
+        mapFragment.setOnMapAddressSelectedListener(new MapFragment.OnMapAddressSelectedListener() {
+            @Override
+            public void onAddressSelected(Address address) {
+                // Handle the selected address
+                activityRegisterSpScreenBinding.city.setText(address.getCity());
+                activityRegisterSpScreenBinding.street.setText(address.getStreet());
+                activityRegisterSpScreenBinding.number.setText(address.getNumber());
+                activityRegisterSpScreenBinding.latitude.setText(address.getLatitude().toString());
+                activityRegisterSpScreenBinding.longitude.setText(address.getLongitude().toString());
+            }
+        });
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.eventFormMapViewFragmentView,mapFragment)
+                .commit();
     }
 
     private void addPhoto(Uri photoUri) {

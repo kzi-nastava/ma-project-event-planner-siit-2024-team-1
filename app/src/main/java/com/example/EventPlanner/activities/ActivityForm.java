@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.activities.HomeScreen;
 import com.example.EventPlanner.fragments.activity.ActivityViewModel;
+import com.example.EventPlanner.fragments.common.map.MapFragment;
 import com.example.EventPlanner.model.common.Address;
 import com.example.EventPlanner.databinding.ActivityActivityFormBinding;
 import com.example.EventPlanner.model.event.Activity;
@@ -107,6 +108,21 @@ public class ActivityForm extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        MapFragment mapFragment = MapFragment.newInstance(false, false,true);
+        mapFragment.setOnMapAddressSelectedListener(new MapFragment.OnMapAddressSelectedListener() {
+            @Override
+            public void onAddressSelected(Address address) {
+                // Handle the selected address
+                activityFormBinding.city.setText(address.getCity());
+                activityFormBinding.street.setText(address.getStreet());
+                activityFormBinding.number.setText(address.getNumber());
+                activityFormBinding.latitude.setText(address.getLatitude().toString());
+                activityFormBinding.longitude.setText(address.getLongitude().toString());
+            }
+        });
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.eventFormMapViewFragmentView,mapFragment)
+                .commit();
     }
 
     private void showTimePickerDialog(EditText targetEditText) {
