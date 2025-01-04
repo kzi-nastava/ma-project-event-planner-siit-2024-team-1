@@ -195,4 +195,7 @@
     <string name="report">Report</string>
     <string name="block">Block</string>
     <string name="messenger">Messenger</string>
+    <string name="chat_with_organizer">Chat with organizer</string>
+    <string name="type_a_message">Type a message</string>
+    <string name="send_message">Send message</string>
 </resources>

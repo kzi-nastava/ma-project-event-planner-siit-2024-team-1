@@ -3,6 +3,8 @@ package com.example.EventPlanner.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -11,12 +13,20 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.EventPlanner.R;
+import com.example.EventPlanner.adapters.message.MessageAdapter;
+import com.example.EventPlanner.adapters.user.UserOverviewAdapter;
 import com.example.EventPlanner.clients.ClientUtils;
 import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.databinding.ActivityMessengerBinding;
+import com.example.EventPlanner.fragments.user.UserOverviewViewModel;
 import com.example.EventPlanner.model.common.ErrorResponseDto;
 import com.example.EventPlanner.model.user.BlockUserDTO;
 import com.example.EventPlanner.model.user.UserReport;
@@ -36,38 +46,163 @@ import retrofit2.Response;
 public class MessengerActivity extends AppCompatActivity {
 
     private int userId;
+    private MessengerViewModel messengerViewModel;
     private ActivityMessengerBinding activityMessengerBinding;
+
+    private MessageAdapter messageAdapter;
+    private int currentUserId; // Get this from your auth system
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        activityMessengerBinding=ActivityMessengerBinding.inflate(getLayoutInflater());
+        activityMessengerBinding = ActivityMessengerBinding.inflate(getLayoutInflater());
         setContentView(activityMessengerBinding.getRoot());
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        setupInsets();
+        setupIntentData();
+        setupButtons();
+        setupRecyclerView();
+        setupViewModel();
+        setupMessageInput();
+    }
+    private void setupInsets() {
+        // Make sure the content is laid out behind system bars
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
+        // Use WindowInsetsControllerCompat for handling keyboard
+        WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+
+        ViewCompat.setOnApplyWindowInsetsListener(activityMessengerBinding.main, (view, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            Insets imeInsets = windowInsets.getInsets(WindowInsetsCompat.Type.ime());
+
+            // Apply padding for the system bars to the main container
+            view.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+
+            // Adjust the bottom padding of the RecyclerView when keyboard appears
+            int bottomPadding = imeInsets.bottom > 0 ? imeInsets.bottom : insets.bottom;
+            activityMessengerBinding.messagesRecyclerView.setPadding(0, 0, 0, bottomPadding);
+
+            // Adjust the message input layout position
+            activityMessengerBinding.messageInputLayout.setTranslationY(-imeInsets.bottom);
+
+            return WindowInsetsCompat.CONSUMED;
         });
-        Intent intent=getIntent();
-        userId=intent.getIntExtra("USER_ID",-1);
-        Button blockBtn=activityMessengerBinding.blockBtn;
-        blockBtn.setOnClickListener(v -> {
+
+        // Handle window insets animation
+        getWindow().getDecorView().setOnApplyWindowInsetsListener((view, windowInsets) -> {
+            return view.onApplyWindowInsets(windowInsets);
+        });
+    }
+
+//    private void setupSystemInsets() {
+//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+//            return insets;
+//        });
+//    }
+
+    private void setupIntentData() {
+        Intent intent = getIntent();
+        userId = intent.getIntExtra("USER_ID", -1);
+        currentUserId = JwtService.getIdFromToken(); // Implement this based on your auth system
+    }
+
+    private void setupButtons() {
+        activityMessengerBinding.blockBtn.setOnClickListener(v -> {
             new MaterialAlertDialogBuilder(MessengerActivity.this)
                     .setTitle("Confirm Block")
                     .setMessage("Are you sure you want to block this user?")
-                    .setNegativeButton("No", (dialog, which) -> {
-                        dialog.dismiss();
-                    })
-                    .setPositiveButton("Yes", (dialog, which) -> {
-                        // Call your approve function here
-                        blockUser();
-                    })
+                    .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                    .setPositiveButton("Yes", (dialog, which) -> blockUser())
                     .show();
         });
-        Button reportBtn=activityMessengerBinding.reportBtn;
-        reportBtn.setOnClickListener(v -> showReportDialog());
+
+        activityMessengerBinding.reportBtn.setOnClickListener(v -> showReportDialog());
     }
+
+    private void setupRecyclerView() {
+        messageAdapter = new MessageAdapter(currentUserId);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setStackFromEnd(true);
+
+        RecyclerView recyclerView = activityMessengerBinding.messagesRecyclerView;
+        recyclerView.setAdapter(messageAdapter);
+        recyclerView.setLayoutManager(layoutManager);
+
+        // Add scroll listener to handle keyboard appearance
+        recyclerView.addOnLayoutChangeListener((v, left, top, right, bottom,
+                                                oldLeft, oldTop, oldRight, oldBottom) -> {
+            if (bottom < oldBottom) {
+                recyclerView.postDelayed(() -> {
+                    int messageCount = messageAdapter.getItemCount();
+                    if (messageCount > 0) {
+                        recyclerView.smoothScrollToPosition(messageCount - 1);
+                    }
+                }, 100);
+            }
+        });
+    }
+
+    private void setupViewModel() {
+        messengerViewModel = new ViewModelProvider(this).get(MessengerViewModel.class);
+
+        messengerViewModel.getMessagedUser().observe(this, user -> {
+            activityMessengerBinding.messagedUser.setText(
+                    String.format("%s %s", user.getFirstName(), user.getLastName()));
+            activityMessengerBinding.userProfileMessenger.setImageResource(R.drawable.dinja);
+        });
+
+        messengerViewModel.getMessages().observe(this, messages -> {
+            messageAdapter.setMessages(messages);
+            scrollToBottom();
+        });
+
+        messengerViewModel.getChatUser(userId);
+        messengerViewModel.getMessagesFromSenderAndRecepient(currentUserId, userId);
+    }
+
+    private void setupMessageInput() {
+        activityMessengerBinding.sendButton.setOnClickListener(v -> {
+            String message = activityMessengerBinding.messageInput.getText().toString().trim();
+            if (!message.isEmpty()) {
+                sendMessage(message);
+                activityMessengerBinding.messageInput.setText("");
+            }
+        });
+
+        // Handle IME action
+        activityMessengerBinding.messageInput.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                String message = v.getText().toString().trim();
+                if (!message.isEmpty()) {
+                    sendMessage(message);
+                    v.setText("");
+                }
+                return true;
+            }
+            return false;
+        });
+    }
+
+    private void scrollToBottom() {
+        activityMessengerBinding.messagesRecyclerView.post(() -> {
+            int messageCount = messageAdapter.getItemCount();
+            if (messageCount > 0) {
+                activityMessengerBinding.messagesRecyclerView.smoothScrollToPosition(messageCount - 1);
+            }
+        });
+    }
+
+    private void sendMessage(String content) {
+        // Implement your message sending logic here
+        // After successful send, refresh messages
+        messengerViewModel.getMessagesFromSenderAndRecepient(currentUserId, userId);
+    }
+
 
     private void showReportDialog() {
         // Create EditText for reason input

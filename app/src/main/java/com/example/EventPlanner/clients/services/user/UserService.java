@@ -47,4 +47,9 @@ public interface UserService {
 
     @POST("users/{blockerId}/block/{blockedUserId}")
     Call<BlockUserDTO> blockUser(@Path("blockerId")int blockerId,@Path("blockedUserId") int blockedUserId);
+
+    @GET("users/chat-user/{id}/message")
+    Call<UserOverview> getChatUser(@Path("id") int id);
+
+
 }
