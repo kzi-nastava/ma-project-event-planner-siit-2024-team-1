@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.EventPlanner.adapters.event.EventOverviewAdapter;
+import com.example.EventPlanner.fragments.common.map.MapViewModel;
 import com.example.EventPlanner.fragments.eventmerchandise.DotsIndicatorDecoration;
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.databinding.FragmentEventListBinding;
@@ -32,6 +33,7 @@ public class EventsList extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private EventListViewModel eventListViewModel;
     private SearchViewModel searchViewModel;
+    private MapViewModel mapViewModel;
 
     private FragmentEventListBinding eventsListBinding;
 
@@ -76,6 +78,8 @@ public class EventsList extends Fragment {
         eventsListBinding= FragmentEventListBinding.inflate(getLayoutInflater());
         eventListViewModel =new ViewModelProvider(requireActivity()).get(EventListViewModel.class);
         searchViewModel=new ViewModelProvider(requireActivity()).get(SearchViewModel.class);
+        mapViewModel=new ViewModelProvider(requireActivity()).get(MapViewModel.class);
+
         String topString=getString(R.string.top);
         String extraValue = topString; // Default value
         if (getArguments() != null) {
@@ -86,6 +90,7 @@ public class EventsList extends Fragment {
         eventListViewModel.getEvents().observe(getViewLifecycleOwner(), events->{
             EventOverviewAdapter eventsAdapter = new EventOverviewAdapter(requireActivity(), events);
             recyclerView.setAdapter(eventsAdapter);
+            mapViewModel.setEvents(events);
             eventsAdapter.notifyDataSetChanged();
 
         });

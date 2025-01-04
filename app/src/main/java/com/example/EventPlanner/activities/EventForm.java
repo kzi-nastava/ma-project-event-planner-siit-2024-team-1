@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.clients.JwtService;
+import com.example.EventPlanner.fragments.common.map.MapFragment;
 import com.example.EventPlanner.fragments.event.EventListViewModel;
 import com.example.EventPlanner.fragments.eventtype.EventTypeViewModel;
 import com.example.EventPlanner.model.common.Address;
@@ -150,6 +151,22 @@ public class EventForm extends AppCompatActivity {
         eventListViewModel = new ViewModelProvider(this).get(EventListViewModel.class);
 
         EdgeToEdge.enable(this);
+        MapFragment mapFragment = MapFragment.newInstance(false, false,true);
+        mapFragment.setOnMapAddressSelectedListener(new MapFragment.OnMapAddressSelectedListener() {
+            @Override
+            public void onAddressSelected(Address address) {
+                // Handle the selected address
+                eventFormBinding.city.setText(address.getCity());
+                eventFormBinding.street.setText(address.getStreet());
+                eventFormBinding.number.setText(address.getNumber());
+                eventFormBinding.latitude.setText(address.getLatitude().toString());
+                eventFormBinding.longitude.setText(address.getLongitude().toString());
+            }
+        });
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.eventFormMapViewFragmentView,mapFragment)
+                .commit();
+
     }
 
     private void showDatePickerDialog() {

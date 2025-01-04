@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.example.EventPlanner.adapters.event.EventOverviewAdapter;
 import com.example.EventPlanner.adapters.merchandise.MerchandiseAdapter;
 import com.example.EventPlanner.adapters.merchandise.MerchandiseOverviewAdapter;
+import com.example.EventPlanner.fragments.common.map.MapViewModel;
 import com.example.EventPlanner.fragments.eventmerchandise.DotsIndicatorDecoration;
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.databinding.FragmentMerchandisesListBinding;
@@ -41,6 +42,8 @@ public class MerchandiseList extends Fragment {
     private String mParam2;
     private MerchandiseViewModel merchandiseViewModel;
     private SearchViewModel searchViewModel;
+    private MapViewModel mapViewModel;
+
 
     private FragmentMerchandisesListBinding merchandisesListBinding;
 
@@ -84,6 +87,8 @@ public class MerchandiseList extends Fragment {
         merchandisesListBinding=FragmentMerchandisesListBinding.inflate(getLayoutInflater());
         merchandiseViewModel =new ViewModelProvider(requireActivity()).get(MerchandiseViewModel.class);
         searchViewModel=new ViewModelProvider(requireActivity()).get(SearchViewModel.class);
+        mapViewModel=new ViewModelProvider(requireActivity()).get(MapViewModel.class);
+
         String topString=getString(R.string.top);
         String extraValue = topString; // Default value
         if (getArguments() != null) {
@@ -95,7 +100,7 @@ public class MerchandiseList extends Fragment {
             MerchandiseOverviewAdapter merchandiseAdapter = new MerchandiseOverviewAdapter(requireContext(), merchandise);
             recyclerView.setAdapter(merchandiseAdapter);
             merchandiseAdapter.notifyDataSetChanged();
-
+            mapViewModel.setMerchandise(merchandise);
         });
         recyclerView.addItemDecoration(new DotsIndicatorDecoration(
                 ContextCompat.getColor(getContext(), R.color.accent_color),
