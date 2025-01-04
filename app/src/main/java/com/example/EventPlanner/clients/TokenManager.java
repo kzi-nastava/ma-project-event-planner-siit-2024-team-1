@@ -8,6 +8,11 @@ public class TokenManager {
     private static String refreshToken;
     private static String eventToken;
 
+    public static void setTokens(String accessToken, String refreshToken){
+        TokenManager.accessToken = accessToken;
+        TokenManager.refreshToken = refreshToken;
+    }
+
     public static void setAccessToken(String accessToken) {
         TokenManager.accessToken = accessToken;
     }
