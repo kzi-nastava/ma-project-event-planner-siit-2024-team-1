@@ -16,6 +16,15 @@ public class JwtService {
         TokenManager.setEventToken(eventToken);
     }
 
+    public static boolean isTokenExpired(String token) {
+        JSONObject decoded = decodeToken(token);
+        if (decoded != null && decoded.has("exp")) {
+            long expTime = decoded.optLong("exp");
+            return System.currentTimeMillis() / 1000 > expTime;
+        }
+        return false;
+    }
+
     // Remove event token
     public static void removeEventToken() {
         TokenManager.setEventToken("");
