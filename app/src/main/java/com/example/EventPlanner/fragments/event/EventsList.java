@@ -140,12 +140,14 @@ public class EventsList extends Fragment {
             case "Top":
                 eventsHeader.setText(R.string.top_events);
                 eventListViewModel.getTop();
+                calendarView.setVisibility(View.GONE);
                 break;
             case "all":
             case "All":
                 eventsHeader.setText(R.string.all_events);
                 eventListViewModel.search(Boolean.TRUE.equals(searchViewModel.getShowEvents().getValue()),searchViewModel.getSearchText().getValue(),searchViewModel.getStartDate().getValue(),searchViewModel.getEndDate().getValue(),
                         searchViewModel.getType().getValue(),searchViewModel.getCity().getValue(),searchViewModel.getEventSortBy().getValue());
+                calendarView.setVisibility(View.GONE);
                 break;
             case "my":
             case "My":

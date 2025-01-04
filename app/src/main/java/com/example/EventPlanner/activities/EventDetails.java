@@ -87,6 +87,11 @@ public class EventDetails extends AppCompatActivity {
                 if (event != null) {
                     setFields(event);
                     mapViewModel.setEvents(event);
+                    eventFormBinding.floatingActionButton.setOnClickListener(v->{
+                        Intent intent = new Intent(this, MessengerActivity.class);
+                        intent.putExtra("USER_ID", event.getOrganizer().getId());
+                        startActivity(intent);
+                    });
                 }
 
             });
@@ -167,6 +172,8 @@ public class EventDetails extends AppCompatActivity {
                 });
             }
         });
+
+
 
 
 
