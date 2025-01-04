@@ -3,12 +3,14 @@ package com.example.EventPlanner.fragments.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.activities.ActivityForm;
+import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.databinding.FragmentActivityCrudBinding;
 import com.example.EventPlanner.fragments.activity.ActivityList;
 
@@ -30,6 +32,11 @@ public class ActivityCRUD extends AppCompatActivity {
 
         // Add new activity button listener
         Button addActivityButton = activityCrudBinding.addActivityButton;
+
+        if(!JwtService.getRoleFromToken().equals("EO")){
+            addActivityButton.setVisibility(View.GONE);
+        }
+
         if (addActivityButton != null) {
             addActivityButton.setOnClickListener((v) -> {
                 Intent intent = new Intent(ActivityCRUD.this, ActivityForm.class);
