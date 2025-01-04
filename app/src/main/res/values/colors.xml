@@ -11,4 +11,9 @@
     <color name="surface_0">#121212</color>
     <color name="warn">#FFF59D</color>
     <color name="danger">#EF9A9A</color>
+    <color name="marker_event">#ff8800</color>      <!-- Pink for events -->
+    <color name="marker_product">#ff4444</color>    <!-- Blue for products -->
+    <color name="marker_service">#0fa8ab</color>
+    <color name="marker_default">#00cc44</color>
+
 </resources>

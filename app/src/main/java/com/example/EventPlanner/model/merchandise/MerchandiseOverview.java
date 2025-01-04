@@ -83,6 +83,18 @@ public class MerchandiseOverview {
     public void setRating(Double rating) {
         this.rating = rating;
     }
+    public MerchandiseOverview(){}
+    public MerchandiseOverview(Integer id, String category, String type, Object photos, String title, Double rating, Address address, Double price, String description) {
+        this.id = id;
+        this.category = category;
+        this.type = type;
+        this.photos = photos;
+        this.title = title;
+        this.rating = rating;
+        this.address = address;
+        this.price = price;
+        this.description = description;
+    }
 
     public Address getAddress() {
         return address;

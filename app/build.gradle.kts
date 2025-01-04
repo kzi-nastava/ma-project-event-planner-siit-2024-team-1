@@ -81,4 +81,5 @@ dependencies {
 
     // OkHttp for network connections
     implementation ("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation ("org.osmdroid:osmdroid-android:6.1.20")
 }

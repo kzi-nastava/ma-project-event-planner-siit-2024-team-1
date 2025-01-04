@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentResultListener;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,15 +20,20 @@ import android.view.ViewGroup;
 
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.databinding.FragmentEventsMerchindisesHorizontalBinding;
+import com.example.EventPlanner.fragments.common.map.MapFragment;
+import com.example.EventPlanner.fragments.common.map.MapViewModel;
 import com.example.EventPlanner.fragments.event.EventListViewModel;
 import com.example.EventPlanner.fragments.event.EventsList;
 import com.example.EventPlanner.fragments.merchandise.MerchandiseList;
 import com.example.EventPlanner.fragments.merchandise.MerchandiseViewModel;
+import com.example.EventPlanner.model.common.Address;
 import com.squareup.seismic.ShakeDetector;
 
 import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.Toast;
+
+import org.osmdroid.views.MapView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -153,6 +159,7 @@ public class EventsMerchindisesHorizontal extends Fragment implements ShakeDetec
         View view = eventsMerchandiseHorizontalBinding.getRoot();
 
         String extraValue = getArguments() != null ? getArguments().getString("type", "top") : "top";
+
         switch (extraValue){
             case "top":
             case "Top":
@@ -169,11 +176,25 @@ public class EventsMerchindisesHorizontal extends Fragment implements ShakeDetec
         eventsList.setArguments(bundle);
         MerchandiseList merchandiseList=new MerchandiseList();
         merchandiseList.setArguments(bundle);
+        MapFragment mapFragment = MapFragment.newInstance(true, true,false);
+//        mapFragment.setOnMapAddressSelectedListener(new MapFragment.OnMapAddressSelectedListener() {
+//            @Override
+//            public void onAddressSelected(Address address) {
+//                // Handle the selected address
+//                Log.d("MapFragment", "Selected address: " +
+//                        "Street: " + address.getStreet() +
+//                        ", City: " + address.getCity() +
+//                        ", Number: " + address.getNumber() +
+//                        ", Lat: " + address.getLatitude() +
+//                        ", Lng: " + address.getLongitude());
+//            }
+//        });
 
 
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainerViewEvent, eventsList)
                 .replace(R.id.fragmentContainerViewMerchandise, merchandiseList)
+                .replace(R.id.fragmentContainerViewMap,mapFragment)
                 .commit();
 
         Button sortByEventsButton = eventsMerchandiseHorizontalBinding.sortEventsByButton;
@@ -199,6 +220,7 @@ public class EventsMerchindisesHorizontal extends Fragment implements ShakeDetec
             filterFragmentContainer.setVisibility(View.VISIBLE);
             eventsMerchandiseHorizontalBinding.fragmentContainerViewEvent.setVisibility(View.GONE);
             eventsMerchandiseHorizontalBinding.fragmentContainerViewMerchandise.setVisibility(View.GONE);
+            eventsMerchandiseHorizontalBinding.fragmentContainerViewMap.setVisibility(View.GONE);
         } else {
             hideFilterFragment();
         }
@@ -213,6 +235,8 @@ public class EventsMerchindisesHorizontal extends Fragment implements ShakeDetec
         filterFragmentContainer.setVisibility(View.GONE);
         eventsMerchandiseHorizontalBinding.fragmentContainerViewEvent.setVisibility(View.VISIBLE);
         eventsMerchandiseHorizontalBinding.fragmentContainerViewMerchandise.setVisibility(View.VISIBLE);
+        eventsMerchandiseHorizontalBinding.fragmentContainerViewMap.setVisibility(View.VISIBLE);
+
     }
 
     private void showSortByEventsMenu(View view) {
