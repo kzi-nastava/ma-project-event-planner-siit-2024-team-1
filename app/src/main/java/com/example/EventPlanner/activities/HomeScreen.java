@@ -104,6 +104,9 @@ public class HomeScreen extends AppCompatActivity {
             }
         });
 
+        setNavigationMenuVisibility(JwtService.getRoleFromToken());
+
+
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
             drawerLayout.closeDrawer(GravityCompat.START);
@@ -156,6 +159,12 @@ public class HomeScreen extends AppCompatActivity {
                 args.putString("type", "fav");
                 args.putString("title", getString(R.string.fav));
                 navController.navigate(R.id.nav_favorite_merc, args);
+            }
+            else if(id==R.id.sidebar_followed_events) {
+                Bundle args = new Bundle();
+                args.putString("type", "flw");
+                args.putString("title", getString(R.string.followed_events));
+                navController.navigate(R.id.nav_followed_events, args);
             }
             return true;
         });
@@ -243,6 +252,58 @@ public class HomeScreen extends AppCompatActivity {
 
         }
     }
+
+    private void setNavigationMenuVisibility(String userRole) {
+        Menu menu = navigationView.getMenu();
+
+        // Example: Hide or show menu items based on role
+        switch (userRole) {
+            case "":
+                menu.findItem(R.id.sidebar_products).setVisible(false);
+                menu.findItem(R.id.sidebar_services).setVisible(false);
+                menu.findItem(R.id.sidebar_event_types).setVisible(false);
+                menu.findItem(R.id.sidebar_events).setVisible(false);
+                menu.findItem(R.id.sidebar_reviews).setVisible(false);
+                menu.findItem(R.id.sidebar_user_reports).setVisible(false);
+                menu.findItem(R.id.sidebar_messenger).setVisible(false);
+                menu.findItem(R.id.sidebar_favorite_merc).setVisible(false);
+                menu.findItem(R.id.sidebar_favorite_events).setVisible(false);
+                menu.findItem(R.id.sidebar_followed_events).setVisible(false);
+            case "AU": // For AU role
+                menu.findItem(R.id.sidebar_products).setVisible(false);
+                menu.findItem(R.id.sidebar_services).setVisible(false);
+                menu.findItem(R.id.sidebar_event_types).setVisible(false);
+                menu.findItem(R.id.sidebar_events).setVisible(false);
+                menu.findItem(R.id.sidebar_reviews).setVisible(false);
+                menu.findItem(R.id.sidebar_user_reports).setVisible(false);
+                break;
+
+            case "EO": // For EO role
+                menu.findItem(R.id.sidebar_products).setVisible(false);
+                menu.findItem(R.id.sidebar_services).setVisible(false);
+                menu.findItem(R.id.sidebar_event_types).setVisible(false);
+                menu.findItem(R.id.sidebar_user_reports).setVisible(false);
+                menu.findItem(R.id.sidebar_reviews).setVisible(false);
+                break;
+            case "SP": // For SP role
+                menu.findItem(R.id.sidebar_event_types).setVisible(false);
+                menu.findItem(R.id.sidebar_events).setVisible(false);
+                menu.findItem(R.id.sidebar_reviews).setVisible(false);
+                menu.findItem(R.id.sidebar_user_reports).setVisible(false);
+                break;
+
+            case "A": // For Admin role
+                menu.findItem(R.id.sidebar_products).setVisible(false);
+                menu.findItem(R.id.sidebar_services).setVisible(false);
+                menu.findItem(R.id.sidebar_events).setVisible(false);
+                break;
+
+            default:
+                // Handle any default role or guest user if needed
+                break;
+        }
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(navController, drawerLayout) || super.onSupportNavigateUp();
@@ -253,21 +314,40 @@ public class HomeScreen extends AppCompatActivity {
         searchMenuItem = menu.findItem(R.id.search_icon);
 
         switch (JwtService.getRoleFromToken()){
+            case "":
+                menu.findItem(R.id.edit_profile).setVisible(false);
+                menu.findItem(R.id.deactivate_account).setVisible(false);
+                menu.findItem(R.id.promote_eo).setVisible(false);
+                menu.findItem(R.id.promote_sp).setVisible(false);
+                menu.findItem(R.id.logout).setVisible(false);
+                break;
             case "AU":
                 menu.findItem(R.id.edit_profile).setVisible(false);
                 menu.findItem(R.id.deactivate_account).setVisible(false);
+                menu.findItem(R.id.register_sp).setVisible(false);
+                menu.findItem(R.id.register_eo).setVisible(false);
+                menu.findItem(R.id.register).setVisible(false);
+                menu.findItem(R.id.login).setVisible(false);
                 break;
             case "EO":
             case "SP":
                 menu.findItem(R.id.promote_eo).setVisible(false);
                 menu.findItem(R.id.deactivate_account).setVisible(true);
+                menu.findItem(R.id.login).setVisible(false);
                 menu.findItem(R.id.promote_sp).setVisible(false);
+                menu.findItem(R.id.register_sp).setVisible(false);
+                menu.findItem(R.id.register_eo).setVisible(false);
+                menu.findItem(R.id.register).setVisible(false);
                 break;
             case "A":
                 menu.findItem(R.id.edit_profile).setVisible(false);
                 menu.findItem(R.id.deactivate_account).setVisible(false);
-                menu.findItem(R.id.promote_eo).setVisible(false);
+                menu.findItem(R.id.login).setVisible(false);
                 menu.findItem(R.id.promote_sp).setVisible(false);
+                menu.findItem(R.id.promote_eo).setVisible(false);
+                menu.findItem(R.id.register_sp).setVisible(false);
+                menu.findItem(R.id.register_eo).setVisible(false);
+                menu.findItem(R.id.register).setVisible(false);
                 break;
         }
 
@@ -350,12 +430,6 @@ public class HomeScreen extends AppCompatActivity {
             startActivity(intent2);
             return true;
 
-        }
-        else if (itemId == R.id.settings) {
-            // Handle Option 1 click
-            Toast.makeText(this, "Option 1 clicked", Toast.LENGTH_SHORT).show();
-            return true;
-
         } else if (itemId == R.id.logout) {
             // Handle Option 2 click
             Intent intent = new Intent(this, WebSocketService.class);
@@ -391,6 +465,21 @@ public class HomeScreen extends AppCompatActivity {
             });
 
             return true;
+        }else if (itemId == R.id.login){
+            Intent intent22 = new Intent(HomeScreen.this, LoginScreen.class);
+            startActivity(intent22);
+        }else if (itemId == R.id.register){
+            Intent intent3 = new Intent(HomeScreen.this, RegisterAuScreen.class);
+            intent3.putExtra("FORM_TYPE", "NEW_FORM");
+            startActivity(intent3);
+        }else if (itemId == R.id.register_eo){
+            Intent intent4 = new Intent(HomeScreen.this, RegisterEoScreen.class);
+            intent4.putExtra("FORM_TYPE", "NEW_FORM");
+            startActivity(intent4);
+        }else if (itemId == R.id.register_sp){
+            Intent intent5 = new Intent(HomeScreen.this, RegisterSpScreen.class);
+            intent5.putExtra("FORM_TYPE", "NEW_FORM");
+            startActivity(intent5);
         }
         return super.onOptionsItemSelected(item);
     }

@@ -2,6 +2,7 @@ package com.example.EventPlanner.fragments.event;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,6 +20,15 @@ import com.example.EventPlanner.fragments.eventmerchandise.DotsIndicatorDecorati
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.databinding.FragmentEventListBinding;
 import com.example.EventPlanner.fragments.eventmerchandise.SearchViewModel;
+import com.example.EventPlanner.model.event.EventOverview;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -71,7 +81,7 @@ public class EventsList extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
+    MaterialCalendarView calendarView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -87,12 +97,37 @@ public class EventsList extends Fragment {
         }
         TextView eventsHeader=eventsListBinding.eventsHeader;
         RecyclerView recyclerView = eventsListBinding.eventsRecyclerViewHorizontal;
+        calendarView = eventsListBinding.calendarView;
+        calendarView.setDateTextAppearance(R.color.white);
         eventListViewModel.getEvents().observe(getViewLifecycleOwner(), events->{
             EventOverviewAdapter eventsAdapter = new EventOverviewAdapter(requireActivity(), events);
             recyclerView.setAdapter(eventsAdapter);
             mapViewModel.setEvents(events);
-            eventsAdapter.notifyDataSetChanged();
 
+            calendarView.removeDecorators();
+            List<CalendarDay> eventDates = new ArrayList<>();
+            for (EventOverview event : events) {
+                // Convert your event dates to CalendarDay objects
+                DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
+                // Parse the date string
+                LocalDateTime date = LocalDateTime.parse(event.getDate(), formatter);
+
+                // Extract year, month, and day
+                int year = date.getYear();
+                int month = date.getMonthValue() - 1;
+                int day = date.getDayOfMonth();
+                CalendarDay calDate = CalendarDay.from(year, month, day);
+                eventDates.add(calDate);
+            }
+
+            // Decorate the calendar with event markers
+            calendarView.addDecorator(new EventDecorator(
+                    ContextCompat.getColor(requireContext(), R.color.accent_color),
+                    eventDates
+            ));
+
+            eventsAdapter.notifyDataSetChanged();
         });
         recyclerView.addItemDecoration(new DotsIndicatorDecoration(
                 ContextCompat.getColor(getContext(), R.color.accent_color),
@@ -122,10 +157,15 @@ public class EventsList extends Fragment {
                 eventsHeader.setText(R.string.favorite_events);
                 eventListViewModel.getFavorites();
                 break;
-
+            case "Flw":
+            case "flw":
+                eventsHeader.setText(R.string.followed_events);
+                eventListViewModel.getFollowed();
+                break;
         }
 
 
         return eventsListBinding.getRoot();
     }
+
 }

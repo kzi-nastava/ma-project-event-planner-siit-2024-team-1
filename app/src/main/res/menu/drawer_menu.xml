@@ -71,6 +71,12 @@
                 android:icon="@drawable/dashboard_icon"
                 android:checkable="true"
                 app:showAsAction="ifRoom"/>
+            <item
+                android:id="@+id/sidebar_followed_events"
+                android:title="@string/followed_events"
+                android:icon="@drawable/dashboard_icon"
+                android:checkable="true"
+                app:showAsAction="ifRoom"/>
         </menu>
     </item>
 

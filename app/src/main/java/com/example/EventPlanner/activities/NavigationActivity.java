@@ -97,11 +97,6 @@ public class NavigationActivity extends AppCompatActivity {
             Toast.makeText(this, "Notifications clicked", Toast.LENGTH_SHORT).show();
             return true;
 
-        } else if (itemId == R.id.settings) {
-            // Handle Option 1 click
-            Toast.makeText(this, "Option 1 clicked", Toast.LENGTH_SHORT).show();
-            return true;
-
         } else if (itemId == R.id.logout) {
             // Handle Option 2 click
             JwtService.logout();
