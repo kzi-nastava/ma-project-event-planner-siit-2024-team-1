@@ -16,9 +16,12 @@ import com.example.EventPlanner.BuildConfig;
 import com.example.EventPlanner.activities.EventDetails;
 import com.example.EventPlanner.activities.HomeScreen;
 import com.example.EventPlanner.activities.LoginScreen;
+import com.example.EventPlanner.activities.ProductDetailsActivity;
+import com.example.EventPlanner.activities.ServiceDetailsActivity;
 import com.example.EventPlanner.clients.ClientUtils;
 import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.model.common.Notification;
+import com.example.EventPlanner.model.common.NotificationType;
 import com.google.gson.Gson;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -135,17 +138,39 @@ public class WebSocketService extends Service {
                 .setDefaults(NotificationCompat.DEFAULT_ALL);  // Use default vibration, sound, etc.
 
         // Optionally, add an intent to open an activity when the notification is tapped
-    /*
-    Intent intent = new Intent(this, EventDetails.class); // Replace with your activity
-    intent.putExtra("EVENT_ID", notification.getId());    // Pass extras if needed
-    PendingIntent pendingIntent = PendingIntent.getActivity(
-            this,
-            0,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-    );
-    builder.setContentIntent(pendingIntent);
-    */
+
+        if(notification.getType()== NotificationType.EVENT) {
+            Intent intent = new Intent(this, EventDetails.class); // Replace with your activity
+            intent.putExtra("EVENT_ID", notification.getEntityId());    // Pass extras if needed
+            PendingIntent pendingIntent = PendingIntent.getActivity(
+                    this,
+                    0,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+            );
+            builder.setContentIntent(pendingIntent);
+        } else if (notification.getType()== NotificationType.PRODUCT) {
+            Intent intent = new Intent(this, ProductDetailsActivity.class); // Replace with your activity
+            intent.putExtra("MERCHANDISE_ID", notification.getEntityId());    // Pass extras if needed
+            PendingIntent pendingIntent = PendingIntent.getActivity(
+                    this,
+                    0,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+            );
+            builder.setContentIntent(pendingIntent);
+        } else if (notification.getType()== NotificationType.SERVICE) {
+            Intent intent = new Intent(this, ServiceDetailsActivity.class); // Replace with your activity
+            intent.putExtra("MERCHANDISE_ID", notification.getEntityId());    // Pass extras if needed
+            PendingIntent pendingIntent = PendingIntent.getActivity(
+                    this,
+                    0,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+            );
+            builder.setContentIntent(pendingIntent);
+        }
+
 
         // Notify the user
         notificationManager.notify(notification.getId(), builder.build());

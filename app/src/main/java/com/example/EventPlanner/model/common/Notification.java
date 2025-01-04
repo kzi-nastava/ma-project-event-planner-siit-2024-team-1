@@ -7,6 +7,24 @@ public class Notification {
     private String content;
     private boolean read;
     private String date;
+    private NotificationType type;
+    private int entityId;
+
+    public NotificationType getType() {
+        return type;
+    }
+
+    public void setType(NotificationType type) {
+        this.type = type;
+    }
+
+    public int getEntityId() {
+        return entityId;
+    }
+
+    public void setEntityId(int entityId) {
+        this.entityId = entityId;
+    }
 
     // Getters and setters
     public int getId() { return id; }
