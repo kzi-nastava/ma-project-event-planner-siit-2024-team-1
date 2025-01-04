@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.JsonWriter;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
@@ -132,6 +133,12 @@ public class EventDetails extends AppCompatActivity {
 
         Button statsButton = (Button) eventFormBinding.stats;
         Button pdfButton = (Button) eventFormBinding.generatePdfButton;
+
+        if(!JwtService.getRoleFromToken().equals("A")){
+            statsButton.setVisibility(View.GONE);
+            pdfButton.setVisibility(View.GONE);
+        }
+
         // Set listeners for buttons
         statsButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, EventStatsActivity.class);

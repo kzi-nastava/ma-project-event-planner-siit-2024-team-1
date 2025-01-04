@@ -192,6 +192,7 @@
     <string name="reviews">Reviews</string>
     <string name="user_reports">User reports</string>
     <string name="favorite_events">Favorite Events</string>
+    <string name="followed_events">Followed Events</string>
     <string name="report">Report</string>
     <string name="block">Block</string>
     <string name="messenger">Messenger</string>

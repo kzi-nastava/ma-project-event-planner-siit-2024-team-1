@@ -39,6 +39,9 @@ public interface EventService {
     Call<Activity> getActivity(@Path("id") int id);
     @GET("events/report/{id}")
     Call<EventReport> getEventReport(@Path("id") int id);
+
+    @GET("events/followed")
+    Call<List<EventOverview>> getFollowed(@Query("userId") int userId);
     @GET("events/search")
     Call<PageResponse<EventOverview>> searchEvents(@Query("userId") int userId,
                                                    @Query("search") String search,

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.EventPlanner.R;
+import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.databinding.FragmentProductCrudBinding;
 import com.example.EventPlanner.activities.ProductForm;
 
@@ -36,6 +37,11 @@ public class ProductCRUD extends Fragment {
 
         // Add new product button listener
         Button addProductButton = productCrudBinding.addProductButton;
+
+        if(!JwtService.getRoleFromToken().equals("SP")){
+            addProductButton.setVisibility(View.GONE);
+        }
+
         addProductButton.setOnClickListener((v) -> {
             Intent intent = new Intent(requireActivity(), ProductForm.class);
             intent.putExtra("FORM_TYPE", "NEW_FORM");
