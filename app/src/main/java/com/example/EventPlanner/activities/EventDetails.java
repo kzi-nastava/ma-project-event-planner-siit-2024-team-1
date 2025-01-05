@@ -47,6 +47,7 @@ import retrofit2.Response;
 
 import com.example.EventPlanner.model.event.ReviewDTO;
 import com.example.EventPlanner.model.event.UserOverview;
+import com.example.EventPlanner.services.WebSocketService;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -172,6 +173,14 @@ public class EventDetails extends AppCompatActivity {
                 });
             }
         });
+        int notificationId = getIntent().getIntExtra("NOTIFICATION_ID", -1);
+        if (notificationId != -1) {
+            // Mark notification as read
+            Intent markReadIntent = new Intent(this, WebSocketService.class);
+            markReadIntent.setAction(WebSocketService.ACTION_MARK_READ);
+            markReadIntent.putExtra("NOTIFICATION_ID", notificationId);
+            startService(markReadIntent);
+        }
 
 
 

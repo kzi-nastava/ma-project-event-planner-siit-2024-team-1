@@ -6,6 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import com.example.EventPlanner.BuildConfig;
 import com.example.EventPlanner.clients.services.auth.AuthService;
 import com.example.EventPlanner.clients.services.messages.MessagesService;
+import com.example.EventPlanner.clients.services.notification.NotificationService;
 import com.example.EventPlanner.clients.services.photo.PhotoService;
 import com.example.EventPlanner.clients.services.common.ReviewService;
 import com.example.EventPlanner.clients.services.user.UserReportService;
@@ -53,5 +54,6 @@ public class ClientUtils {
     public static UserReportService userReportService=retrofit.create(UserReportService.class);
 
     public static MessagesService messagesService=retrofit.create(MessagesService.class);
+    public static NotificationService notificationService=retrofit.create(NotificationService.class);
 
 }

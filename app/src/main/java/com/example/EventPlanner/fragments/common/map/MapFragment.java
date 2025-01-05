@@ -45,6 +45,7 @@ public class MapFragment extends Fragment implements MapEventsReceiver {
     private OnMapAddressSelectedListener addressListener;
     private static final double DEFAULT_LATITUDE = 45.25710603831593;
     private static final double DEFAULT_LONGITUDE = 19.84540080257916;
+    private boolean firstMarker=true;
 
     public interface OnMapAddressSelectedListener {
         void onAddressSelected(Address address);
@@ -190,12 +191,18 @@ public class MapFragment extends Fragment implements MapEventsReceiver {
             m.showInfoWindow();
             return true;
         });
+        if(firstMarker&&!enableAddressDetection){
+            mapView.getController().setCenter(point);
+            mapView.invalidate();
+            firstMarker=false;
+        }
 
         return marker;
     }
 
     private void displayEventMarkers(List<EventOverview> events) {
         if (events == null) return;
+        firstMarker=true;
 
         // Remove existing markers
         mapView.getOverlays().removeIf(overlay -> overlay instanceof Marker);
@@ -233,7 +240,7 @@ public class MapFragment extends Fragment implements MapEventsReceiver {
 
     private void displayMerchandiseMarkers(List<MerchandiseOverview> merchandise) {
         if (merchandise == null) return;
-
+        firstMarker=true;
         for (MerchandiseOverview item : merchandise) {
             if (item.getAddress() != null &&
                     item.getAddress().getLatitude() != null &&
@@ -257,6 +264,7 @@ public class MapFragment extends Fragment implements MapEventsReceiver {
                 );
 
                 mapView.getOverlays().add(marker);
+
             }
         }
 

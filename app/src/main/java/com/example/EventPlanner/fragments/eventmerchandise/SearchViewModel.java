@@ -98,7 +98,7 @@ public class SearchViewModel extends ViewModel {
     }
 
     public void setSearchText(String newSearchText) {
-        searchText.postValue(newSearchText);
+        searchText.setValue(newSearchText);
     }
 
     public LiveData<LocalDate> getStartDate() {
