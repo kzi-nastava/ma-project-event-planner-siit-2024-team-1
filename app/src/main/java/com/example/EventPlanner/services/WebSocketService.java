@@ -22,9 +22,17 @@ import com.example.EventPlanner.clients.ClientUtils;
 import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.model.common.Notification;
 import com.example.EventPlanner.model.common.NotificationType;
+import com.example.EventPlanner.model.common.PageResponse;
+import com.example.EventPlanner.model.event.EventOverview;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.reactivex.disposables.CompositeDisposable;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
 
@@ -35,6 +43,7 @@ public class WebSocketService extends Service {
     private int userId;
     private static final String CHANNEL_ID = "websocket_notifications";
     private static final String CHANNEL_NAME = "WebSocket Notifications";
+    public static final String ACTION_MARK_READ = "com.example.EventPlanner.ACTION_MARK_READ";
 
     @Nullable
     @Override
@@ -45,13 +54,24 @@ public class WebSocketService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
-            userId = intent.getIntExtra("USER_ID", -1);
-            if (userId != -1) {
-                connectWebSocket(userId);
+            String action = intent.getAction();
+            if (ACTION_MARK_READ.equals(action)) {
+                int notificationId = intent.getIntExtra("NOTIFICATION_ID", -1);
+                if (notificationId != -1) {
+                    markNotificationAsRead(notificationId);
+                }
+            } else {
+                // Existing WebSocket connection logic
+                userId = intent.getIntExtra("USER_ID", -1);
+                if (userId != -1) {
+                    connectWebSocket(userId);
+                    fetchUnreadNotifications(userId);
+                }
             }
         }
         return START_STICKY;
     }
+
 
     private void connectWebSocket(int userId) {
         stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, WEBSOCKET_URL);
@@ -72,6 +92,7 @@ public class WebSocketService extends Service {
         });
 
         stompClient.connect();
+
 
         compositeDisposable.add(
                 stompClient.topic("/user/" + userId + "/notifications")
@@ -98,6 +119,28 @@ public class WebSocketService extends Service {
         );
     }
 
+    private void fetchUnreadNotifications(int userId) {
+
+        ClientUtils.notificationService.getUnreadNotifications(userId).enqueue(new Callback<List<Notification>>() {
+            @Override
+            public void onResponse(Call<List<Notification>> call, Response<List<Notification>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Notification> unreadNotifications = response.body();
+                    for (Notification notification : unreadNotifications) {
+                        showNotification(notification);
+                    }
+                    Log.d("WebSocket", "Fetched " + unreadNotifications.size() + " unread notifications");
+                } else {
+                    Log.e("WebSocket", "Error fetching unread notifications: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Notification>> call, Throwable t) {
+                Log.e("WebSocket", "Failed to fetch unread notifications", t);
+            }
+        });
+    }
     private Notification parseNotification(String payload) {
         try {
             Gson gson = new Gson();
@@ -117,63 +160,92 @@ public class WebSocketService extends Service {
         String CHANNEL_ID = "your_channel_id";
         String CHANNEL_NAME = "Your Channel Name";
 
-        // Create notification channel for Android O and above
         NotificationChannel channel = new NotificationChannel(
                 CHANNEL_ID,
                 CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_HIGH // High importance for drop-down visibility
+                NotificationManager.IMPORTANCE_HIGH
         );
-        channel.setDescription("Channel description"); // Optional
+        channel.setDescription("Channel description");
         notificationManager.createNotificationChannel(channel);
 
-        // Build the notification
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(android.R.drawable.ic_dialog_info) // Use an appropriate icon
-                .setContentTitle("Event Planner")          // Title for the notification
-                .setContentText(notification.getContent())      // Brief content for the notification
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(notification.getContent()))    // Expanded content for the notification
-                .setPriority(NotificationCompat.PRIORITY_HIGH) // High priority to show in drop-down
-                .setAutoCancel(true)                           // Auto-dismiss when tapped
-                .setDefaults(NotificationCompat.DEFAULT_ALL);  // Use default vibration, sound, etc.
+        // Create delete intent for swipe dismiss
+        Intent deleteIntent = new Intent(this, WebSocketService.class);
+        deleteIntent.setAction(ACTION_MARK_READ);
+        deleteIntent.putExtra("NOTIFICATION_ID", notification.getId());
+        PendingIntent deletePendingIntent = PendingIntent.getService(
+                this,
+                notification.getId(),
+                deleteIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
 
-        // Optionally, add an intent to open an activity when the notification is tapped
-
-        if(notification.getType()== NotificationType.EVENT) {
-            Intent intent = new Intent(this, EventDetails.class); // Replace with your activity
-            intent.putExtra("EVENT_ID", notification.getEntityId());    // Pass extras if needed
-            PendingIntent pendingIntent = PendingIntent.getActivity(
-                    this,
-                    0,
-                    intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-            );
-            builder.setContentIntent(pendingIntent);
-        } else if (notification.getType()== NotificationType.PRODUCT) {
-            Intent intent = new Intent(this, ProductDetailsActivity.class); // Replace with your activity
-            intent.putExtra("MERCHANDISE_ID", notification.getEntityId());    // Pass extras if needed
-            PendingIntent pendingIntent = PendingIntent.getActivity(
-                    this,
-                    0,
-                    intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-            );
-            builder.setContentIntent(pendingIntent);
-        } else if (notification.getType()== NotificationType.SERVICE) {
-            Intent intent = new Intent(this, ServiceDetailsActivity.class); // Replace with your activity
-            intent.putExtra("MERCHANDISE_ID", notification.getEntityId());    // Pass extras if needed
-            PendingIntent pendingIntent = PendingIntent.getActivity(
-                    this,
-                    0,
-                    intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-            );
-            builder.setContentIntent(pendingIntent);
+        // Create content intent based on notification type
+        Intent contentIntent;
+        switch (notification.getType()) {
+            case EVENT:
+                contentIntent = new Intent(this, EventDetails.class)
+                        .putExtra("EVENT_ID", notification.getEntityId());
+                break;
+            case PRODUCT:
+                contentIntent = new Intent(this, ProductDetailsActivity.class)
+                        .putExtra("MERCHANDISE_ID", notification.getEntityId());
+                break;
+            case SERVICE:
+                contentIntent = new Intent(this, ServiceDetailsActivity.class)
+                        .putExtra("MERCHANDISE_ID", notification.getEntityId());
+                break;
+            default:
+                contentIntent = new Intent(this, HomeScreen.class);
         }
+        contentIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
+        // Add the notification ID to the content intent
+        contentIntent.putExtra("NOTIFICATION_ID", notification.getId());
 
-        // Notify the user
+        // Create pending intent for content click
+        PendingIntent contentPendingIntent = PendingIntent.getActivity(
+                this,
+                notification.getId(),
+                contentIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(android.R.drawable.ic_dialog_info)
+                .setContentTitle("Event Planner")
+                .setContentText(notification.getContent())
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(notification.getContent()))
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true)
+                .setDeleteIntent(deletePendingIntent)
+                .setContentIntent(contentPendingIntent)
+                .setDefaults(NotificationCompat.DEFAULT_ALL);
+
         notificationManager.notify(notification.getId(), builder.build());
+    }
+
+
+
+    private void markNotificationAsRead(int notificationId) {
+        ClientUtils.notificationService.markAsRead(notificationId).enqueue(new Callback<Notification>() {
+            @Override
+            public void onResponse(Call<Notification> call, Response<Notification> response) {
+                if (response.isSuccessful()) {
+                    Log.d("WebSocket", "Notification marked as read: " + notificationId);
+                    // Cancel the notification from the notification drawer
+                    NotificationManager notificationManager =
+                            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.cancel(notificationId);
+                } else {
+                    Log.e("WebSocket", "Error marking notification as read: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Notification> call, Throwable t) {
+                Log.e("WebSocket", "Failed to mark notification as read", t);
+            }
+        });
     }
 
 

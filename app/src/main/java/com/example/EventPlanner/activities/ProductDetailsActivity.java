@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.EventPlanner.R;
+import com.example.EventPlanner.services.WebSocketService;
 
 public class ProductDetailsActivity extends AppCompatActivity {
 
@@ -28,5 +29,13 @@ public class ProductDetailsActivity extends AppCompatActivity {
         Intent intent=getIntent();
         merchandiseId=intent.getIntExtra("MERCHANDISE_ID",-1);
         Log.d("merchandise_id", String.valueOf(merchandiseId));
+        int notificationId = getIntent().getIntExtra("NOTIFICATION_ID", -1);
+        if (notificationId != -1) {
+            // Mark notification as read
+            Intent markReadIntent = new Intent(this, WebSocketService.class);
+            markReadIntent.setAction(WebSocketService.ACTION_MARK_READ);
+            markReadIntent.putExtra("NOTIFICATION_ID", notificationId);
+            startService(markReadIntent);
+        }
     }
 }
