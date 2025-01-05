@@ -1,45 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/filters"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
         android:layout_marginBottom="16dp" />
 
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        app:cardElevation="2dp"
+        app:cardCornerRadius="8dp">
 
-        <CheckBox
-            android:id="@+id/cb_show_events"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/events" />
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <CheckBox
-            android:id="@+id/cb_show_services"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/services" />
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cb_show_events"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/events" />
 
-        <CheckBox
-            android:id="@+id/cb_show_products"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/products" />
-    </LinearLayout>
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cb_show_services"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/services" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cb_show_products"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/products" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -53,166 +61,307 @@
             android:orientation="vertical">
 
             <!-- Events Section -->
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginBottom="16dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="8dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/event_filters"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textView"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/Start_Date" />
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                <CalendarView
-                    android:id="@+id/event_date_picker_start"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:text="@string/event_filters"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1" />
 
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/end_date" />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/Start_Date"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" />
 
-                <CalendarView
-                    android:id="@+id/event_date_picker_end"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    <CalendarView
+                        android:id="@+id/event_date_picker_start"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp" />
 
-                <EditText
-                    android:id="@+id/event_type_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/type" />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/end_date"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" />
 
-                <EditText
-                    android:id="@+id/event_city_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/sort_events_by_city" />
-            </LinearLayout>
+                    <CalendarView
+                        android:id="@+id/event_date_picker_end"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/event_type_input"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/type" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/event_city_input"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/sort_events_by_city" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Services Section -->
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginBottom="16dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="8dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/service_filters"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/service_price_min"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/price_min" />
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                <EditText
-                    android:id="@+id/service_price_max"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/price_max" />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:text="@string/service_filters"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1" />
 
-                <EditText
-                    android:id="@+id/service_category"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/category" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-                <EditText
-                    android:id="@+id/service_duration_min"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/duration_min" />
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/service_price_min"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/price_min"
+                            android:inputType="numberDecimal" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/service_duration_max"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/duration_max" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-                <EditText
-                    android:id="@+id/service_city"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/sort_events_by_city" />
-            </LinearLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/service_price_max"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/price_max"
+                            android:inputType="numberDecimal" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/service_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/category" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/service_duration_min"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/duration_min"
+                            android:inputType="number" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/service_duration_max"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/duration_max"
+                            android:inputType="number" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/service_city"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/sort_events_by_city" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Products Section -->
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginBottom="16dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="8dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/product_filters"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/product_price_min"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/price_min" />
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                <EditText
-                    android:id="@+id/product_price_max"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/price_max" />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:text="@string/product_filters"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1" />
 
-                <EditText
-                    android:id="@+id/product_category"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/category" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-                <EditText
-                    android:id="@+id/product_duration_min"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/duration_min" />
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/product_price_min"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/price_min"
+                            android:inputType="numberDecimal" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/product_duration_max"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/duration_max" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-                <EditText
-                    android:id="@+id/product_city"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/sort_events_by_city" />
-            </LinearLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/product_price_max"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/price_max"
+                            android:inputType="numberDecimal" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/product_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/category" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/product_duration_min"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/duration_min"
+                            android:inputType="number" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/product_duration_max"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/duration_max"
+                            android:inputType="number" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/product_city"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/sort_events_by_city" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/btn_apply_filters"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/apply_filters" />
+        android:orientation="vertical"
+        android:layout_marginTop="16dp">
 
-    <Button
-        android:id="@+id/btnResetFilters"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/reset_filter_values" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_apply_filters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/apply_filters"
+            style="@style/Widget.MaterialComponents.Button" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnResetFilters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/reset_filter_values"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+    </LinearLayout>
 
 </LinearLayout>
