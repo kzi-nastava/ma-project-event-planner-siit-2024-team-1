@@ -12,9 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.EventPlanner.adapters.event.EventOverviewAdapter;
+import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.fragments.common.map.MapViewModel;
 import com.example.EventPlanner.fragments.eventmerchandise.DotsIndicatorDecoration;
 import com.example.EventPlanner.R;
@@ -91,16 +93,19 @@ public class EventsList extends Fragment {
         mapViewModel=new ViewModelProvider(requireActivity()).get(MapViewModel.class);
 
         String topString=getString(R.string.top);
-        String extraValue = topString; // Default value
+        String extraValue; // Default value
         if (getArguments() != null) {
             extraValue = getArguments().getString("type", topString);
+        } else {
+            extraValue = topString;
         }
         TextView eventsHeader=eventsListBinding.eventsHeader;
+
         RecyclerView recyclerView = eventsListBinding.eventsRecyclerViewHorizontal;
         calendarView = eventsListBinding.calendarView;
         calendarView.setDateTextAppearance(R.color.white);
         eventListViewModel.getEvents().observe(getViewLifecycleOwner(), events->{
-            EventOverviewAdapter eventsAdapter = new EventOverviewAdapter(requireActivity(), events);
+            EventOverviewAdapter eventsAdapter = new EventOverviewAdapter(requireActivity(), events, extraValue);
             recyclerView.setAdapter(eventsAdapter);
             mapViewModel.setEvents(events);
 

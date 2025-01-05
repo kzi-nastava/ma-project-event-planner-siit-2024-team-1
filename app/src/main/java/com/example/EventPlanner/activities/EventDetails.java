@@ -31,6 +31,7 @@ import com.example.EventPlanner.model.common.Address;
 import com.example.EventPlanner.model.common.Review;
 import com.example.EventPlanner.model.event.CreatedEventResponse;
 import com.example.EventPlanner.model.event.Event;
+import com.example.EventPlanner.model.event.EventOverview;
 import com.example.EventPlanner.model.event.EventReport;
 import com.example.EventPlanner.model.event.EventTypeOverview;
 
@@ -101,8 +102,32 @@ public class EventDetails extends AppCompatActivity {
 
         starButton = findViewById(R.id.star_button);
 
-        // Set initial state based on event details
-        updateStarIcon();
+        Call<List<EventOverview>> call1 = ClientUtils.eventService.getFavorites(JwtService.getIdFromToken());
+        call1.enqueue(new Callback<List<EventOverview>>() {
+            @Override
+            public void onResponse(Call<List<EventOverview>> call, Response<List<EventOverview>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if(response.body().stream().filter(x -> x.getId() == eventId).findAny().isPresent()){
+                        isFavorited = true;
+                    }
+                    else{
+                        isFavorited = false;
+                    }
+                    updateStarIcon();
+                } else {
+                    // Handle error cases
+                    Log.e("Favorizing Event Error", "Response not successful: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<EventOverview>> call, Throwable throwable) {
+                // Handle network errors
+                Log.e("Favorizing Event Failure", "Error: " + throwable.getMessage());
+            }
+        });
+
+
 
         // Handle star button click
         starButton.setOnClickListener(view -> {
