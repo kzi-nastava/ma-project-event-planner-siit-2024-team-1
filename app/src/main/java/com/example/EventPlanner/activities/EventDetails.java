@@ -46,6 +46,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.example.EventPlanner.model.event.FollowResponse;
 import com.example.EventPlanner.model.event.ReviewDTO;
 import com.example.EventPlanner.model.event.UserOverview;
 import com.example.EventPlanner.services.WebSocketService;
@@ -127,7 +128,9 @@ public class EventDetails extends AppCompatActivity {
             }
         });
 
-
+        if(JwtService.getIdFromToken() == -1){
+            starButton.setVisibility(View.GONE);
+        }
 
         // Handle star button click
         starButton.setOnClickListener(view -> {
@@ -147,6 +150,11 @@ public class EventDetails extends AppCompatActivity {
 
         Button agendaButton = (Button) eventFormBinding.seeAgenda;
         Button followEventButton = (Button) eventFormBinding.followEvent;
+
+        if(JwtService.getIdFromToken() == -1){
+            followEventButton.setVisibility(View.GONE);
+        }
+
         // Set listeners for buttons
         agendaButton.setOnClickListener(v -> {
             // Handle the "Edit" button click
@@ -159,7 +167,20 @@ public class EventDetails extends AppCompatActivity {
 
         // Set listeners for buttons
         followEventButton.setOnClickListener(v -> {
+            ClientUtils.userService.followEvent(JwtService.getIdFromToken(), eventId).enqueue(new Callback<FollowResponse>() {
+                @Override
+                public void onResponse(Call<FollowResponse> call, Response<FollowResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {// Generate PDF with the event report
+                    } else {
+                        Log.e("PDF Generation", "Failed to fetch report: " + response.code());
+                    }
+                }
 
+                @Override
+                public void onFailure(Call<FollowResponse> call, Throwable t) {
+                    Log.e("PDF Generation", "Error fetching report: " + t.getMessage());
+                }
+            });
         });
 
         Button statsButton = (Button) eventFormBinding.stats;
