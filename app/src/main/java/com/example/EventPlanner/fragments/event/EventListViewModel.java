@@ -42,7 +42,7 @@ public class EventListViewModel extends ViewModel {
     }
 
     public void getTop() {
-        Call<PageResponse<EventOverview>> call = ClientUtils.eventService.getTop(-1);
+        Call<PageResponse<EventOverview>> call = ClientUtils.eventService.getTop(JwtService.getIdFromToken());
         call.enqueue(new Callback<PageResponse<EventOverview>>() {
             @Override
             public void onResponse(Call<PageResponse<EventOverview>> call, Response<PageResponse<EventOverview>> response) {
@@ -66,7 +66,7 @@ public class EventListViewModel extends ViewModel {
             eventsLiveData.postValue(new ArrayList<>());
             return;
         }
-        Call<PageResponse<EventOverview>> call = ClientUtils.eventService.searchEvents(-1,searchText,startDate,endDate,type,city,sortBy);
+        Call<PageResponse<EventOverview>> call = ClientUtils.eventService.searchEvents(JwtService.getIdFromToken(),searchText,startDate,endDate,type,city,sortBy);
         call.enqueue(new Callback<PageResponse<EventOverview>>() {
             @Override
             public void onResponse(Call<PageResponse<EventOverview>> call, Response<PageResponse<EventOverview>> response) {

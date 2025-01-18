@@ -270,6 +270,8 @@ public class MessengerActivity extends AppCompatActivity {
                     Toast.makeText(MessengerActivity.this,
                             "User Blocked",
                             Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MessengerActivity.this, HomeScreen.class);
+                    startActivity(intent);
                     finish();
                 } else {
                     try {
@@ -282,6 +284,7 @@ public class MessengerActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(MessengerActivity.this, "Unknown error occurred", Toast.LENGTH_LONG).show();
                         }
+
                     } catch (IOException e) {
                         Toast.makeText(MessengerActivity.this, "Error parsing server response", Toast.LENGTH_LONG).show();
                     }
