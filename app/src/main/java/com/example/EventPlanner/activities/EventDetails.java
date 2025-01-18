@@ -170,7 +170,10 @@ public class EventDetails extends AppCompatActivity {
             ClientUtils.userService.followEvent(JwtService.getIdFromToken(), eventId).enqueue(new Callback<FollowResponse>() {
                 @Override
                 public void onResponse(Call<FollowResponse> call, Response<FollowResponse> response) {
-                    if (response.isSuccessful() && response.body() != null) {// Generate PDF with the event report
+                    if (response.isSuccessful() && response.body() != null) {
+                        Intent intent = new Intent(getBaseContext(), HomeScreen.class);
+                        startActivity(intent);
+                        // Generate PDF with the event report
                     } else {
                         Log.e("PDF Generation", "Failed to fetch report: " + response.code());
                     }

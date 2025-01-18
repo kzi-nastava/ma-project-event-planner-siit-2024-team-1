@@ -182,7 +182,7 @@ public class RegisterEoScreen extends AppCompatActivity {
                             JwtService.setTokens(response.body().getAccessToken(), response.body().getRefreshToken());
 
                             // Navigate to the home screen
-                            Intent intent = new Intent(RegisterEoScreen.this, HomeScreen.class);
+                            Intent intent = new Intent(RegisterEoScreen.this, LoginScreen.class);
                             startActivity(intent);
                         } else {
                             // Handle error cases

@@ -385,7 +385,13 @@ public class HomeScreen extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                     if (response.isSuccessful() && response.body() != null) {
-
+                        if(response.body()){
+                            Toast.makeText(HomeScreen.this, "Successful account deactivation", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(HomeScreen.this, LoginScreen.class);
+                            startActivity(intent);
+                        }else{
+                            Toast.makeText(HomeScreen.this, "You cannot deactivate account because you have created events or booked services", Toast.LENGTH_LONG).show();
+                        }
                     } else {
                         // Parse error response
                         try {

@@ -2,6 +2,9 @@ package com.example.EventPlanner.adapters.merchandise;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +17,23 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.activities.ServiceDetailsActivity;
+import com.example.EventPlanner.clients.ClientUtils;
 import com.example.EventPlanner.fragments.activity.ActivityCRUD;
 import com.example.EventPlanner.model.merchandise.Merchandise;
 import com.example.EventPlanner.model.merchandise.MerchandiseOverview;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Locale;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MerchandiseOverviewAdapter extends RecyclerView.Adapter<MerchandiseOverviewAdapter.MerchandiseViewHolder> {
     private ArrayList<MerchandiseOverview> aMerchandises;
@@ -44,10 +56,31 @@ public class MerchandiseOverviewAdapter extends RecyclerView.Adapter<Merchandise
     public void onBindViewHolder(@NonNull MerchandiseViewHolder holder, int position) {
         MerchandiseOverview merchandise = aMerchandises.get(position);
 
-//        if (merchandise.getPhotos() != null && !merchandise.getPhotos()) {
-//            holder.merchandiseImage.setImageResource(R.drawable.dinja);
-//        }
-        holder.merchandiseImage.setImageResource(R.drawable.dinja);
+        if (!merchandise.getPhotos().isEmpty()) {
+            ClientUtils.photoService.getPhoto(merchandise.getPhotos().get(0).getPhoto()).enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        InputStream inputStream = response.body().byteStream();
+                        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+
+                        // Load bitmap with Glide
+                        Glide.with(context)
+                                .load(bitmap)
+                                .into(holder.merchandiseImage);
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                    // Handle failure
+                    holder.merchandiseImage.setImageResource(R.drawable.error); // Fallback image
+                }
+            });
+        } else {
+            holder.merchandiseImage.setImageResource(R.drawable.no_image);
+        }
+
         holder.merchandiseTitle.setText(merchandise.getTitle());
         holder.merchandiseDescription.setText(merchandise.getDescription());
 
