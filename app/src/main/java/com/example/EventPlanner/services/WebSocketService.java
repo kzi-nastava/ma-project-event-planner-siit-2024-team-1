@@ -1,11 +1,14 @@
 package com.example.EventPlanner.services;
 
+import static android.app.Notification.VISIBILITY_PUBLIC;
+
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -41,14 +44,22 @@ public class WebSocketService extends Service {
     private StompClient stompClient;
     private CompositeDisposable compositeDisposable;
     private int userId;
-    private static final String CHANNEL_ID = "websocket_notifications";
-    private static final String CHANNEL_NAME = "WebSocket Notifications";
     public static final String ACTION_MARK_READ = "com.example.EventPlanner.ACTION_MARK_READ";
+
+    private static final String EVENT_CHANNEL_ID = "event_channel_id";
+    private static final String PRODUCT_CHANNEL_ID = "product_channel_id";
+    private static final String SERVICE_CHANNEL_ID = "service_channel_id";
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        createNotificationChannels();
     }
 
     @Override
@@ -151,22 +162,58 @@ public class WebSocketService extends Service {
         }
     }
 
+    private void createNotificationChannels() {
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Event Channel
+        NotificationChannel eventChannel = new NotificationChannel(
+                EVENT_CHANNEL_ID,
+                "Event Notifications",
+                NotificationManager.IMPORTANCE_HIGH
+        );
+        eventChannel.setDescription("Notifications for upcoming and ongoing events");
+        // Add these settings
+        eventChannel.enableLights(true);
+        eventChannel.enableVibration(true);
+        eventChannel.setLockscreenVisibility(VISIBILITY_PUBLIC);
+        eventChannel.setShowBadge(true);
+        notificationManager.createNotificationChannel(eventChannel);
+
+        // Product Channel
+        NotificationChannel productChannel = new NotificationChannel(
+                PRODUCT_CHANNEL_ID,
+                "Product Notifications",
+                NotificationManager.IMPORTANCE_HIGH
+        );
+        productChannel.setDescription("Updates and alerts about products");
+        // Add these settings
+        productChannel.enableLights(true);
+        productChannel.enableVibration(true);
+        productChannel.setLockscreenVisibility(VISIBILITY_PUBLIC);
+        productChannel.setShowBadge(true);
+        notificationManager.createNotificationChannel(productChannel);
+
+        // Service Channel
+        NotificationChannel serviceChannel = new NotificationChannel(
+                SERVICE_CHANNEL_ID,
+                "Service Notifications",
+                NotificationManager.IMPORTANCE_HIGH
+        );
+        serviceChannel.setDescription("Updates and alerts about services");
+        // Add these settings
+        serviceChannel.enableLights(true);
+        serviceChannel.enableVibration(true);
+        serviceChannel.setLockscreenVisibility(VISIBILITY_PUBLIC);
+        serviceChannel.setShowBadge(true);
+        notificationManager.createNotificationChannel(serviceChannel);
+    }
+
     private void showNotification(Notification notification) {
         if (notification == null) return;
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        String CHANNEL_ID = "your_channel_id";
-        String CHANNEL_NAME = "Your Channel Name";
-
-        NotificationChannel channel = new NotificationChannel(
-                CHANNEL_ID,
-                CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_HIGH
-        );
-        channel.setDescription("Channel description");
-        notificationManager.createNotificationChannel(channel);
 
         // Create delete intent for swipe dismiss
         Intent deleteIntent = new Intent(this, WebSocketService.class);
@@ -181,25 +228,34 @@ public class WebSocketService extends Service {
 
         // Create content intent based on notification type
         Intent contentIntent;
+        String channelId;
+        String title;
+
         switch (notification.getType()) {
             case EVENT:
                 contentIntent = new Intent(this, EventDetails.class)
                         .putExtra("EVENT_ID", notification.getEntityId());
+                channelId = EVENT_CHANNEL_ID;
+                title = "Event Update";
                 break;
             case PRODUCT:
                 contentIntent = new Intent(this, ProductDetailsActivity.class)
                         .putExtra("MERCHANDISE_ID", notification.getEntityId());
+                channelId = PRODUCT_CHANNEL_ID;
+                title = "Product Update";
                 break;
             case SERVICE:
                 contentIntent = new Intent(this, ServiceDetailsActivity.class)
                         .putExtra("MERCHANDISE_ID", notification.getEntityId());
+                channelId = SERVICE_CHANNEL_ID;
+                title = "Service Update";
                 break;
             default:
                 contentIntent = new Intent(this, HomeScreen.class);
+                channelId = EVENT_CHANNEL_ID; // fallback to event channel
+                title = "Event Planner";
         }
         contentIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        // Add the notification ID to the content intent
         contentIntent.putExtra("NOTIFICATION_ID", notification.getId());
 
         // Create pending intent for content click
@@ -210,16 +266,22 @@ public class WebSocketService extends Service {
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
                 .setSmallIcon(android.R.drawable.ic_dialog_info)
-                .setContentTitle("Event Planner")
+                .setContentTitle(title)
                 .setContentText(notification.getContent())
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(notification.getContent()))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true)
                 .setDeleteIntent(deletePendingIntent)
                 .setContentIntent(contentPendingIntent)
-                .setDefaults(NotificationCompat.DEFAULT_ALL);
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                // Add these settings
+                .setFullScreenIntent(contentPendingIntent, true)  // Add this line
+                .setVibrate(new long[]{0, 250, 250, 250})
+                .setLights(Color.RED, 3000, 3000)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
         notificationManager.notify(notification.getId(), builder.build());
     }

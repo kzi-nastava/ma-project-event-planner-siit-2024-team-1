@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.EventPlanner.DummyMerchandiseGenerator;
 import com.example.EventPlanner.clients.ClientUtils;
+import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.model.common.PageResponse;
 import com.example.EventPlanner.model.event.EventOverview;
 import com.example.EventPlanner.model.merchandise.Merchandise;
@@ -44,7 +45,7 @@ public class MerchandiseViewModel extends ViewModel {
     }
 
     public void getTop() {
-        Call<ArrayList<MerchandiseOverview>> call = ClientUtils.merchandiseService.getTop(-1);
+        Call<ArrayList<MerchandiseOverview>> call = ClientUtils.merchandiseService.getTop(JwtService.getIdFromToken());
         call.enqueue(new Callback<ArrayList<MerchandiseOverview>>() {
             @Override
             public void onResponse(Call<ArrayList<MerchandiseOverview>> call, Response<ArrayList<MerchandiseOverview>> response) {
@@ -92,7 +93,7 @@ public class MerchandiseViewModel extends ViewModel {
         // Products call
         if (areProductsVisible) {
             Call<PageResponse<MerchandiseOverview>> call = ClientUtils.productService
-                    .searchProducts(-1, searchText, productPriceMin, productPriceMax,
+                    .searchProducts(JwtService.getIdFromToken(), searchText, productPriceMin, productPriceMax,
                             productDurationMin, productDurationMax, productCity, productCategory);
 
             call.enqueue(new Callback<PageResponse<MerchandiseOverview>>() {
@@ -118,7 +119,7 @@ public class MerchandiseViewModel extends ViewModel {
         // Services call
         if (areServicesVisible) {
             Call<PageResponse<MerchandiseOverview>> callTwo = ClientUtils.serviceService
-                    .searchServices(-1, searchText, servicePriceMin, servicePriceMax,
+                    .searchServices(JwtService.getIdFromToken(), searchText, servicePriceMin, servicePriceMax,
                             serviceDurationMin, serviceDurationMax, serviceCity, serviceCategory);
 
             callTwo.enqueue(new Callback<PageResponse<MerchandiseOverview>>() {
