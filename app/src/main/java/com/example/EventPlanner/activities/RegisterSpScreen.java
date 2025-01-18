@@ -215,7 +215,7 @@ public class RegisterSpScreen extends AppCompatActivity {
                             JwtService.setTokens(response.body().getAccessToken(), response.body().getRefreshToken());
 
                             // Navigate to the home screen
-                            Intent intent = new Intent(RegisterSpScreen.this, HomeScreen.class);
+                            Intent intent = new Intent(RegisterSpScreen.this, LoginScreen.class);
                             startActivity(intent);
                         } else {
                             // Handle error cases

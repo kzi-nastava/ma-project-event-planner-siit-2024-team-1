@@ -64,7 +64,7 @@ public class RegisterAuScreen extends AppCompatActivity {
                     if (response.isSuccessful() && response.body() != null) {
                         JwtService.setTokens(response.body().getAccessToken(), response.body().getRefreshToken());
                         // Navigate to the home screen
-                        Intent intent = new Intent(RegisterAuScreen.this, HomeScreen.class);
+                        Intent intent = new Intent(RegisterAuScreen.this, LoginScreen.class);
                         startActivity(intent);
                     } else {
                         try {
