@@ -23,9 +23,9 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/editTextText2"
+            android:id="@+id/title"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="24dp"
@@ -36,7 +36,7 @@
             app:layout_constraintTop_toBottomOf="@+id/form_title" />
 
         <EditText
-            android:id="@+id/editTextTextMultiLine"
+            android:id="@+id/description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -48,12 +48,12 @@
             android:minLines="2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextText2" />
+            app:layout_constraintTop_toBottomOf="@+id/title" />
 
         <EditText
-            android:id="@+id/editTextText5"
+            android:id="@+id/specificity"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
@@ -61,134 +61,206 @@
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine" />
+            app:layout_constraintTop_toBottomOf="@+id/description" />
 
         <EditText
-            android:id="@+id/editTextNumberDecimal"
+            android:id="@+id/price"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:hint="@string/price"
             android:inputType="numberDecimal"
-            app:layout_constraintEnd_toStartOf="@+id/editTextNumberDecimal2"
+            app:layout_constraintEnd_toStartOf="@+id/discount"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextText5" />
+            app:layout_constraintTop_toBottomOf="@+id/specificity" />
 
         <EditText
-            android:id="@+id/editTextNumberDecimal2"
+            android:id="@+id/discount"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="24dp"
             android:hint="@string/discount"
             android:inputType="numberDecimal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/editTextNumberDecimal"
-            app:layout_constraintTop_toTopOf="@+id/editTextNumberDecimal" />
+            app:layout_constraintStart_toEndOf="@+id/price"
+            app:layout_constraintTop_toTopOf="@+id/price" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/categoryTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:text="@string/category"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal" />
+            app:layout_constraintTop_toBottomOf="@+id/price" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/eventTypeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="24dp"
             android:text="@string/event_type"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView4" />
+            app:layout_constraintTop_toTopOf="@+id/categoryTitle" />
 
         <Spinner
             android:id="@+id/category_spinner"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toStartOf="@+id/event_type_spinner"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+            app:layout_constraintTop_toBottomOf="@+id/categoryTitle" />
 
         <Spinner
             android:id="@+id/event_type_spinner"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/category_spinner"
             app:layout_constraintTop_toTopOf="@+id/category_spinner" />
 
+        <!-- City Input -->
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/eventFormMapViewFragmentView"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginVertical="10dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/event_type_spinner" />
+
         <EditText
-            android:id="@+id/editTextNumberDecimal3"
+            android:id="@+id/city"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:hint="@string/city"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/eventFormMapViewFragmentView" />
+
+        <!-- Street Input -->
+        <EditText
+            android:id="@+id/street"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:hint="@string/street"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/city" />
+
+        <!-- Number Input -->
+        <EditText
+            android:id="@+id/number"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:hint="@string/number"
+            android:inputType="text"
+            app:layout_constraintEnd_toStartOf="@id/latitude"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/street"
+            tools:ignore="TextFields" />
+
+        <!-- Latitude Input -->
+        <EditText
+            android:id="@+id/latitude"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:hint="@string/latitude"
+            android:inputType="numberDecimal"
+            app:layout_constraintEnd_toEndOf="@id/longitude"
+            app:layout_constraintStart_toEndOf="@id/number"
+            app:layout_constraintTop_toBottomOf="@+id/street" />
+
+        <!-- Longitude Input -->
+        <EditText
+            android:id="@+id/longitude"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:hint="@string/longitude"
+            android:inputType="numberDecimal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/latitude"
+            app:layout_constraintTop_toBottomOf="@+id/street" />
+
+        <EditText
+            android:id="@+id/minDuration"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:hint="@string/min_Duration"
             android:inputType="numberDecimal"
-            app:layout_constraintEnd_toStartOf="@+id/editTextNumberDecimal5"
+            app:layout_constraintEnd_toStartOf="@+id/maxDuration"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/category_spinner" />
+            app:layout_constraintTop_toBottomOf="@+id/latitude" />
 
         <EditText
-            android:id="@+id/editTextNumberDecimal5"
+            android:id="@+id/maxDuration"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:hint="@string/max_duration"
-            android:inputType="numberDecimal"
-            app:layout_constraintEnd_toStartOf="@+id/editTextNumberDecimal4"
-            app:layout_constraintStart_toEndOf="@+id/editTextNumberDecimal3"
-            app:layout_constraintTop_toTopOf="@+id/editTextNumberDecimal3" />
-
-        <EditText
-            android:id="@+id/editTextNumberDecimal4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="24dp"
-            android:hint="@string/duration"
+            android:hint="@string/max_duration"
             android:inputType="numberDecimal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/editTextNumberDecimal5"
-            app:layout_constraintTop_toTopOf="@+id/editTextNumberDecimal5" />
+            app:layout_constraintStart_toEndOf="@+id/minDuration"
+            app:layout_constraintTop_toTopOf="@+id/minDuration" />
 
         <EditText
-            android:id="@+id/editTextNumberDecimal6"
+            android:id="@+id/reservationDeadline"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:hint="@string/reservation_Deadline"
             android:inputType="numberDecimal"
-            app:layout_constraintEnd_toStartOf="@+id/editTextNumberDecimal7"
+            app:layout_constraintEnd_toStartOf="@+id/cancellationDeadline"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal3" />
+            app:layout_constraintTop_toBottomOf="@+id/minDuration" />
 
         <EditText
-            android:id="@+id/editTextNumberDecimal7"
+            android:id="@+id/cancellationDeadline"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="24dp"
             android:hint="@string/cancellation_deadline"
             android:inputType="numberDecimal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/editTextNumberDecimal6"
-            app:layout_constraintTop_toTopOf="@+id/editTextNumberDecimal6" />
+            app:layout_constraintStart_toEndOf="@+id/reservationDeadline"
+            app:layout_constraintTop_toTopOf="@+id/reservationDeadline" />
 
         <TextView
             android:id="@+id/service_reservation_type_label"
@@ -198,10 +270,10 @@
             android:layout_marginTop="16dp"
             android:text="@string/reservation_type"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal6" />
+            app:layout_constraintTop_toBottomOf="@+id/reservationDeadline" />
 
         <RadioGroup
-            android:id="@+id/radioGroup"
+            android:id="@+id/reservationTypeRadioGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="24dp"
@@ -241,7 +313,7 @@
             android:text="@string/available"
             app:layout_constraintEnd_toStartOf="@+id/service_visible_checkbox"
             app:layout_constraintStart_toEndOf="@+id/add_service_photos_button"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+            app:layout_constraintTop_toBottomOf="@+id/reservationTypeRadioGroup" />
 
         <CheckBox
             android:id="@+id/service_visible_checkbox"
@@ -250,12 +322,13 @@
             android:layout_marginEnd="24dp"
             android:text="@string/visible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+            app:layout_constraintTop_toBottomOf="@+id/reservationTypeRadioGroup" />
 
         <Button
             android:id="@+id/submit_service_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:layout_marginBottom="24dp"
             android:text="@string/submit"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -270,19 +343,6 @@
             android:layout_marginStart="24dp"
             android:layout_marginEnd="8dp"
             android:text="@string/category_change"
-            android:visibility="gone"
-            app:layout_constraintEnd_toStartOf="@+id/event_type_spinner"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/category_spinner" />
-
-        <EditText
-            android:id="@+id/category_input"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="8dp"
-            android:hint="@string/category"
-            android:inputType="text"
             android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@+id/event_type_spinner"
             app:layout_constraintStart_toStartOf="parent"
