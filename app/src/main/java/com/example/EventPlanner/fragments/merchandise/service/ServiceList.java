@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.EventPlanner.adapters.merchandise.service.ServiceAdapter;
+import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.databinding.FragmentServiceListBinding;
 import com.example.EventPlanner.model.merchandise.service.Service;
 
@@ -71,14 +72,16 @@ public class ServiceList extends Fragment {
                              Bundle savedInstanceState) {
         serviceListBinding = FragmentServiceListBinding.inflate(getLayoutInflater());
         serviceViewModel = new ViewModelProvider(requireActivity()).get(ServiceViewModel.class);
-
-        ArrayList<Service> allServices = new ArrayList<Service>();
-        allServices = serviceViewModel.getAll();
-
-        ServiceAdapter adapter = new ServiceAdapter(requireContext(), allServices);
         RecyclerView recyclerView = serviceListBinding.serviceListVertical;
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        recyclerView.setAdapter(adapter);
+
+        serviceViewModel.getServices().observe(getViewLifecycleOwner(), services -> {
+            ServiceAdapter adapter = new ServiceAdapter(requireContext(), services);
+            recyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        });
+
+        serviceViewModel.getAllBySp(JwtService.getIdFromToken());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         return serviceListBinding.getRoot();
     }

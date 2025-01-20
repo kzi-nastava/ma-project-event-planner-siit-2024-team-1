@@ -21,7 +21,7 @@
             android:orientation="vertical">
 
             <!-- Media -->
-            <ImageView
+            <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/service_image"
                 android:layout_width="match_parent"
                 android:layout_height="194dp"
@@ -49,22 +49,6 @@
                         android:text="Wedding Hall"
                         android:textAppearance="?attr/textAppearanceTitleMedium"
                         />
-
-                    <RatingBar
-                        android:id="@+id/service_rating"
-                        style="@style/RatingBar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:numStars="5"
-                        android:rating="4.5"
-                        android:stepSize="0.5" />
-
-                    <TextView
-                        android:id="@+id/service_rating_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:textAppearance="?attr/textAppearanceBodyMedium" />
                 </LinearLayout>
                 <TextView
                     android:id="@+id/service_category"
@@ -125,7 +109,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:text="@string/reserve"
+                    android:text="@string/see_details"
                     style="@style/Secondary.Button.Primary.Text"
                     />
 

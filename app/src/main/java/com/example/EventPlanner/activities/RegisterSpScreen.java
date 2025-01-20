@@ -24,23 +24,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.adapters.merchandise.BusinessPhotoAdapter;
-import com.example.EventPlanner.adapters.merchandise.MerchandisePhotoAdapter;
 import com.example.EventPlanner.clients.ClientUtils;
 import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.databinding.ActivityRegisterSpScreenBinding;
 import com.example.EventPlanner.fragments.common.map.MapFragment;
-import com.example.EventPlanner.model.auth.RegisterEoRequest;
-import com.example.EventPlanner.model.auth.RegisterEoResponse;
 import com.example.EventPlanner.model.auth.RegisterSpRequest;
 import com.example.EventPlanner.model.auth.RegisterSpResponse;
 import com.example.EventPlanner.model.auth.Role;
 import com.example.EventPlanner.model.common.Address;
-import com.example.EventPlanner.model.merchandise.MerchandisePhoto;
 import com.example.EventPlanner.model.user.BusinessPhoto;
 import com.example.EventPlanner.model.user.GetEoById;
 import com.example.EventPlanner.model.user.GetSpById;
-import com.example.EventPlanner.model.user.UpdateEoRequest;
-import com.example.EventPlanner.model.user.UpdateEoResponse;
 import com.example.EventPlanner.model.user.UpdateSpRequest;
 import com.example.EventPlanner.model.user.UpdateSpResponse;
 
