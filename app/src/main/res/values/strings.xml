@@ -63,6 +63,7 @@
     <string name="price_min">Price Min</string>
     <string name="price_max">Price Max</string>
     <string name="category">Category</string>
+    <string name="categories">Categories</string>
     <string name="duration_min">Duration Min</string>
     <string name="duration_max">Duration Max</string>
     <string name="product_filters">Product Filters</string>
