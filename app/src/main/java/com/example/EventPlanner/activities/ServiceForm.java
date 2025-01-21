@@ -590,24 +590,20 @@ public class ServiceForm extends AppCompatActivity {
 
             CreateCategoryRequest dto = new CreateCategoryRequest(title, description, pending);
 
-            Call<List<CategoryOverview>> call = ClientUtils.categoryService.create(dto);
+            Call<CategoryOverview> call = ClientUtils.categoryService.create(dto);
 
-            call.enqueue(new Callback<List<CategoryOverview>>() {
+            call.enqueue(new Callback<CategoryOverview>() {
                 @Override
-                public void onResponse(Call<List<CategoryOverview>> call, Response<List<CategoryOverview>> response) {
+                public void onResponse(Call<CategoryOverview> call, Response<CategoryOverview> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        for(CategoryOverview cat: response.body()){
-                            if(cat.getTitle().equals(dto.getTitle())){
-                                selectedCategory = cat;
-                            }
-                        }
+                        selectedCategory = response.body();
                     } else {
                         Log.e("Upload", "Failed to create category");
                     }
                 }
 
                 @Override
-                public void onFailure(Call<List<CategoryOverview>> call, Throwable t) {
+                public void onFailure(Call<CategoryOverview> call, Throwable t) {
                     Log.e("Upload", "Error creating category", t);
                 }
             });

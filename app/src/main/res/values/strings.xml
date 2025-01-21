@@ -63,6 +63,7 @@
     <string name="price_min">Price Min</string>
     <string name="price_max">Price Max</string>
     <string name="category">Category</string>
+    <string name="categories">Categories</string>
     <string name="duration_min">Duration Min</string>
     <string name="duration_max">Duration Max</string>
     <string name="product_filters">Product Filters</string>
@@ -199,4 +200,7 @@
     <string name="chat_with_organizer">Chat with organizer</string>
     <string name="type_a_message">Type a message</string>
     <string name="send_message">Send message</string>
+    <string name="approved_categories">Approved Categories</string>
+    <string name="pending_categories">Pending Categories</string>
+    <string name="category_that_will_be_replaced">Category that will be replaced:</string>
 </resources>

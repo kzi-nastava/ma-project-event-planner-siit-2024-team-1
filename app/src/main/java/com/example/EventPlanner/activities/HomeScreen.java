@@ -122,7 +122,7 @@ public class HomeScreen extends AppCompatActivity {
                 args.putString("title", getString(R.string.all));
                 navController.navigate(R.id.nav_events_merchandise_list_horizontal,args);
             }else if(id==R.id.sidebar_services) {
-                navController.navigate(R.id.nav_services_list_vertical);
+                navController.navigate(R.id.nav_services_crud);
             }
             else if(id==R.id.sidebar_products) {
                 Bundle args = new Bundle();
@@ -165,6 +165,8 @@ public class HomeScreen extends AppCompatActivity {
                 args.putString("type", "flw");
                 args.putString("title", getString(R.string.followed_events));
                 navController.navigate(R.id.nav_followed_events, args);
+            } else if(id==R.id.sidebar_categories) {
+                navController.navigate(R.id.nav_category_crud);
             }
             return true;
         });
@@ -269,6 +271,7 @@ public class HomeScreen extends AppCompatActivity {
                 menu.findItem(R.id.sidebar_favorite_merc).setVisible(false);
                 menu.findItem(R.id.sidebar_favorite_events).setVisible(false);
                 menu.findItem(R.id.sidebar_followed_events).setVisible(false);
+                menu.findItem(R.id.sidebar_categories).setVisible(false);
             case "AU": // For AU role
                 menu.findItem(R.id.sidebar_products).setVisible(false);
                 menu.findItem(R.id.sidebar_services).setVisible(false);
@@ -276,6 +279,7 @@ public class HomeScreen extends AppCompatActivity {
                 menu.findItem(R.id.sidebar_events).setVisible(false);
                 menu.findItem(R.id.sidebar_reviews).setVisible(false);
                 menu.findItem(R.id.sidebar_user_reports).setVisible(false);
+                menu.findItem(R.id.sidebar_categories).setVisible(false);
                 break;
 
             case "EO": // For EO role
@@ -284,12 +288,14 @@ public class HomeScreen extends AppCompatActivity {
                 menu.findItem(R.id.sidebar_event_types).setVisible(false);
                 menu.findItem(R.id.sidebar_user_reports).setVisible(false);
                 menu.findItem(R.id.sidebar_reviews).setVisible(false);
+                menu.findItem(R.id.sidebar_categories).setVisible(false);
                 break;
             case "SP": // For SP role
                 menu.findItem(R.id.sidebar_event_types).setVisible(false);
                 menu.findItem(R.id.sidebar_events).setVisible(false);
                 menu.findItem(R.id.sidebar_reviews).setVisible(false);
                 menu.findItem(R.id.sidebar_user_reports).setVisible(false);
+                menu.findItem(R.id.sidebar_categories).setVisible(false);
                 break;
 
             case "A": // For Admin role

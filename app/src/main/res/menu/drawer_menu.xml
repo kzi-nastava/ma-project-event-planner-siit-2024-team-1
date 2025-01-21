@@ -77,6 +77,13 @@
                 android:icon="@drawable/dashboard_icon"
                 android:checkable="true"
                 app:showAsAction="ifRoom"/>
+            <item
+                android:id="@+id/sidebar_categories"
+                android:title="@string/categories"
+                android:icon="@drawable/dashboard_icon"
+                android:checkable="true"
+                app:showAsAction="ifRoom"
+                />
         </menu>
     </item>
 

@@ -15,7 +15,7 @@
         android:label="@string/top"
         tools:layout="@layout/fragment_events_merchindises_horizontal"/>
     <fragment
-        android:id="@+id/nav_services_list_vertical"
+        android:id="@+id/nav_services_crud"
         android:name="com.example.EventPlanner.activities.ServiceCRUD"
         android:label="@string/services"
         tools:layout="@layout/fragment_service_crud"/>
@@ -64,4 +64,9 @@
         android:name="com.example.EventPlanner.fragments.event.EventsList"
         android:label="@string/followed_events"
         tools:layout="@layout/fragment_merchandises_list"/>
+    <fragment
+        android:id="@+id/nav_category_crud"
+        android:name="com.example.EventPlanner.fragments.merchandise.category.CategoryCRUD"
+        android:label="@string/categories"
+        tools:layout="@layout/fragment_category_crud"/>
 </navigation>
