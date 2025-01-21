@@ -38,16 +38,33 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/add_24px" />
             </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center"
+                android:text="@string/approved_categories"
+                android:textAppearance="?attr/textAppearanceTitleMedium"/>
+
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/fragmentContainerViewApprovedCategories"
                 android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="150dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:text="@string/pending_categories"
+                android:textAppearance="?attr/textAppearanceTitleMedium"/>
+
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/fragmentContainerViewPendingCategories"
                 android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="150dp"/>
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

@@ -200,4 +200,7 @@
     <string name="chat_with_organizer">Chat with organizer</string>
     <string name="type_a_message">Type a message</string>
     <string name="send_message">Send message</string>
+    <string name="approved_categories">Approved Categories</string>
+    <string name="pending_categories">Pending Categories</string>
+    <string name="category_that_will_be_replaced">Category that will be replaced:</string>
 </resources>

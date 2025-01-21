@@ -74,6 +74,66 @@ public class CategoryViewModel extends ViewModel {
         });
     }
 
+    public void getById(int categoryId) {
+        Call<CategoryOverview> call = ClientUtils.categoryService.getById(categoryId);
+        call.enqueue(new Callback<CategoryOverview>() {
+            @Override
+            public void onResponse(Call<CategoryOverview> call, Response<CategoryOverview> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    selectedCategory.postValue(response.body());
+                }else {
+                    Log.e("CategoryViewModel", "Failed to get category: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CategoryOverview> call, Throwable throwable) {
+                Log.e("CategoryViewModel", "Error getting category: " + throwable.getMessage());
+            }
+        });
+    }
+
+    public void replaceCategory(int categoryId, int replacedCategoryId) {
+        Call<ResponseBody> call = ClientUtils.categoryService.replaceCategory(categoryId, replacedCategoryId);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()) {
+                    boolean found = false;
+                    ArrayList<CategoryOverview> currentListApproved = approvedCategoryLiveData.getValue();
+                    if(currentListApproved != null) {
+                        for(int i = 0; i < currentListApproved.size(); i++) {
+                            if(currentListApproved.get(i).getId() == categoryId) {
+                                currentListApproved.remove(i);
+                                found = true;
+                                break;
+                            }
+                        }
+                        approvedCategoryLiveData.setValue(currentListApproved);
+                    }
+
+                    if(found) {
+                        ArrayList<CategoryOverview> currentListPending = pendingCategoryLiveData.getValue();
+                        if(currentListPending != null) {
+                            for(int i = 0; i < currentListPending.size(); i++) {
+                                if(currentListPending.get(i).getId() == categoryId) {
+                                    currentListPending.remove(i);
+                                    break;
+                                }
+                            }
+                            pendingCategoryLiveData.setValue(currentListPending);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable throwable) {
+
+            }
+        });
+    }
+
     public void approveCategory(int categoryId) {
         Call<CategoryOverview> call = ClientUtils.categoryService.approveCategory(categoryId);
         call.enqueue(new Callback<CategoryOverview>() {
@@ -90,12 +150,7 @@ public class CategoryViewModel extends ViewModel {
 
                     ArrayList<CategoryOverview> currentListPending = pendingCategoryLiveData.getValue();
                     if(currentListPending != null) {
-                        for(int i = 0; i < currentListPending.size(); i++) {
-                            if(currentListPending.get(i).getId() == approvedCategory.getId()) {
-                                currentListPending.remove(i);
-                                break;
-                            }
-                        }
+                        currentListPending.removeIf(category -> category.getId() == approvedCategory.getId());
                         pendingCategoryLiveData.setValue(currentListPending);
                     }
                 }else {
@@ -205,7 +260,7 @@ public class CategoryViewModel extends ViewModel {
                         approvedCategoryLiveData.setValue(currentListApproved);
                     }
 
-                    if(found) {
+                    if(!found) {
                         ArrayList<CategoryOverview> currentListPending = pendingCategoryLiveData.getValue();
                         if(currentListPending != null) {
                             for(int i = 0; i < currentListPending.size(); i++) {

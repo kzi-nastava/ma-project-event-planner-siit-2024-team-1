@@ -32,4 +32,8 @@ public interface CategoryService {
     Call<CategoryOverview> updateCategory(@Path("categoryId") int categoryId, @Body CreateCategoryRequest dto);
     @DELETE("categories/delete/{categoryId}")
     Call<ResponseBody> deleteCategory(@Path("categoryId") int categoryId);
+    @GET("categories/{categoryId}")
+    Call<CategoryOverview> getById(@Path("categoryId") int categoryId);
+    @PUT("categories/replace/{categoryId}/{replacedCategoryId}")
+    Call<ResponseBody> replaceCategory(@Path("categoryId") int categoryId, @Path("replacedCategoryId") int replacedCategoryId);
 }

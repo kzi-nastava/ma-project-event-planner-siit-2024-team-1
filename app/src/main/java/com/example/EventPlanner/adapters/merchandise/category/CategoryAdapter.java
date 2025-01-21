@@ -61,14 +61,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             categoryViewModel.deleteCategory(category.getId());
 
             allCategories.remove(position);
-
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, allCategories.size());
         });
 
         if(this.categoryType == CategoryList.CategoryType.PENDING) {
             holder.itemView.findViewById(R.id.approve_category_button).setOnClickListener(v -> {
-                CategoryViewModel categoryViewModel = new CategoryViewModel();
+                CategoryViewModel categoryViewModel = new ViewModelProvider((ViewModelStoreOwner) context)
+                        .get(CategoryViewModel.class);
                 categoryViewModel.approveCategory(category.getId());
             });
         }
