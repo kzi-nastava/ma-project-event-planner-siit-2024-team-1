@@ -12,6 +12,7 @@ import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.model.common.PageResponse;
 import com.example.EventPlanner.model.event.EventOverview;
 import com.example.EventPlanner.model.merchandise.Merchandise;
+import com.example.EventPlanner.model.merchandise.MerchandiseDetailsDTO;
 import com.example.EventPlanner.model.merchandise.MerchandiseOverview;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class MerchandiseViewModel extends ViewModel {
     private final AtomicInteger pendingResponses = new AtomicInteger(2);
     private final List<MerchandiseOverview> productResults = Collections.synchronizedList(new ArrayList<>());
     private final List<MerchandiseOverview> serviceResults = Collections.synchronizedList(new ArrayList<>());
+    private final MutableLiveData<MerchandiseDetailsDTO> merchandiseDetails = new MutableLiveData<>();
 
     public LiveData<ArrayList<MerchandiseOverview>> getMerchandise(){
         return merchandiseLiveData;
@@ -43,6 +45,8 @@ public class MerchandiseViewModel extends ViewModel {
     public ArrayList<Merchandise> getAll() {
         return merchandises;
     }
+
+    public MutableLiveData<MerchandiseDetailsDTO> getMerchandiseDetails() { return merchandiseDetails; }
 
     public void getTop() {
         Call<ArrayList<MerchandiseOverview>> call = ClientUtils.merchandiseService.getTop(JwtService.getIdFromToken());
@@ -141,6 +145,26 @@ public class MerchandiseViewModel extends ViewModel {
                 }
             });
         }
+    }
+
+    public void merchandiseDetails(int merchandiseId) {
+        Call<MerchandiseDetailsDTO> call = ClientUtils.merchandiseService.getMerchandiseById(merchandiseId, JwtService.getIdFromToken());
+        call.enqueue(new Callback<MerchandiseDetailsDTO>() {
+            @Override
+            public void onResponse(Call<MerchandiseDetailsDTO> call, Response<MerchandiseDetailsDTO> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    MerchandiseDetailsDTO merchandise = response.body();
+                    merchandiseDetails.setValue(merchandise);
+                }else {
+                    Log.e("MerchandiseViewModel", "Failed to fetch detailed merchandise: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MerchandiseDetailsDTO> call, Throwable throwable) {
+                Log.e("MerchandiseViewModel", "Error fetching detailed merchandise: " + throwable.getMessage());
+            }
+        });
     }
 
     private void checkAndCombineResults(String sortBy, boolean ascending) {

@@ -1,6 +1,9 @@
-package com.example.EventPlanner.model.merchandise.service;
+package com.example.EventPlanner.model.merchandise;
 
 import com.example.EventPlanner.model.common.Address;
+import com.example.EventPlanner.model.common.ReviewOverview;
+import com.example.EventPlanner.model.event.EventType;
+import com.example.EventPlanner.model.event.EventTypeOverview;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -9,7 +12,10 @@ import java.util.List;
 import javax.annotation.Generated;
 
 @Generated("jsonschema2pojo")
-public class UpdateServiceRequest {
+public class MerchandiseDetailsDTO {
+    @SerializedName("id")
+    @Expose
+    private Integer id;
     @SerializedName("title")
     @Expose
     private String title;
@@ -25,9 +31,12 @@ public class UpdateServiceRequest {
     @SerializedName("discount")
     @Expose
     private Integer discount;
-    @SerializedName("eventTypesIds")
+    @SerializedName("visible")
     @Expose
-    private List<Integer> eventTypesIds;
+    private Boolean visible;
+    @SerializedName("available")
+    @Expose
+    private Boolean available;
     @SerializedName("minDuration")
     @Expose
     private Integer minDuration;
@@ -40,44 +49,57 @@ public class UpdateServiceRequest {
     @SerializedName("cancellationDeadline")
     @Expose
     private Integer cancellationDeadline;
-    @SerializedName("automaticReservation")
-    @Expose
-    private Boolean automaticReservation;
-    @SerializedName("visible")
-    @Expose
-    private Boolean visible;
-    @SerializedName("available")
-    @Expose
-    private Boolean available;
     @SerializedName("merchandisePhotos")
     @Expose
-    private List<Integer> merchandisePhotos;
-    @SerializedName("serviceProviderId")
+    private List<MerchandisePhoto> merchandisePhotos;
+    @SerializedName("reviews")
     @Expose
-    private Integer serviceProviderId;
+    private List<DetailsReviewOverview> reviews;
     @SerializedName("address")
     @Expose
     private Address address;
+    @SerializedName("category")
+    @Expose
+    private CategoryOverview category;
+    @SerializedName("eventTypes")
+    @Expose
+    private List<EventTypeOverview> eventTypes;
+    @SerializedName("rating")
+    @Expose
+    private Double rating;
+    @SerializedName("serviceProviderId")
+    @Expose
+    private Integer serviceProviderId;
+    @SerializedName("type")
+    @Expose
+    private String type;
 
-    public UpdateServiceRequest() { }
-
-    public UpdateServiceRequest(String title, String description, String specificity, Double price, Integer discount, List<Integer> eventTypesIds, Integer minDuration, Integer maxDuration, Integer reservationDeadline, Integer cancellationDeadline, Boolean automaticReservation, Boolean visible, Boolean available, List<Integer> merchandisePhotos, Integer serviceProviderId, Address address) {
+    public MerchandiseDetailsDTO() {}
+    public MerchandiseDetailsDTO(int id, String title, String description, String specificity, Double price, Integer discount, Boolean visible, Boolean available, Integer minDuration, Integer maxDuration, Integer reservationDeadline, Integer cancellationDeadline, List<MerchandisePhoto> merchandisePhotos, List<DetailsReviewOverview> reviews, Address address, CategoryOverview category, List<EventTypeOverview> eventTypes, Double rating, Integer serviceProviderId, String type) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.specificity = specificity;
         this.price = price;
         this.discount = discount;
-        this.eventTypesIds = eventTypesIds;
+        this.visible = visible;
+        this.available = available;
         this.minDuration = minDuration;
         this.maxDuration = maxDuration;
         this.reservationDeadline = reservationDeadline;
         this.cancellationDeadline = cancellationDeadline;
-        this.automaticReservation = automaticReservation;
-        this.visible = visible;
-        this.available = available;
         this.merchandisePhotos = merchandisePhotos;
-        this.serviceProviderId = serviceProviderId;
+        this.reviews = reviews;
         this.address = address;
+        this.category = category;
+        this.eventTypes = eventTypes;
+        this.rating = rating;
+        this.serviceProviderId = serviceProviderId;
+        this.type = type;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getTitle() {
@@ -100,8 +122,12 @@ public class UpdateServiceRequest {
         return discount;
     }
 
-    public List<Integer> getEventTypesIds() {
-        return eventTypesIds;
+    public Boolean getVisible() {
+        return visible;
+    }
+
+    public Boolean getAvailable() {
+        return available;
     }
 
     public Integer getMinDuration() {
@@ -120,28 +146,40 @@ public class UpdateServiceRequest {
         return cancellationDeadline;
     }
 
-    public Boolean getAutomaticReservation() {
-        return automaticReservation;
-    }
-
-    public Boolean getVisible() {
-        return visible;
-    }
-
-    public Boolean getAvailable() {
-        return available;
-    }
-
-    public List<Integer> getMerchandisePhotos() {
+    public List<MerchandisePhoto> getMerchandisePhotos() {
         return merchandisePhotos;
+    }
+
+    public List<DetailsReviewOverview> getReviews() {
+        return reviews;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public CategoryOverview getCategory() {
+        return category;
+    }
+
+    public List<EventTypeOverview> getEventTypes() {
+        return eventTypes;
+    }
+
+    public Double getRating() {
+        return rating;
     }
 
     public Integer getServiceProviderId() {
         return serviceProviderId;
     }
 
-    public Address getAddress() {
-        return address;
+    public String getType() {
+        return type;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setTitle(String title) {
@@ -164,8 +202,12 @@ public class UpdateServiceRequest {
         this.discount = discount;
     }
 
-    public void setEventTypesIds(List<Integer> eventTypesIds) {
-        this.eventTypesIds = eventTypesIds;
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
+    }
+
+    public void setAvailable(Boolean available) {
+        this.available = available;
     }
 
     public void setMinDuration(Integer minDuration) {
@@ -184,27 +226,35 @@ public class UpdateServiceRequest {
         this.cancellationDeadline = cancellationDeadline;
     }
 
-    public void setAutomaticReservation(Boolean automaticReservation) {
-        this.automaticReservation = automaticReservation;
-    }
-
-    public void setVisible(Boolean visible) {
-        this.visible = visible;
-    }
-
-    public void setAvailable(Boolean available) {
-        this.available = available;
-    }
-
-    public void setMerchandisePhotos(List<Integer> merchandisePhotos) {
+    public void setMerchandisePhotos(List<MerchandisePhoto> merchandisePhotos) {
         this.merchandisePhotos = merchandisePhotos;
+    }
+
+    public void setReviews(List<DetailsReviewOverview> reviews) {
+        this.reviews = reviews;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public void setCategory(CategoryOverview category) {
+        this.category = category;
+    }
+
+    public void setEventTypes(List<EventTypeOverview> eventTypes) {
+        this.eventTypes = eventTypes;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 
     public void setServiceProviderId(Integer serviceProviderId) {
         this.serviceProviderId = serviceProviderId;
     }
 
-    public void setAddress(Address address) {
-        this.address = address;
+    public void setType(String type) {
+        this.type = type;
     }
 }

@@ -203,4 +203,7 @@
     <string name="approved_categories">Approved Categories</string>
     <string name="pending_categories">Pending Categories</string>
     <string name="category_that_will_be_replaced">Category that will be replaced:</string>
+    <string name="image_description">Image description</string>
+    <string name="chat_with_us">Chat with us</string>
+    <string name="buy">Buy</string>
 </resources>

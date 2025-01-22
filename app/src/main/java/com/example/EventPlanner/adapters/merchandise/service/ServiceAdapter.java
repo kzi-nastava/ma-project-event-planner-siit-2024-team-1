@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.EventPlanner.R;
+import com.example.EventPlanner.activities.ServiceDetailsActivity;
 import com.example.EventPlanner.activities.ServiceForm;
 import com.example.EventPlanner.adapters.merchandise.PhotoSliderAdapter;
 import com.example.EventPlanner.model.merchandise.service.ServiceOverview;
@@ -46,6 +47,11 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
             Intent intent = new Intent(context, ServiceForm.class);
             intent.putExtra("FORM_TYPE", "EDIT_FORM");
             intent.putExtra("SERVICE_ID", service.getId());
+            context.startActivity(intent);
+        });
+        holder.itemView.findViewById(R.id.service_details).setOnClickListener(v -> {
+            Intent intent = new Intent(context, ServiceDetailsActivity.class);
+            intent.putExtra("MERCHANDISE_ID", service.getId());
             context.startActivity(intent);
         });
     }

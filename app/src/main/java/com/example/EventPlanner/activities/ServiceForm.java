@@ -539,9 +539,11 @@ public class ServiceForm extends AppCompatActivity {
             serviceFormBinding.serviceVisibleCheckbox.setChecked(true);
         }
 
-        for(MerchandisePhoto photo: service.getMerchandisePhotos()) {
-            selectedPhotoIds.add(photo.getId());
-            selectedPhotos.add(photo.getPhoto());
+        if(service.getMerchandisePhotos() != null && !service.getMerchandisePhotos().isEmpty()) {
+            for(MerchandisePhoto photo: service.getMerchandisePhotos()) {
+                selectedPhotoIds.add(photo.getId());
+                selectedPhotos.add(photo.getPhoto());
+            }
         }
 
         if(eventTypesList != null && !eventTypesList.isEmpty()) {
