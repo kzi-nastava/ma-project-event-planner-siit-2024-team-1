@@ -206,4 +206,6 @@
     <string name="image_description">Image description</string>
     <string name="chat_with_us">Chat with us</string>
     <string name="buy">Buy</string>
+    <string name="buy_product">Buy Product</string>
+    <string name="select_event">Select event</string>
 </resources>
