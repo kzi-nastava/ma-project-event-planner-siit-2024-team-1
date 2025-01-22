@@ -15,10 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.ActionOnlyNavDirections;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.EventPlanner.R;
+import com.example.EventPlanner.activities.ProductDetailsActivity;
 import com.example.EventPlanner.activities.ServiceDetailsActivity;
 import com.example.EventPlanner.clients.ClientUtils;
 import com.example.EventPlanner.fragments.activity.ActivityCRUD;
@@ -104,6 +106,10 @@ public class MerchandiseOverviewAdapter extends RecyclerView.Adapter<Merchandise
         holder.itemView.findViewById(R.id.see_details_button).setOnClickListener(v -> {
             if(merchandise.getType().equals("Service")) {
                 Intent intent = new Intent(context, ServiceDetailsActivity.class);
+                intent.putExtra("MERCHANDISE_ID", merchandise.getId());
+                context.startActivity(intent);
+            }else if(merchandise.getType().equals("Product")) {
+                Intent intent = new Intent(context, ProductDetailsActivity.class);
                 intent.putExtra("MERCHANDISE_ID", merchandise.getId());
                 context.startActivity(intent);
             }

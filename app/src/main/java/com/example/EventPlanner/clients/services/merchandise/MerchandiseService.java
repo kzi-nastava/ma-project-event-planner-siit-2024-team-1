@@ -1,5 +1,6 @@
 package com.example.EventPlanner.clients.services.merchandise;
 
+import com.example.EventPlanner.model.merchandise.MerchandiseDetailsDTO;
 import com.example.EventPlanner.model.merchandise.MerchandiseOverview;
 import com.example.EventPlanner.model.merchandise.product.ProductOverview;
 
@@ -17,4 +18,7 @@ public interface MerchandiseService {
 
     @GET("merchandise/{id}/favorite")
     Call<List<MerchandiseOverview>> getFavorites(@Path("id") int id);
+
+    @GET("merchandise/{id}")
+    Call<MerchandiseDetailsDTO> getMerchandiseById(@Path("id") int id, @Query("userId") int userId);
 }

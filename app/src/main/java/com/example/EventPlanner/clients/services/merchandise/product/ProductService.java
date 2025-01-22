@@ -14,6 +14,7 @@ import com.example.EventPlanner.model.merchandise.product.UpdateProductRequest;
 import java.time.LocalDate;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -53,4 +54,7 @@ public interface ProductService {
 
     @DELETE("products/{id}")
     Call<Boolean> delete(@Path("id") int id);
+
+    @POST("products/buy/{productId}")
+    Call<ResponseBody> buyProduct(@Path("productId") int productId, @Body int eventId);
 }

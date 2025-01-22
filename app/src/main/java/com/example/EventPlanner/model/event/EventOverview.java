@@ -38,6 +38,9 @@ public class EventOverview {
         this.isPublic = isPublic;
     }
 
+    @Override
+    public String toString() { return this.title; }
+
     @SerializedName("description")
     @Expose
     private String description;
