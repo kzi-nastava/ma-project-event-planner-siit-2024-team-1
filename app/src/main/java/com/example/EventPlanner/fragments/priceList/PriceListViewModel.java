@@ -11,8 +11,6 @@ import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.model.priceList.PriceListItem;
 import com.example.EventPlanner.model.priceList.UpdatePriceListItemRequest;
 
-import org.slf4j.spi.LocationAwareLogger;
-
 import java.util.ArrayList;
 import java.util.List;
 

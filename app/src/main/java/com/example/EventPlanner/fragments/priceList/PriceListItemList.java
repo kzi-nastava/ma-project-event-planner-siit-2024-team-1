@@ -1,19 +1,34 @@
 package com.example.EventPlanner.fragments.priceList;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.EventPlanner.R;
 import com.example.EventPlanner.adapters.priceList.PriceListAdapter;
 import com.example.EventPlanner.databinding.FragmentPriceListBinding;
+import com.example.EventPlanner.model.priceList.PriceListItem;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+
+import java.io.File;
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -73,6 +88,7 @@ public class PriceListItemList extends Fragment {
         RecyclerView recyclerView = priceListBinding.priceListItemListVertical;
 
         priceListViewModel.getPriceListItems().observe(getViewLifecycleOwner(), priceList -> {
+            priceListBinding.generatePdfButton.setOnClickListener(v -> generatePDF(priceList));
             PriceListAdapter adapter = new PriceListAdapter(requireContext(), priceList);
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
@@ -82,5 +98,54 @@ public class PriceListItemList extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         // Inflate the layout for this fragment
         return priceListBinding.getRoot();
+    }
+
+    private void generatePDF(ArrayList<PriceListItem> priceList) {
+        String downloadsDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+        String filePath = downloadsDirectory + "/PriceListReport.pdf";
+
+        try {
+            PdfWriter writer = new PdfWriter(filePath);
+            PdfDocument pdfDocument = new PdfDocument(writer);
+            Document document = new Document(pdfDocument);
+
+            float[] columnWidths = {6, 4, 4, 4};
+            Table table = new Table(columnWidths);
+
+            table.addCell(new Cell().add(new Paragraph("Title").setBold()));
+            table.addCell(new Cell().add(new Paragraph("Price").setBold()));
+            table.addCell(new Cell().add(new Paragraph("Discount").setBold()));
+            table.addCell(new Cell().add(new Paragraph("Total").setBold()));
+
+            for(PriceListItem priceListItem: priceList) {
+                table.addCell(priceListItem.getTitle());
+                table.addCell(priceListItem.getPrice() + "€");
+                table.addCell(priceListItem.getDiscount() + "%");
+                table.addCell(priceListItem.getDiscountedPrice() + "€");
+            }
+
+            document.add(table);
+            document.close();
+            openPDF(filePath);
+        }catch (Exception e) {
+            Log.e("PDF Generation", "Error creating PDF: " + e.getMessage());
+        }
+    }
+
+    private void openPDF(String filePath) {
+        File pdfFile = new File(filePath);
+        Uri pdfUri;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            pdfUri = FileProvider.getUriForFile(requireContext(), "com.example.EventPlanner.fileprovider", pdfFile);
+        }else {
+            pdfUri = Uri.fromFile(pdfFile);
+        }
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(pdfUri, "application/pdf");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        startActivity(intent);
     }
 }
