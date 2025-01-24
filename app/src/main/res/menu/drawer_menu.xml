@@ -84,6 +84,12 @@
                 android:checkable="true"
                 app:showAsAction="ifRoom"
                 />
+            <item
+                android:id="@+id/sidebar_price_list"
+                android:title="@string/price_list"
+                android:icon="@drawable/dashboard_icon"
+                android:checkable="true"
+                app:showAsAction="ifRoom"/>
         </menu>
     </item>
 

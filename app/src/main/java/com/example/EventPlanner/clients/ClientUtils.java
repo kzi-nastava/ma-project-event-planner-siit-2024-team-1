@@ -10,6 +10,7 @@ import com.example.EventPlanner.clients.services.messages.MessagesService;
 import com.example.EventPlanner.clients.services.notification.NotificationService;
 import com.example.EventPlanner.clients.services.photo.PhotoService;
 import com.example.EventPlanner.clients.services.common.ReviewService;
+import com.example.EventPlanner.clients.services.priceList.PriceListService;
 import com.example.EventPlanner.clients.services.user.UserReportService;
 import com.example.EventPlanner.clients.services.user.UserService;
 import com.example.EventPlanner.clients.services.event.EventService;
@@ -58,5 +59,6 @@ public class ClientUtils {
     public static NotificationService notificationService=retrofit.create(NotificationService.class);
 
     public static BudgetService budgetService = retrofit.create(BudgetService.class);
+    public static PriceListService priceListService = retrofit.create(PriceListService.class);
 
 }

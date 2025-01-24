@@ -168,6 +168,9 @@ public class HomeScreen extends AppCompatActivity {
             } else if(id==R.id.sidebar_categories) {
                 navController.navigate(R.id.nav_category_crud);
             }
+            else if(id==R.id.sidebar_price_list) {
+                navController.navigate(R.id.nav_price_list);
+            }
             return true;
         });
 
@@ -272,6 +275,7 @@ public class HomeScreen extends AppCompatActivity {
                 menu.findItem(R.id.sidebar_favorite_events).setVisible(false);
                 menu.findItem(R.id.sidebar_followed_events).setVisible(false);
                 menu.findItem(R.id.sidebar_categories).setVisible(false);
+                menu.findItem(R.id.sidebar_price_list).setVisible(false);
             case "AU": // For AU role
                 menu.findItem(R.id.sidebar_products).setVisible(false);
                 menu.findItem(R.id.sidebar_services).setVisible(false);
@@ -280,6 +284,7 @@ public class HomeScreen extends AppCompatActivity {
                 menu.findItem(R.id.sidebar_reviews).setVisible(false);
                 menu.findItem(R.id.sidebar_user_reports).setVisible(false);
                 menu.findItem(R.id.sidebar_categories).setVisible(false);
+                menu.findItem(R.id.sidebar_price_list).setVisible(false);
                 break;
 
             case "EO": // For EO role
@@ -289,6 +294,7 @@ public class HomeScreen extends AppCompatActivity {
                 menu.findItem(R.id.sidebar_user_reports).setVisible(false);
                 menu.findItem(R.id.sidebar_reviews).setVisible(false);
                 menu.findItem(R.id.sidebar_categories).setVisible(false);
+                menu.findItem(R.id.sidebar_price_list).setVisible(false);
                 break;
             case "SP": // For SP role
                 menu.findItem(R.id.sidebar_event_types).setVisible(false);
@@ -302,6 +308,7 @@ public class HomeScreen extends AppCompatActivity {
                 menu.findItem(R.id.sidebar_products).setVisible(false);
                 menu.findItem(R.id.sidebar_services).setVisible(false);
                 menu.findItem(R.id.sidebar_events).setVisible(false);
+                menu.findItem(R.id.sidebar_price_list).setVisible(false);
                 break;
 
             default:
