@@ -6,15 +6,31 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".fragments.merchandise.MerchandiseList">
-
-    <TextView
-        android:id="@+id/merchandise_header"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/top_merchandise"
-        android:textAppearance="?attr/textAppearanceTitleLarge"
-        android:textStyle="bold"
-        android:padding="10dp"/>
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp">
+        <TextView
+            android:id="@+id/merchandise_header"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/top_merchandise"
+            android:textAppearance="?attr/textAppearanceTitleLarge"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:padding="10dp"/>
+
+        <Button
+            android:id="@+id/submit_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="15dp"
+            android:text="@string/submit"
+            android:visibility="gone" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/merchandises_list_horizontal"

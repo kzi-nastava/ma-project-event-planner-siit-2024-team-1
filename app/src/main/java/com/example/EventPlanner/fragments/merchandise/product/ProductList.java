@@ -59,7 +59,7 @@ public class ProductList extends Fragment {
             case "fav":
             case "Fav":
                 productViewModel.getMerc().observe(getViewLifecycleOwner(),merc->{
-                    MerchandiseOverviewAdapter merchandiseOverviewAdapter = new MerchandiseOverviewAdapter(requireActivity(), merc);
+                    MerchandiseOverviewAdapter merchandiseOverviewAdapter = new MerchandiseOverviewAdapter(requireActivity(), merc, -1);
                     recyclerView.setAdapter(merchandiseOverviewAdapter);
                     merchandiseOverviewAdapter.notifyDataSetChanged();
 

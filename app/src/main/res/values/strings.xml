@@ -32,6 +32,8 @@
     <string name="skip_login">Login as a guest</string>
     <string name="events_merchandise">Event Planner</string>
     <string name="top">Top</string>
+    <string name="choose_merchandise">Choose merchandise</string>
+    <string name="merchandise_details">Merchandise Details</string>
     <string name="all">All</string>
     <string name="my">My</string>
     <string name="top_merchandise">Top Products/Services</string>
@@ -208,4 +210,7 @@
     <string name="buy">Buy</string>
     <string name="buy_product">Buy Product</string>
     <string name="select_event">Select event</string>
+    <string name="budget">Budget</string>
+    <string name="maximum_amount">Maximum Amount:</string>
+    <string name="amount_spent">Amount Spent:</string>
 </resources>

@@ -97,9 +97,8 @@ public class ServiceDetailsActivity extends AppCompatActivity {
             activityServiceDetailsBinding.favoriteButton.setImageResource(R.drawable.ic_star_border);
         }
 
-        if(!merchandise.getAvailable()) {
-            activityServiceDetailsBinding.serviceReservation.setClickable(false);
-        }
+        activityServiceDetailsBinding.serviceReservation.setEnabled(merchandise.getAvailable());
+
         if(merchandise.getMerchandisePhotos() != null && !merchandise.getMerchandisePhotos().isEmpty()) {
             PhotoSliderAdapter photosAdapter = new PhotoSliderAdapter(this, merchandise.getMerchandisePhotos());
             activityServiceDetailsBinding.merchandiseImages.setAdapter(photosAdapter);
@@ -110,7 +109,7 @@ public class ServiceDetailsActivity extends AppCompatActivity {
         activityServiceDetailsBinding.serviceAddress.setText(address);
 
         if(merchandise.getDiscount() > 0) {
-            String price = String.valueOf(merchandise.getPrice()) + "€";
+            String price = merchandise.getPrice() + "€";
             SpannableString spannebleString = new SpannableString(price);
 
             spannebleString.setSpan(new StrikethroughSpan(), 0, price.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

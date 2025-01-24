@@ -108,8 +108,8 @@ public class BuyProductActivity extends AppCompatActivity {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.isSuccessful()) {
                     //TODO: Maybe change later to load budget of event related to item purchase
-                    Intent intent = new Intent(BuyProductActivity.this, ProductDetailsActivity.class);
-                    intent.putExtra("MERCHANDISE_ID", productId);
+                    Intent intent = new Intent(BuyProductActivity.this, BudgetActivity.class);
+                    intent.putExtra("EVENT_ID", eventId);
                     startActivity(intent);
                 }else {
                     Intent intent = new Intent(BuyProductActivity.this, ProductDetailsActivity.class);

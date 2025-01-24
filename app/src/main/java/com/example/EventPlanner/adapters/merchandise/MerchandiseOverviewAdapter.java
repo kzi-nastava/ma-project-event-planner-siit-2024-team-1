@@ -40,10 +40,12 @@ import retrofit2.Response;
 public class MerchandiseOverviewAdapter extends RecyclerView.Adapter<MerchandiseOverviewAdapter.MerchandiseViewHolder> {
     private ArrayList<MerchandiseOverview> aMerchandises;
     private Context context;
+    private int eventId;
 
-    public MerchandiseOverviewAdapter(Context context, ArrayList<MerchandiseOverview> merchandises) {
+    public MerchandiseOverviewAdapter(Context context, ArrayList<MerchandiseOverview> merchandises, int eventId) {
         this.context = context;
         aMerchandises = merchandises;
+        this.eventId = eventId;
     }
 
     @NonNull
@@ -111,6 +113,7 @@ public class MerchandiseOverviewAdapter extends RecyclerView.Adapter<Merchandise
             }else if(merchandise.getType().equals("Product")) {
                 Intent intent = new Intent(context, ProductDetailsActivity.class);
                 intent.putExtra("MERCHANDISE_ID", merchandise.getId());
+                intent.putExtra("EVENT_ID", eventId);
                 context.startActivity(intent);
             }
         });
