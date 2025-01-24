@@ -1,11 +1,9 @@
 package com.example.EventPlanner.clients.services.merchandise;
 
-import com.example.EventPlanner.model.merchandise.Category1;
 import com.example.EventPlanner.model.merchandise.CategoryOverview;
 import com.example.EventPlanner.model.merchandise.CreateCategoryRequest;
 import com.example.EventPlanner.model.merchandise.GetAllCategoriesDTO;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.ResponseBody;

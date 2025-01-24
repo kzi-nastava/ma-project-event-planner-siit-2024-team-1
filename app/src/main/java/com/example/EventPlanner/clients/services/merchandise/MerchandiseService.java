@@ -21,4 +21,7 @@ public interface MerchandiseService {
 
     @GET("merchandise/{id}")
     Call<MerchandiseDetailsDTO> getMerchandiseById(@Path("id") int id, @Query("userId") int userId);
+
+    @GET("merchandise/category/{categoryId}")
+    Call<List<MerchandiseOverview>> getMerchandiseByCategory(@Path("categoryId") int categoryId, @Query("maxPrice") double maxPrice);
 }

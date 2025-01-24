@@ -167,6 +167,25 @@ public class MerchandiseViewModel extends ViewModel {
         });
     }
 
+    public void getMerchandiseByCategory(int categoryId, double maxPrice) {
+        Call<List<MerchandiseOverview>> merchandiseCall = ClientUtils.merchandiseService.getMerchandiseByCategory(categoryId, maxPrice);
+        merchandiseCall.enqueue(new Callback<List<MerchandiseOverview>>() {
+            @Override
+            public void onResponse(Call<List<MerchandiseOverview>> call, Response<List<MerchandiseOverview>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    merchandiseLiveData.setValue(new ArrayList<>(response.body()));
+                }else {
+                    Log.e("MerchandiseViewModel", "Failed to fetch merchandise: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<MerchandiseOverview>> call, Throwable throwable) {
+                Log.e("MerchandiseViewModel", "Error fetching merchandise: " + throwable.getMessage());
+            }
+        });
+    }
+
     private void checkAndCombineResults(String sortBy, boolean ascending) {
         if (pendingResponses.decrementAndGet() == 0) {
             List<MerchandiseOverview> combinedResults = new ArrayList<>();

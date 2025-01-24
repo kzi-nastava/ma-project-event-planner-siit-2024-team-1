@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.EventPlanner.R;
+import com.example.EventPlanner.activities.BudgetActivity;
 import com.example.EventPlanner.activities.EventDetails;
 import com.example.EventPlanner.activities.EventForm;
 import com.example.EventPlanner.activities.EventTypeForm;
@@ -109,6 +110,12 @@ public class EventOverviewAdapter extends RecyclerView.Adapter<EventOverviewAdap
 
         holder.eventCard.setOnClickListener(v -> {
             Toast.makeText(context, event.getTitle(), Toast.LENGTH_SHORT).show();
+        });
+
+        holder.eventCard.findViewById(R.id.see_budget_button).setOnClickListener(v -> {
+            Intent intent = new Intent(context, BudgetActivity.class);
+            intent.putExtra("EVENT_ID", event.getId());
+            context.startActivity(intent);
         });
     }
 

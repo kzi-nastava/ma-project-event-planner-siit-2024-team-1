@@ -26,6 +26,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activities.ShowRecommendedMerchandise"
+            android:exported="false" />
+        <activity
+            android:name=".activities.BudgetActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.BuyProductActivity"
             android:exported="false" />
         <activity

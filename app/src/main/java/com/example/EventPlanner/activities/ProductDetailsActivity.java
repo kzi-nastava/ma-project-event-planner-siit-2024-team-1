@@ -27,6 +27,7 @@ import com.example.EventPlanner.model.merchandise.MerchandiseDetailsDTO;
 import com.example.EventPlanner.model.user.GetSpById;
 import com.example.EventPlanner.services.WebSocketService;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,6 +52,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         });
         Intent intent=getIntent();
         merchandiseId=intent.getIntExtra("MERCHANDISE_ID",-1);
+        int eventId = intent.getIntExtra("EVENT_ID", -1);
         if(merchandiseId != -1) {
             merchandiseViewModel.getMerchandiseDetails().observe(this, merchandise -> {
                 if(merchandise != null) {
@@ -62,7 +64,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             merchandiseViewModel.merchandiseDetails(merchandiseId);
         }
         Button buyProduct = activityProductDetailsBinding.buyProductBtn;
-        buyProduct.setOnClickListener(v -> openBuyProduct(merchandiseId));
+        buyProduct.setOnClickListener(v -> openBuyProduct(merchandiseId, eventId));
         activityProductDetailsBinding.favoriteButton.setOnClickListener(v -> setMerchandiseAsFavorite(merchandiseId));
         int notificationId = getIntent().getIntExtra("NOTIFICATION_ID", -1);
         if (notificationId != -1) {
@@ -156,10 +158,34 @@ public class ProductDetailsActivity extends AppCompatActivity {
         }
     }
 
-    private void openBuyProduct(int merchandiseId) {
-        Intent intent = new Intent(ProductDetailsActivity.this, BuyProductActivity.class);
-        intent.putExtra("MERCHANDISE_ID", merchandiseId);
-        startActivity(intent);
+    private void openBuyProduct(int merchandiseId, int eventId) {
+        if(eventId != -1) {
+            Call<ResponseBody> call = ClientUtils.productService.buyProduct(merchandiseId, eventId);
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if(response.isSuccessful()) {
+                        Intent intent = new Intent(ProductDetailsActivity.this, BudgetActivity.class);
+                        intent.putExtra("EVENT_ID", eventId);
+                        startActivity(intent);
+                    }else {
+                        Intent intent = new Intent(ProductDetailsActivity.this, ProductDetailsActivity.class);
+                        intent.putExtra("MERCHANDISE_ID", merchandiseId);
+                        startActivity(intent);
+                        Log.e("BuyProduct", "Failed to buy product: " + response.message());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable throwable) {
+                    Log.e("BuyProduct", "Error buying product: " + throwable.getMessage());
+                }
+            });
+        }else {
+            Intent intent = new Intent(ProductDetailsActivity.this, BuyProductActivity.class);
+            intent.putExtra("MERCHANDISE_ID", merchandiseId);
+            startActivity(intent);
+        }
     }
 
     private boolean isFavorite = false;

@@ -13,17 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.EventPlanner.adapters.event.EventOverviewAdapter;
-import com.example.EventPlanner.adapters.merchandise.MerchandiseAdapter;
 import com.example.EventPlanner.adapters.merchandise.MerchandiseOverviewAdapter;
 import com.example.EventPlanner.fragments.common.map.MapViewModel;
 import com.example.EventPlanner.fragments.eventmerchandise.DotsIndicatorDecoration;
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.databinding.FragmentMerchandisesListBinding;
 import com.example.EventPlanner.fragments.eventmerchandise.SearchViewModel;
-import com.example.EventPlanner.model.merchandise.Merchandise;
-
-import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,7 +56,7 @@ public class MerchandiseList extends Fragment {
      * @return A new instance of fragment Merchandises_list.
      */
     // TODO: Rename and change types and number of parameters
-    public static MerchandiseList newInstance(String param1, String param2) {
+    public static MerchandiseList newInstance(String param1, String param2, String param3) {
         MerchandiseList fragment = new MerchandiseList();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -91,13 +86,22 @@ public class MerchandiseList extends Fragment {
 
         String topString=getString(R.string.top);
         String extraValue = topString; // Default value
+        int categoryId = -1;
+        int eventId;
+        double maxPrice = 0;
         if (getArguments() != null) {
             extraValue = getArguments().getString("type", topString);
+            categoryId = getArguments().getInt("categoryId", -1);
+            maxPrice = getArguments().getDouble("maxPrice", 0);
+            eventId = getArguments().getInt("eventId", -1);
+        } else {
+            eventId = -1;
         }
         TextView merchandiseHeader=merchandisesListBinding.merchandiseHeader;
         RecyclerView recyclerView = merchandisesListBinding.merchandisesListHorizontal;
+
         merchandiseViewModel.getMerchandise().observe(getViewLifecycleOwner(),merchandise->{
-            MerchandiseOverviewAdapter merchandiseAdapter = new MerchandiseOverviewAdapter(requireContext(), merchandise);
+            MerchandiseOverviewAdapter merchandiseAdapter = new MerchandiseOverviewAdapter(requireContext(), merchandise, eventId);
             recyclerView.setAdapter(merchandiseAdapter);
             merchandiseAdapter.notifyDataSetChanged();
             mapViewModel.setMerchandise(merchandise);
@@ -127,7 +131,11 @@ public class MerchandiseList extends Fragment {
                         searchViewModel.getServiceDurationMax().getValue(),searchViewModel.getServiceCity().getValue(),searchViewModel.getServiceCategory().getValue(),
                         searchViewModel.getMerchandiseSortBy().getValue(), Boolean.TRUE.equals(searchViewModel.getMerchandiseSortByAscending().getValue()));
                 break;
-
+            case "category":
+                merchandiseHeader.setText(R.string.choose_merchandise);
+                merchandisesListBinding.submitBtn.setVisibility(View.VISIBLE);
+                merchandiseViewModel.getMerchandiseByCategory(categoryId, maxPrice);
+                break;
         }
 
 
