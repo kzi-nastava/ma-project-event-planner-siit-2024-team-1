@@ -26,6 +26,7 @@ import com.example.EventPlanner.databinding.ActivityEventDetailsBinding;
 import com.example.EventPlanner.fragments.activity.ActivityCRUD;
 import com.example.EventPlanner.fragments.common.map.MapFragment;
 import com.example.EventPlanner.fragments.common.map.MapViewModel;
+import com.example.EventPlanner.fragments.common.review.MerchandiseReviewList;
 import com.example.EventPlanner.fragments.event.EventListViewModel;
 import com.example.EventPlanner.model.common.Address;
 import com.example.EventPlanner.model.common.Review;
@@ -231,10 +232,15 @@ public class EventDetails extends AppCompatActivity {
             startService(markReadIntent);
         }
 
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", eventId);
+        bundle.putString("reviewType", "EVENT_REVIEW");
+        MerchandiseReviewList reviewList = new MerchandiseReviewList();
+        reviewList.setArguments(bundle);
 
-
-
-
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainerViewReviews, reviewList)
+                .commit();
     }
 
 

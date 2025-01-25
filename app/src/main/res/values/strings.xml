@@ -214,4 +214,6 @@
     <string name="maximum_amount">Maximum Amount:</string>
     <string name="amount_spent">Amount Spent:</string>
     <string name="price_list">Price List</string>
+    <string name="leave_review">Leave Review</string>
+    <string name="comment">Comment…</string>
 </resources>

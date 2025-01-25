@@ -134,6 +134,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/organizer_name" />
 
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentContainerViewReviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/eventFormMapViewFragmentView"/>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -141,7 +153,7 @@
             android:layout_marginBottom="54dp"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/eventFormMapViewFragmentView"
+            app:layout_constraintTop_toBottomOf="@id/fragmentContainerViewReviews"
             android:id="@+id/btn_layout1">
 
             <com.google.android.material.button.MaterialButton
@@ -188,7 +200,6 @@
                 android:layout_weight="1"
                 android:text="@string/generate_pdf" />
         </LinearLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
 

@@ -8,10 +8,14 @@ import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StrikethroughSpan;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -21,11 +25,18 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.EventPlanner.R;
 import com.example.EventPlanner.adapters.merchandise.PhotoSliderAdapter;
 import com.example.EventPlanner.clients.ClientUtils;
+import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.databinding.ActivityProductDetailsBinding;
+import com.example.EventPlanner.fragments.common.review.MerchandiseReviewList;
 import com.example.EventPlanner.fragments.merchandise.MerchandiseViewModel;
+import com.example.EventPlanner.model.common.PageResponse;
+import com.example.EventPlanner.model.event.EventOverview;
 import com.example.EventPlanner.model.merchandise.MerchandiseDetailsDTO;
 import com.example.EventPlanner.model.user.GetSpById;
 import com.example.EventPlanner.services.WebSocketService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -66,6 +77,17 @@ public class ProductDetailsActivity extends AppCompatActivity {
         Button buyProduct = activityProductDetailsBinding.buyProductBtn;
         buyProduct.setOnClickListener(v -> openBuyProduct(merchandiseId, eventId));
         activityProductDetailsBinding.favoriteButton.setOnClickListener(v -> setMerchandiseAsFavorite(merchandiseId));
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", merchandiseId);
+        bundle.putString("reviewType", "MERCHANDISE_REVIEW");
+        MerchandiseReviewList reviewList = new MerchandiseReviewList();
+        reviewList.setArguments(bundle);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainerViewReviews, reviewList)
+                .commit();
+
         int notificationId = getIntent().getIntExtra("NOTIFICATION_ID", -1);
         if (notificationId != -1) {
             // Mark notification as read

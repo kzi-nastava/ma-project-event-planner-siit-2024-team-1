@@ -5,6 +5,7 @@ import com.example.EventPlanner.model.event.Activity;
 import com.example.EventPlanner.model.event.CreateActivityRequest;
 import com.example.EventPlanner.model.event.CreateEventRequest;
 import com.example.EventPlanner.model.event.CreatedEventResponse;
+import com.example.EventPlanner.model.event.EventDetailsDTO;
 import com.example.EventPlanner.model.event.EventOverview;
 import com.example.EventPlanner.model.event.EventReport;
 import com.example.EventPlanner.model.event.InvitationResponse;
@@ -70,4 +71,7 @@ public interface EventService {
 
     @POST("events/{eventId}/add-to-favorites/{userId}")
     Call<Boolean> favorizeEvent(@Path("eventId") int eventId, @Path("userId") int userId);
+
+    @GET("events/{id}/details")
+    Call<EventDetailsDTO> getDetails(@Path("id") int id, @Query("userId") int userId);
 }
