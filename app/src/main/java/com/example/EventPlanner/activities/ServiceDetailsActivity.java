@@ -23,6 +23,7 @@ import com.example.EventPlanner.adapters.merchandise.PhotoSliderAdapter;
 import com.example.EventPlanner.clients.ClientUtils;
 import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.databinding.ActivityServiceDetailsBinding;
+import com.example.EventPlanner.fragments.common.review.MerchandiseReviewList;
 import com.example.EventPlanner.fragments.merchandise.MerchandiseViewModel;
 import com.example.EventPlanner.fragments.user.UserOverviewViewModel;
 import com.example.EventPlanner.model.merchandise.MerchandiseDetailsDTO;
@@ -65,6 +66,17 @@ public class ServiceDetailsActivity extends AppCompatActivity {
             merchandiseViewModel.merchandiseDetails(merchandiseId);
         }
         activityServiceDetailsBinding.favoriteButton.setOnClickListener(v -> setMerchandiseAsFavorite(merchandiseId));
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", merchandiseId);
+        bundle.putString("reviewType", "MERCHANDISE_REVIEW");
+        MerchandiseReviewList reviewList = new MerchandiseReviewList();
+        reviewList.setArguments(bundle);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainerViewReviews, reviewList)
+                .commit();
+
         Button bookReservationBtn=activityServiceDetailsBinding.bookReservationBtn;
         bookReservationBtn.setOnClickListener(v->openBookReservation());
         Log.d("merchandise_id", String.valueOf(merchandiseId));
