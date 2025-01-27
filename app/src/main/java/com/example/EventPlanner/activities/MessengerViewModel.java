@@ -11,6 +11,7 @@ import com.example.EventPlanner.model.messages.MessageDTO;
 import com.example.EventPlanner.model.user.UserOverview;
 import com.example.EventPlanner.model.user.UserReportOverview;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -54,7 +55,7 @@ public class MessengerViewModel extends ViewModel {
             @Override
             public void onResponse(Call<List<MessageDTO>> call, Response<List<MessageDTO>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    messages.postValue(response.body());  // This gets just the list of events
+                    messages.setValue(response.body());  // This gets just the list of events
                 } else {
 
                 }
@@ -65,5 +66,14 @@ public class MessengerViewModel extends ViewModel {
                 Log.d("errrrror",t.getMessage());
             }
         });
+    }
+
+    public void addMessage(MessageDTO message) {
+        if (messages.getValue() == null) {
+            messages.setValue(new ArrayList<>());
+        }
+        List<MessageDTO> updatedMessages = new ArrayList<>(messages.getValue());
+        updatedMessages.add(message);
+        messages.setValue(updatedMessages);
     }
 }

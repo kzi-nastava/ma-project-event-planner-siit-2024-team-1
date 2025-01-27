@@ -9,16 +9,21 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.EventPlanner.BuildConfig;
 import com.example.EventPlanner.activities.EventDetails;
 import com.example.EventPlanner.activities.HomeScreen;
 import com.example.EventPlanner.activities.LoginScreen;
+import com.example.EventPlanner.activities.MessengerViewModel;
 import com.example.EventPlanner.activities.ProductDetailsActivity;
 import com.example.EventPlanner.activities.ServiceDetailsActivity;
 import com.example.EventPlanner.clients.ClientUtils;
@@ -27,6 +32,8 @@ import com.example.EventPlanner.model.common.Notification;
 import com.example.EventPlanner.model.common.NotificationType;
 import com.example.EventPlanner.model.common.PageResponse;
 import com.example.EventPlanner.model.event.EventOverview;
+import com.example.EventPlanner.model.messages.MessageDTO;
+import com.example.EventPlanner.model.messages.MessageRequestDTO;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -41,9 +48,11 @@ import ua.naiksoftware.stomp.StompClient;
 
 public class WebSocketService extends Service {
     private static final String WEBSOCKET_URL = "ws://"+ BuildConfig.IP_ADDR + ":8080/ws";
+    private final IBinder binder = new LocalBinder();
     private StompClient stompClient;
     private CompositeDisposable compositeDisposable;
     private int userId;
+    private int recipientId;
     public static final String ACTION_MARK_READ = "com.example.EventPlanner.ACTION_MARK_READ";
 
     private static final String EVENT_CHANNEL_ID = "event_channel_id";
@@ -53,7 +62,7 @@ public class WebSocketService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return binder;
     }
 
     @Override
@@ -74,6 +83,7 @@ public class WebSocketService extends Service {
             } else {
                 // Existing WebSocket connection logic
                 userId = intent.getIntExtra("USER_ID", -1);
+                recipientId = intent.getIntExtra("RECIPIENT_ID", -1);
                 if (userId != -1) {
                     connectWebSocket(userId);
                     fetchUnreadNotifications(userId);
@@ -128,6 +138,23 @@ public class WebSocketService extends Service {
                             Log.e("WebSocket", "Error on subscribe", throwable);
                         })
         );
+        if(recipientId != -1) {
+            String conversationId = generateConversationId(userId, recipientId);
+            compositeDisposable.add(
+                    stompClient.topic("/user/" + userId + "/private/messages/" + conversationId)
+                            .subscribe(topicMessage -> {
+                                MessageDTO message = parseMessage(topicMessage.getPayload());
+                                if(message != null) {
+                                    Intent broadcastIntent = new Intent("MESSAGE_RECEIVED");
+                                    broadcastIntent.putExtra("message", new Gson().toJson(message));
+                                    LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+                                }
+                                Log.d("WebSocket", "Message recieved");
+                            }, throwable -> {
+                                Log.e("WebSocket", "Error on subscribe", throwable);
+                            })
+            );
+        }
     }
 
     private void fetchUnreadNotifications(int userId) {
@@ -310,6 +337,35 @@ public class WebSocketService extends Service {
         });
     }
 
+    public void sendMessage(int senderId, int recipientId, String content) {
+        if(stompClient != null && stompClient.isConnected()) {
+            String destination = "/app/chat.sendMessage";
+            MessageRequestDTO message = new MessageRequestDTO(content, senderId, recipientId);
+            String messagePayload = new Gson().toJson(message);
+
+            stompClient.send(destination, messagePayload).subscribe(() -> {
+                Log.d("WebSocket", "Message sent to server successfully!");
+            }, throwable -> {
+                Log.e("WebSocket", "Error accured while sending a message", throwable);
+            });
+        } else {
+            Log.e("WebSocket", "STOMP Client not connected");
+        }
+    }
+
+    private MessageDTO parseMessage(String payload) {
+        try {
+            Gson gson = new Gson();
+            return gson.fromJson(payload, MessageDTO.class);
+        } catch (Exception e) {
+            Log.e("WebSocket", "Error parsing message", e);
+            return null;
+        }
+    }
+
+    private String generateConversationId(int senderId, int recipientId) {
+        return senderId < recipientId ? senderId + "-" + recipientId : recipientId + "-" + senderId;
+    }
 
     public void disconnect() {
         if (compositeDisposable != null && !compositeDisposable.isDisposed()) {
@@ -324,5 +380,23 @@ public class WebSocketService extends Service {
     public void onDestroy() {
         super.onDestroy();
         disconnect();
+    }
+
+    public class LocalBinder extends Binder {
+        public WebSocketService getService() {
+            return WebSocketService.this;
+        }
+    }
+
+    public void ensureConnection(int userId, int recipientId) {
+        this.userId = userId;
+        this.recipientId = recipientId;
+        if(stompClient == null && !stompClient.isConnected()) {
+            connectWebSocket(userId);
+        }
+    }
+
+    public boolean isConnected() {
+        return stompClient != null && stompClient.isConnected();
     }
 }
