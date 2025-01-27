@@ -1,7 +1,13 @@
 package com.example.EventPlanner.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.text.InputType;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -17,6 +23,7 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,14 +35,18 @@ import com.example.EventPlanner.clients.JwtService;
 import com.example.EventPlanner.databinding.ActivityMessengerBinding;
 import com.example.EventPlanner.fragments.user.UserOverviewViewModel;
 import com.example.EventPlanner.model.common.ErrorResponseDto;
+import com.example.EventPlanner.model.messages.MessageDTO;
 import com.example.EventPlanner.model.user.BlockUserDTO;
 import com.example.EventPlanner.model.user.UserReport;
 import com.example.EventPlanner.model.user.UserReportResponse;
 import com.example.EventPlanner.model.user.UserSuspension;
+import com.example.EventPlanner.services.WebSocketService;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.util.Date;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -47,6 +58,9 @@ public class MessengerActivity extends AppCompatActivity {
 
     private int userId;
     private MessengerViewModel messengerViewModel;
+    private WebSocketService webSocketService;
+    private boolean serviceBound = false;
+    private BroadcastReceiver messageReceiver;
     private ActivityMessengerBinding activityMessengerBinding;
 
     private MessageAdapter messageAdapter;
@@ -58,6 +72,29 @@ public class MessengerActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         activityMessengerBinding = ActivityMessengerBinding.inflate(getLayoutInflater());
         setContentView(activityMessengerBinding.getRoot());
+
+        currentUserId = JwtService.getIdFromToken();
+        Intent messengerIntent = getIntent();
+        userId = messengerIntent.getIntExtra("USER_ID", -1);
+
+        Intent intent = new Intent(this, WebSocketService.class);
+        intent.putExtra("USER_ID", currentUserId);
+        intent.putExtra("RECIPIENT_ID", userId);
+        startService(intent);
+        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+        messageReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if("MESSAGE_RECEIVED".equals(intent.getAction())) {
+                    String messageJson = intent.getStringExtra("message");
+                    MessageDTO message = new Gson().fromJson(messageJson, MessageDTO.class);
+                    messengerViewModel.addMessage(message);
+                    scrollToBottom();
+                }
+            }
+        };
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, new IntentFilter("MESSAGE_RECEIVED"));
 
         setupInsets();
         setupIntentData();
@@ -198,9 +235,23 @@ public class MessengerActivity extends AppCompatActivity {
     }
 
     private void sendMessage(String content) {
-        // Implement your message sending logic here
-        // After successful send, refresh messages
-        messengerViewModel.getMessagesFromSenderAndRecepient(currentUserId, userId);
+        if(!serviceBound || webSocketService == null) {
+            Toast.makeText(this, "Service not connected. Please try again.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        MessageDTO messageDTO = new MessageDTO();
+        messageDTO.setContent(content);
+        messageDTO.setSenderId(currentUserId);
+        messageDTO.setRecipientId(userId);
+
+        if(webSocketService.isConnected()) {
+            webSocketService.sendMessage(currentUserId, userId, content);
+            activityMessengerBinding.messageInput.setText("");
+            scrollToBottom();
+        }else {
+            Toast.makeText(this, "Not connected to chat server. Please try again.", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -299,4 +350,35 @@ public class MessengerActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(webSocketService != null) {
+            webSocketService.disconnect();
+        }
+        if(messageReceiver != null) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(messageReceiver);
+        }
+        if(serviceBound) {
+            unbindService(serviceConnection);
+            serviceBound = false;
+        }
+    }
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            WebSocketService.LocalBinder binder = (WebSocketService.LocalBinder) service;
+            webSocketService = binder.getService();
+            serviceBound = true;
+
+            webSocketService.ensureConnection(currentUserId, userId);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            serviceBound = false;
+        }
+    };
 }
