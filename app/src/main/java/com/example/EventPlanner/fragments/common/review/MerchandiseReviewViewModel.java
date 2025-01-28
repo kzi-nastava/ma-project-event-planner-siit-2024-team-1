@@ -26,7 +26,7 @@ public class MerchandiseReviewViewModel extends ViewModel {
     private final MutableLiveData<Boolean> isEligibleForReview = new MutableLiveData<>();
 
     public MerchandiseReviewViewModel() {
-        isEligibleForReview.setValue(true);
+        isEligibleForReview.setValue(false);
     }
 
     public LiveData<ArrayList<DetailsReviewOverview>> getReviews() { return this.reviews; }
@@ -110,7 +110,7 @@ public class MerchandiseReviewViewModel extends ViewModel {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                 if(response.isSuccessful() && response.body() != null) {
-                    isEligibleForReview.setValue(true);
+                    isEligibleForReview.setValue(response.body());
                 }else {
                     Log.e("MerchandiseReviewModel", "Failed to check if eligible for review: " + response.message());
                     isEligibleForReview.setValue(false);

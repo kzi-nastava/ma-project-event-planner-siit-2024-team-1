@@ -69,6 +69,7 @@ public class EventOverviewAdapter extends RecyclerView.Adapter<EventOverviewAdap
 
         if(!extraValue.equals("my")){
             holder.itemView.findViewById(R.id.edit_event).setVisibility(View.GONE);
+            holder.itemView.findViewById(R.id.see_budget_button).setVisibility(View.GONE);
         }
 
         holder.eventType.setText(String.format(Locale.getDefault(), "%s", event.getType()));
