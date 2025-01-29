@@ -9,6 +9,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -24,4 +25,7 @@ public interface MerchandiseService {
 
     @GET("merchandise/category/{categoryId}")
     Call<List<MerchandiseOverview>> getMerchandiseByCategory(@Path("categoryId") int categoryId, @Query("maxPrice") double maxPrice);
+
+    @POST("merchandise/{merchandiseId}/add-to-favorites/{userId}")
+    Call<Boolean> favorizeMerchandise(@Path("merchandiseId") int merchandiseId, @Path("userId") int userId);
 }

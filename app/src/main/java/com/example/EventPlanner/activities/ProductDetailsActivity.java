@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import androidx.activity.EdgeToEdge;
@@ -32,6 +33,7 @@ import com.example.EventPlanner.fragments.merchandise.MerchandiseViewModel;
 import com.example.EventPlanner.model.common.PageResponse;
 import com.example.EventPlanner.model.event.EventOverview;
 import com.example.EventPlanner.model.merchandise.MerchandiseDetailsDTO;
+import com.example.EventPlanner.model.merchandise.MerchandiseOverview;
 import com.example.EventPlanner.model.user.GetSpById;
 import com.example.EventPlanner.services.WebSocketService;
 
@@ -48,6 +50,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private int merchandiseId;
     private ActivityProductDetailsBinding activityProductDetailsBinding;
     private MerchandiseViewModel merchandiseViewModel;
+    private ImageButton starButton;
+    private boolean isFavorited = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +81,44 @@ public class ProductDetailsActivity extends AppCompatActivity {
         }
         Button buyProduct = activityProductDetailsBinding.buyProductBtn;
         buyProduct.setOnClickListener(v -> openBuyProduct(merchandiseId, eventId));
-        activityProductDetailsBinding.favoriteButton.setOnClickListener(v -> setMerchandiseAsFavorite(merchandiseId));
+
+        starButton = findViewById(R.id.favorite_button);
+
+        Call<List<MerchandiseOverview>> call1 = ClientUtils.merchandiseService.getFavorites(JwtService.getIdFromToken());
+        call1.enqueue(new Callback<List<MerchandiseOverview>>() {
+            @Override
+            public void onResponse(Call<List<MerchandiseOverview>> call, Response<List<MerchandiseOverview>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if(response.body().stream().filter(x -> x.getId() == merchandiseId).findAny().isPresent()){
+                        isFavorited = true;
+                    }
+                    else{
+                        isFavorited = false;
+                    }
+                    updateStarIcon();
+                } else {
+                    // Handle error cases
+                    Log.e("Favorizing Event Error", "Response not successful: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<MerchandiseOverview>> call, Throwable throwable) {
+                // Handle network errors
+                Log.e("Favorizing Event Failure", "Error: " + throwable.getMessage());
+            }
+        });
+
+        if(JwtService.getIdFromToken() == -1){
+            starButton.setVisibility(View.GONE);
+        }
+
+        // Handle star button click
+        starButton.setOnClickListener(view -> {
+            isFavorited = !isFavorited; // Toggle the favorite state
+            updateStarIcon();
+            saveFavoriteState(); // Save state to backend or local storage
+        });
 
         Bundle bundle = new Bundle();
         bundle.putInt("id", merchandiseId);
@@ -168,6 +210,35 @@ public class ProductDetailsActivity extends AppCompatActivity {
             public void onFailure(Call<GetSpById> call, Throwable throwable) {
                 String serviceProvider = "Service Provider";
                 activityProductDetailsBinding.serviceProviderName.setText(serviceProvider);
+            }
+        });
+    }
+
+    private void updateStarIcon() {
+        if (isFavorited) {
+            starButton.setImageResource(R.drawable.ic_star_filled); // Use filled star
+        } else {
+            starButton.setImageResource(R.drawable.ic_star_border); // Use empty star
+        }
+    }
+
+    private void saveFavoriteState() {
+        Call<Boolean> call1 = ClientUtils.merchandiseService.favorizeMerchandise(merchandiseId, JwtService.getIdFromToken());
+        call1.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                if (response.isSuccessful() && response.body() != null) {
+
+                } else {
+                    // Handle error cases
+                    Log.e("Favorizing Event Error", "Response not successful: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable throwable) {
+                // Handle network errors
+                Log.e("Favorizing Event Failure", "Error: " + throwable.getMessage());
             }
         });
     }
