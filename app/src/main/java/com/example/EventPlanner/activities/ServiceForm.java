@@ -273,7 +273,7 @@ public class ServiceForm extends AppCompatActivity {
             String number = serviceFormBinding.number.getText().toString();
             double longitude = Double.parseDouble(serviceFormBinding.longitude.getText().toString());
             double latitude = Double.parseDouble(serviceFormBinding.latitude.getText().toString());
-            Address address = new Address(city, street, number, longitude, latitude);
+            Address address = new Address(street, city, number, longitude, latitude);
 
             return new CreateServiceRequest(title, description, specificity, price, discount,
                     category.getId(), eventTypeIds, minDuration, maxDuration, reservationDeadline,
