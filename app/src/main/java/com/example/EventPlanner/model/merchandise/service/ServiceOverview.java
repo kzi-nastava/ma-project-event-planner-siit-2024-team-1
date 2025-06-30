@@ -52,7 +52,7 @@ public class ServiceOverview {
     @SerializedName("automaticReservation")
     @Expose
     private Boolean automaticReservation;
-    @SerializedName("photos")
+    @SerializedName("merchandisePhotos")
     @Expose
     private List<MerchandisePhoto> merchandisePhotos;
     @SerializedName("eventTypes")
